@@ -1,0 +1,46 @@
+.cards__container
+  padding-top 70px
+
+.short-card
+  height 600px
+  width 400px
+  margin 0 auto 10px auto
+  border 2px solid #f00
+  padding 10px
+
+  &__title
+    height 20%
+    font-size 1.5em
+    border-bottom 1px solid #808080
+
+  &__key-value
+    height 65%
+    list-style none
+    display table
+    padding 10px
+    li
+      display table-row
+      border-bottom 1px solid #e8e8e8
+      label
+        display table-cell
+        width 50%
+      span
+        display table-cell
+        width 50%
+
+  &__tag-list
+    height 15%
+    a
+      margin 10px
+      border-bottom 1px solid black
+
+.pager
+  &__title
+  &__container
+    list-style none
+    &:after
+      clear both
+  &__page
+    float left
+    margin 10px
+

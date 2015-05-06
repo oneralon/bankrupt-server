@@ -1,0 +1,178 @@
+extends layout
+
+block content
+    h1 Информация о торгах
+    dl
+        dt Форма торга по составу участников
+        dd= lot.trade.trade_type
+
+        dt Форма представления предложений о цене
+        dd= lot.trade.price_submission_type
+
+        dt Наименование
+        dd= lot.trade.title
+
+        dt Дополнительные сведения
+        dd= lot.trade.additional
+
+        dt Порядок и критерии определения победителя торгов
+        dd= lot.trade.win_procedure
+
+        dt Порядок представления заявок на участие в торгах
+        dd= lot.trade.submission_procedure
+
+        if lot.trade.holding_date
+            dt Дата проведения
+            dd= lot.trade.holding_date
+
+        dt Дата начала представления заявок на участие
+        dd= lot.trade.requests_start_date
+
+        dt Дата окончания представления заявок на участие
+        dd= lot.trade.requests_end_date
+
+        if lot.trade.intervals_start_date
+            dt Дата начала первого интервала
+            dd= lot.trade.intervals_start_date
+
+            dt Дата окончания последнего интервала
+            dd= lot.trade.interval_end_date
+
+        dt Дата публикации сообщения о проведении открытых торгов в официальном издании
+        dd= lot.trade.official_publish_date
+
+        dt Дата публикации в печатном органе по месту нахождения должника
+        dd= lot.trade.print_publish_date
+
+        dt Дата размещения сообщения в Едином федеральном реестре сведений о банкротстве
+        dd= lot.trade.bankrot_date
+
+        dt Место подведения итогов
+        dd= lot.trade.results_place
+
+        if lot.trade.results_date
+            dt Дата подведения итогов
+            dd= lot.trade.results_date
+
+        if lot.trade.contract_signing_person
+            dt Лицо, подписывающее договор
+            dd= lot.trade.contract_signing_person
+
+    h1 Информация о лоте
+    dl
+        dt Номер
+        dd= lot.number
+
+        dt Наименование
+        dd= lot.title
+
+        dt Статус
+        dd= lot.status
+
+        dt Порядок оформления участия в торгах, перечень представляемых участниками торгов документов и требования к их оформлению
+        dd= lot.procedure
+
+        dt Категория лота
+        dd= lot.category
+
+        if lot.currency
+            dt Валюта цены по ОКВ
+            dd= lot.currency
+
+        dt Начальная цена, руб.
+        dd= lot.start_price
+
+        dt Сведения об имуществе должника, его составе, характеристиках, описание, порядок ознакомления
+        dd= lot.information
+
+        if lot.step_percent
+            dt Шаг, % от начальной цены
+            dd= lot.step_percent
+            if lot.step_sum
+                dt Шаг, руб.
+                dd= lot.step_sum
+            else
+                dt Шаг, руб.
+                dd= (lot.start_price * lot.step_percent / 100)
+
+        if lot.price_reduction_type
+            dt Тип снижения цены публичного предложения
+            dd= lot.price_reduction_type
+
+            dt Текущая цена, руб.
+            dd= lot.current_sum
+
+    h1 Ключевые слова
+    dl
+        for input in lot.tagInputs
+            dt= input.match
+            dd= input.input
+
+    h1 Обеспечение задатка
+    dl
+        dt Способ расчета обеспечения
+        dd= lot.calc_method
+
+        dt Размер задатка, руб.
+        dd= lot.deposit_size
+
+        if lot.deposit_payment_date
+            dt Дата внесения задатка
+            dd= lot.deposit_payment_date
+
+        if lot.deposit_return_date
+            dt Дата возврата задатка
+            dd= lot.deposit_return_date
+
+        if lot.deposit_procedure
+            dt Порядок внесения и возврата задатка
+            dd= lot.deposit_procedure
+
+        if lot.bank_name
+            dt Название банка
+            dd= lot.bank_name
+
+        if lot.payment_account
+            dt Расчетный счет
+            dd= lot.payment_account
+
+        if lot.correspondent_account
+            dt Кор. счет
+            dd= lot.correspondent_account
+
+        if lot.bik
+            dt БИК
+            dd= lot.bik
+
+
+
+    h1 Документы лота
+    dl
+        for file in lot.documents
+            dt= file.name
+            dd
+                a(href=file.url)= file.url
+
+    if lot.intervals.length
+        h1 Интервалы снижения цены
+        table
+            tr
+                th(align="center") Дата начала интервала
+                th(align="center") Дата начала приема заявок на интервале
+                th(align="center") Дата окончания приема заявок на интервале
+                th(align="center") Дата окончания интервала
+                th(align="center") Снижение цены предыдущего интервала на процент от начальной цены, проценты
+                th(align="center") Задаток на интервале, руб.
+                th(align="center") Цена на интервале, руб.
+                th(align="center") Комментарий
+
+            for interval in lot.intervals
+                tr
+                    td(align="center")= interval.interval_start_date
+                    td(align="center")= interval.request_start_date
+                    td(align="center")= interval.request_end_date
+                    td(align="center")= interval.interval_end_date
+                    td(align="center")= interval.price_reduction_percent
+                    td(align="center")= interval.deposit_sum
+                    td(align="center")= interval.interval_price
+                    td(align="center")= interval.comment

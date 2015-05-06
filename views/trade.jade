@@ -1,0 +1,177 @@
+extends layout
+
+block content
+    h1 Информация о торгах
+    dl
+        dt Форма торга по составу участников
+        dd= trade.trade_type
+
+        dt Форма представления предложений о цене
+        dd= trade.price_submission_type
+
+        dt Наименование
+        dd= trade.title
+
+        dt Дополнительные сведения
+        dd= trade.additional
+
+        dt Порядок и критерии определения победителя торгов
+        dd= trade.win_procedure
+
+        dt Порядок представления заявок на участие в торгах
+        dd= trade.submission_procedure
+
+        if trade.holding_date
+            dt Дата проведения
+            dd= trade.holding_date
+
+        dt Дата начала представления заявок на участие
+        dd= trade.requests_start_date
+
+        dt Дата окончания представления заявок на участие
+        dd= trade.requests_end_date
+
+        if trade.intervals_start_date
+            dt Дата начала первого интервала
+            dd= trade.intervals_start_date
+
+            dt Дата окончания последнего интервала
+            dd= trade.interval_end_date
+
+        dt Дата публикации сообщения о проведении открытых торгов в официальном издании
+        dd= trade.official_publish_date
+
+        if trade.print_publish_date
+            dt Дата публикации в печатном органе по месту нахождения должника
+            dd= trade.print_publish_date
+
+        dt Дата размещения сообщения в Едином федеральном реестре сведений о банкротстве
+        dd= trade.bankrot_date
+
+        dt Место подведения итогов
+        dd= trade.results_place
+
+        if trade.results_date
+            dt Дата подведения итогов
+            dd= trade.results_date
+
+        if trade.contract_signing_person
+            dt Лицо, подписывающее договор
+            dd= trade.contract_signing_person
+
+    h1 Информация об организаторе торгов
+    dl
+        if trade.owner.short_name
+            dt Сокращенное наименование
+            dd= trade.owner.short_name
+
+        dt Полное наименование
+        dd= trade.owner.full_name
+
+        if trade.owner.internet_address
+            dt Адрес сайта
+            dd= trade.owner.internet_address
+
+        dt ИНН
+        dd= trade.owner.inn
+
+        if trade.owner.kpp
+            dt КПП
+            dd= trade.owner.kpp
+        if trade.owner.ogrn
+            dt ОГРН
+            dd= trade.owner.ogrn
+        if trade.owner.ogrnip
+            dt ОГРНИП
+            dd= trade.owner.ogrnip
+
+        h2 Контактное лицо организатора торгов
+        dl
+            if trade.owner.contact.name
+                dt Ф.И.О.
+                dd= trade.owner.contact.name
+
+            dt Телефон
+            dd= trade.owner.contact.phone
+
+            if trade.owner.contact.fax
+                dt Факс
+                dd= trade.owner.contact.fax
+
+    h1 Информация о должнике
+    dl
+        dt Тип должника
+        dd= trade.debtor.debtor_type
+
+        dt ИНН
+        dd= trade.debtor.inn
+
+        if trade.debtor.short_name
+            dt Сокращенное наименование
+            dd= trade.debtor.short_name
+
+        dt Полное наименование
+        dd= trade.debtor.full_name
+
+        dt ОГРН
+        dd= trade.debtor.ogrn
+
+        dt Основание для проведения торгов (реквизиты судебного акта арбитражного суда)
+        dd= trade.debtor.judgment
+
+        if trade.debtor.reviewing_property
+            dt Порядок ознакомления с имуществом
+            dd= trade.debtor.reviewing_property
+
+        dt Регион
+        dd= trade.debtor.region || trade.region
+
+        dt Наименование арбитражного суда
+        dd= trade.debtor.arbitral_name
+
+        dt Номер дела о банкротстве
+        dd= trade.debtor.bankruptcy_number
+
+        dt Арбитражный управляющий
+        dd= trade.debtor.arbitral_commissioner
+
+        dt Наименование организации арбитражных управляющих
+        dd= trade.debtor.arbitral_organization
+
+        dt Порядок и срок заключения договора купли-продажи
+        dd= trade.debtor.contract_procedure
+
+        dt Сроки платежей, реквизиты счетов
+        dd= trade.debtor.payment_terms
+
+    h1 Документы торгов
+    dl
+        for file in trade.documents
+            dt= file.name
+            dd
+                a(href=file.url)= file.url
+
+    h1 Лоты торгов
+    table(style="width:100%;")
+        tr
+            th(align="center") Номер
+            th(align="center") Лот
+            th(align="center") Тэги
+            th(align="center") Валюта цены
+            th(align="center") Начальная цена
+            th(align="center") Статус
+
+        for lot in trade.lots
+            if lot.number
+                tr
+                    td(align="center")
+                        a(href='/trades/' + trade._id + '/lot/'+lot._id)= lot.number
+                    td(align="center")
+                        a(href='/trades/' + trade._id + '/lot/'+lot._id)= lot.title
+                    td(align="center")
+                        for tag in lot.tags
+                            span= tag+', '
+                    td(align="center")= lot.currency
+                    td(align="center")= lot.start_price
+                    td(align="center")= lot.status
+

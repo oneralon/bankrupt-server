@@ -1,0 +1,78 @@
+extends layout
+
+block header
+  div Тэги
+  a(style="padding: 5px;" href='/') Все
+  br
+  for tag in keymap
+    a(style="padding: 5px;" href='/?tag='+tag.title)= tag.title
+  a(style="padding: 5px;" href='/?tag=разное') разное
+
+block content
+  div Страница
+  il(style="list-style:none;clear: both;")
+    if currentPage >= 10
+      li(style="float: left; margin: 10px;")
+        a(href="?page="+(parseInt(currentPage / 10) * 10 - 1)+"&tag="+currentTag) <<
+    for number in pages
+      li(style="float: left; margin: 10px;")
+        if number !== currentPage
+          a(href="?page="+number+"&tag="+currentTag)= number
+        else
+          span= number
+    li(style="float: left; margin: 10px;")
+      a(href="?page="+(parseInt(currentPage / 10) * 10  + 10)+"&tag="+currentTag) >>
+
+  table(style="clear:both;border-collapse:collapse;" border="0")
+    tr(style='border: 1pt solid black;')
+      th(align="center") Номер
+      th(align="center") Торги
+      th(align="center") Название лота
+      th(align="center") Начальная цена
+      th(align="center") Организатор торгов
+      th(align="center") Дата окончания представления заявок
+      th(align="center") Дата проведения
+      th(align="center") Статус
+      th(align="center") ЭТП
+      th(align="center") Форма проведения торгов
+      th(align="center") Тэги
+    each lot in lots
+      if lot.number
+        tr(style='border: 1pt solid black;')
+          td(align="center")
+            a(href='/trades/'+lot.trade._id)= lot.trade.number
+          td(align="center")
+            a(href='/trades/'+lot.trade._id)= lot.trade.title
+          td(align="center")
+            a(href='/trades/'+lot.trade._id+'/lot/'+lot._id)= lot.title
+          td(align="center")= lot.start_price
+          if lot.trade.owner.short_name
+            td(align="center")= lot.trade.owner.short_name
+          else
+            if lot.trade.owner.full_name
+              td(align="center")= lot.trade.owner.full_name
+            else
+              td(align="center") -
+          td(align="center")= lot.trade.requests_end_date
+          td(align="center")= lot.trade.holding_date
+          td(align="center")= lot.status
+          td(align="center")= lot.trade.etp.name
+          td(align="center")= lot.trade.type
+          td(align="center")
+            for tag in lot.tags
+              a(style="padding: 5px;" href='/?tag='+tag)= tag
+
+
+  div Страница
+  il(style="list-style:none;clear: both;")
+    if currentPage >= 10
+      li(style="float: left; margin: 10px;")
+        a(href="?page="+(parseInt(currentPage / 10) * 10 - 1)+"&tag="+currentTag) <<
+    for number in pages
+      li(style="float: left; margin: 10px;")
+        if number !== currentPage
+          a(href="?page="+number+"&tag="+currentTag)= number
+        else
+          span= number
+    li(style="float: left; margin: 10px;")
+      a(href="?page="+(parseInt(currentPage / 10) * 10  + 10)+"&tag="+currentTag) >>
