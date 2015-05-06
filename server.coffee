@@ -7,10 +7,13 @@ redis         = require './modules/redis-session'
 logger        = require './middlewares/logger'
 dbConfig      = require './config/db'
 
+webAPI        = require './routes/web-api'
+login         = require './routes/login'
+
 base          = __dirname
 app           = express()
 
-webAPI        = require './routes/web-api'
+require './modules/passport'
 
 app.use logger
 
@@ -31,6 +34,7 @@ app.set 'views', base + '/views'
 app.set 'view engine', 'jade'
 
 app.use '/api', webAPI
+app.use '/user', login
 
 app.use express.static('public')
 
