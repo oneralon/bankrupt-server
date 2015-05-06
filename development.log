@@ -251,3 +251,10 @@
 [06.5.15 14:15:07] ACCESS GET /api/short-cards?render=true&regions[]=%D0%A1%D0%B2%D0%B5%D1%80%D0%B4%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C 200 7296 - 237.580 ms
 [06.5.15 14:15:07] ACCESS GET /styles/main.css 200 725 - 6.100 ms
 [06.5.15 14:15:07] ACCESS GET /favicon.ico 404 24 - 2.555 ms
+[06.5.15 14:19:31] ACCESS GET /api/short-cards?render=true&regions[]=%D0%A1%D0%B2%D0%B5%D1%80%D0%B4%D0%BB%D0%BE%D0%B2%D1%81%D0%BA%D0%B0%D1%8F%20%D0%BE%D0%B1%D0%BB%D0%B0%D1%81%D1%82%D1%8C 200 7362 - 228.051 ms
+[06.5.15 14:19:31] ACCESS GET /styles/main.css 200 725 - 5.360 ms
+[06.5.15 14:19:31] ACCESS GET /favicon.ico 404 24 - 2.635 ms
+[06.5.15 14:19:33] ACCESS GET /api/short-cards?tags[]=%D0%B7%D0%B0%D0%B4%D0%BE%D0%BB%D0%B6%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D1%8C&render=true 200 21441 - 124.613 ms
+[06.5.15 14:19:33] ACCESS GET /styles/main.css 304 - - 1.482 ms
+[06.5.15 14:19:38] ACCESS GET /api/short-cards?tags[]=%D0%B7%D0%B0%D0%B4%D0%BE%D0%BB%D0%B6%D0%B5%D0%BD%D0%BD%D0%BE%D1%81%D1%82%D1%8C&render=true 304 - - 74.316 ms
+[06.5.15 14:19:38] ACCESS GET /styles/main.css 304 - - 0.987 ms

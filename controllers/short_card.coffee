@@ -12,7 +12,7 @@ Lot       = mongoose.model 'Lot'
 exports.list = (req, res, next) ->
   page = Number(req.query.page) or 1
   perPage = Number(req.query.perPage) or 30
-  tag = req.query.tag or ''
+  tags = req.query.tags or ''
   statuses = req.query.statuses
   etps = req.query.etps
   regions = req.query.regions
@@ -22,8 +22,8 @@ exports.list = (req, res, next) ->
   promises = []
 
   query = Lot.find()
-  unless _.isEmpty tag
-    query.where tags: $in: [tag]
+  unless _.isEmpty tags
+    query.where tags: $in: [tags]
 
   unless _.isEmpty statuses
     query.where status: $in: statuses
@@ -94,7 +94,7 @@ exports.list = (req, res, next) ->
       if req.query.render
         res.render 'short_card',
           lots: lots
-          currentTag: tag
+          currentTag: tags
           pages: [(parseInt(page/10)*10 + if page < 10 then 1 else 0)..parseInt(page/10)*10+9]
           currentPage: page
       else

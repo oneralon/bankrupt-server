@@ -6,15 +6,15 @@ block content
         il.pager__container
             if currentPage >= 10
                 li.pager__page
-                    a(href="?page="+(parseInt(currentPage / 10) * 10 - 1)+"&tag="+currentTag+"&render=true") <<
+                    a(href="?page="+(parseInt(currentPage / 10) * 10 - 1)+"&tags[]="+currentTag+"&render=true") <<
             for number in pages
                 li.pager__page
                     if number !== currentPage
-                        a(href="?page="+number+"&tag="+currentTag+"&render=true")= number
+                        a(href="?page="+number+"&tags[]="+currentTag+"&render=true")= number
                     else
                         span= number
             li.pager__page
-                a(href="?page="+(parseInt(currentPage / 10) * 10  + 10)+"&tag="+currentTag+"&render=true") >>
+                a(href="?page="+(parseInt(currentPage / 10) * 10  + 10)+"&tags[]="+currentTag+"&render=true") >>
 
     .cards__container
         for lot in lots
@@ -60,7 +60,7 @@ block content
 
                 .short-card__tag-list
                     for tag in lot.tags
-                        a(href="/api/short-cards?tag="+tag+"&render=true")= tag
+                        a(href="/api/short-cards?tags[]="+tag+"&render=true")= tag
 
     if lots.length > 1
         .pager
@@ -68,12 +68,12 @@ block content
             il.pager__container
                 if currentPage >= 10
                     li.pager__page
-                        a(href="?page="+(parseInt(currentPage / 10) * 10 - 1)+"&tag="+currentTag+"&render=true") <<
+                        a(href="?page="+(parseInt(currentPage / 10) * 10 - 1)+"&tags[]="+currentTag+"&render=true") <<
                 for number in pages
                     li.pager__page
                         if number !== currentPage
-                            a(href="?page="+number+"&tag="+currentTag+"&render=true")= number
+                            a(href="?page="+number+"&tags[]="+currentTag+"&render=true")= number
                         else
                             span= number
                 li.pager__page
-                    a(href="?page="+(parseInt(currentPage / 10) * 10  + 10)+"&tag="+currentTag+"&render=true") >>
+                    a(href="?page="+(parseInt(currentPage / 10) * 10  + 10)+"&tags[]="+currentTag+"&render=true") >>
