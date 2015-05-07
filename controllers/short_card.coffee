@@ -18,10 +18,12 @@ exports.list = (req, res, next) ->
   regions = req.query.regions
   start_price = req.query.startPrice
   end_price = req.query.endPrice
+  text = req.query.text
 
   promises = []
 
   query = Lot.find()
+
   unless _.isEmpty tags
     query.where tags: $in: [tags]
 
@@ -47,6 +49,9 @@ exports.list = (req, res, next) ->
         cursor.toArray (err, ids) ->
           query.where trade: $in: ids
           resolve()
+
+  unless _.isEmpty text
+    query.where $text: $search: text
 
   Promise.all(promises).then ->
     query.sort(last_message: -1).limit(perPage)

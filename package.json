@@ -28,7 +28,8 @@
     "lodash": "^3.8.0",
     "jade": "^1.9.2",
     "grunt-contrib-stylus": "^0.21.0",
-    "promise": "^7.0.1"
+    "promise": "^7.0.1",
+    "passport-anonymous": "^1.0.1"
   },
   "devDependencies": {},
   "scripts": {
