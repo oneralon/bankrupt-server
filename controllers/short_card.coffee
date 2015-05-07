@@ -54,7 +54,7 @@ exports.list = (req, res, next) ->
     query.where $text: $search: text
 
   Promise.all(promises).then ->
-    query.sort(last_message: -1).limit(perPage)
+    query.sort(last_message: -1).skip((page - 1) * perPage).limit(perPage)
 
     query.populate 'trade'
 
