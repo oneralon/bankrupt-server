@@ -25,6 +25,7 @@ lotSchema = new Schema
   deposit_procedure: String
   url: String
   last_message: Date
+  region: String
   documents: [
     name: String
     url: String
@@ -47,5 +48,8 @@ lotSchema = new Schema
   trade:
     type: Schema.Types.ObjectId
     ref: 'Trade'
+
+lotSchema.index {title: 'text', information: 'text'}, { default_language: "russian" }
+# lotSchema.set 'autoIndex', false
 
 mongoose.model 'Lot', lotSchema

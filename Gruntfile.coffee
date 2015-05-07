@@ -29,12 +29,14 @@ module.exports = (grunt) ->
         options:
           script: 'server.coffee'
           opts: ['/usr/local/bin/coffee']
+          node_env: 'development'
           #port: 8080
       prod:
         options:
           script: 'server.coffee'
           opts: ['/usr/local/bin/coffee']
           background: yes
+          node_env: 'production'
           #port: 8080
 
 

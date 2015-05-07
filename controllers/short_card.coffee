@@ -19,6 +19,9 @@ exports.list = (req, res, next) ->
   start_price = req.query.startPrice
   end_price = req.query.endPrice
   text = req.query.text
+  trade_type = req.query.tradeType?.toLowerCase()
+  membership_type = req.query.membershipType?.toLowerCase()
+  price_submission_type = req.query.priceSubmissionType?.toLowerCase()
 
   promises = []
 
@@ -36,15 +39,23 @@ exports.list = (req, res, next) ->
   unless _.isEmpty end_price
     query.where end_price: $gte: end_price
 
-  unless _.isEmpty(etps) and _.isEmpty(regions)
+  unless _.isEmpty regions
+    query.where region: $in: regions
+
+  unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_type) and _.isEmpty(membership_type) and _.isEmpty(price_submission_type)
     promises.push new Promise (resolve, reject) ->
       tradeQuery = {}
       unless _.isEmpty etps
         tradeQuery['etp.name'] = $in: etps
-      unless _.isEmpty regions
-        tradeQuery.region = $in: regions
+      # unless _.isEmpty regions
+      #   tradeQuery.region = $in: regions
+      unless _.isEmpty trade_type
+        tradeQuery['trade_type'] = trade_type
+      unless _.isEmpty membership_type
+        tradeQuery['membership_type'] = membership_type
+      unless _.isEmpty price_submission_type
+        tradeQuery['price_submission_type'] = price_submission_type
 
-      console.log tradeQuery
       mongoose.connection.collection('trades').find tradeQuery, {'_id': 1}, (err, cursor) ->
         cursor.toArray (err, ids) ->
           query.where trade: $in: ids
@@ -52,6 +63,8 @@ exports.list = (req, res, next) ->
 
   unless _.isEmpty text
     query.where $text: $search: text
+      .select score: $meta: 'textScore'
+      .sort score: $meta: "textScore"
 
   Promise.all(promises).then ->
     query.sort(last_message: -1).skip((page - 1) * perPage).limit(perPage)
@@ -95,7 +108,7 @@ exports.list = (req, res, next) ->
           title: item.title.substr 0, 100
           type: item.trade.type
           status: item.status
-          region: item.trade.region
+          region: item.region
           start_price: item.start_price
           current_price: current_interval?.interval_price or item.current_sum or item.start_price
           next_interval_start_date: duration

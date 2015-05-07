@@ -2,10 +2,12 @@ mongoose            = require "mongoose"
 Schema              = mongoose.Schema
 
 tradeSchema = new Schema
-  price_submission_type: String
   holding_date: Date
   title: String
+  type: String
   trade_type: String
+  membership_type: String
+  price_submission_type: String
   requests_start_date: Date
   additional: String
   requests_end_date: Date
@@ -19,6 +21,7 @@ tradeSchema = new Schema
   number: String
   url: String
   region: String
+  last_message: Date
   owner:
     short_name: String
     full_name: String
@@ -28,6 +31,8 @@ tradeSchema = new Schema
       name: String
       fax: String
       phone: String
+      _id: false
+    _id: false
   debtor:
     debtor_type: String
     arbitral_name: String
@@ -43,17 +48,21 @@ tradeSchema = new Schema
     payment_terms: String
     reviewing_property: String
     region: String
+    _id: false
   etp:
     href: String
     name: String
-  type: String
+    _id: false
   documents: [
     name: String
     url: String
+    _id: false
   ]
   lots: [
     type: Schema.Types.ObjectId
     ref: 'Lot'
   ]
+,
+  versionKey: false
 
 mongoose.model 'Trade', tradeSchema
