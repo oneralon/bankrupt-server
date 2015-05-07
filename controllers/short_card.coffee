@@ -75,7 +75,18 @@ exports.list = (req, res, next) ->
               current_interval = interval
               break
           nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
-          duration = moment.duration(moment(nextInterval.interval_start_date).diff new Date()) if nextInterval?
+          if nextInterval?
+            duration = moment(nextInterval.interval_start_date)
+
+        end_date = moment(item.trade.requests_end_date or
+          item.intervals[item.intervals.length - 1]?.request_end_date or
+          item.trade.holding_date or
+          item.trade.results_date)
+
+        if req.query.render
+          duration = moment.duration(duration.diff new Date()).humanize() if duration?
+          end_date = moment.duration(end_date.diff new Date()).humanize() if end_date?
+
         return {
           id: item.id
           url: item.url
@@ -87,12 +98,8 @@ exports.list = (req, res, next) ->
           region: item.trade.region
           start_price: item.start_price
           current_price: current_interval?.interval_price or item.current_sum or item.start_price
-          next_interval_start_date: duration.humanize() if duration?
-          end_date: moment.duration(moment(item.trade.requests_end_date or
-            item.intervals[item.intervals.length - 1]?.request_end_date or
-            item.trade.holding_date or
-            item.trade.results_date).diff(new Date())
-          ).humanize()
+          next_interval_start_date: duration
+          end_date: end_date
           tags: item.tags
         }
 
