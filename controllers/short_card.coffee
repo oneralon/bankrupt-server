@@ -22,7 +22,7 @@ exports.list = (req, res, next) ->
   trade_types = req.query.tradeTypes?.map (item) -> item.toLowerCase()
   membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
   price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
-  sort = req.query.sort or '-last_message'
+  sort = req.query.sort or 'last_message'
   sort_order = req.query.sortOrder or 'asc'
 
   promises = []
