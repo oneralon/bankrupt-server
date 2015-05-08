@@ -19,9 +19,9 @@ exports.list = (req, res, next) ->
   start_price = req.query.startPrice
   end_price = req.query.endPrice
   text = req.query.text
-  trade_type = req.query.tradeType?.toLowerCase()
-  membership_type = req.query.membershipType?.toLowerCase()
-  price_submission_type = req.query.priceSubmissionType?.toLowerCase()
+  trade_types = req.query.tradeTypes?.map (item) -> item.toLowerCase()
+  membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
+  price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
 
   promises = []
 
@@ -50,11 +50,11 @@ exports.list = (req, res, next) ->
       # unless _.isEmpty regions
       #   tradeQuery.region = $in: regions
       unless _.isEmpty trade_type
-        tradeQuery['trade_type'] = trade_type
+        tradeQuery['trade_type'] = $in: trade_types
       unless _.isEmpty membership_type
-        tradeQuery['membership_type'] = membership_type
+        tradeQuery['membership_type'] = $in: membership_types
       unless _.isEmpty price_submission_type
-        tradeQuery['price_submission_type'] = price_submission_type
+        tradeQuery['price_submission_type'] = $in: price_submission_types
 
       mongoose.connection.collection('trades').find tradeQuery, {'_id': 1}, (err, cursor) ->
         cursor.toArray (err, ids) ->
