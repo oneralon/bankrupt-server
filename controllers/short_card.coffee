@@ -37,7 +37,7 @@ exports.list = (req, res, next) ->
     query.where start_price: $gte: start_price
 
   unless _.isEmpty end_price
-    query.where end_price: $gte: end_price
+    query.where end_price: $lte: end_price
 
   unless _.isEmpty regions
     query.where region: $in: regions
