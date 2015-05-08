@@ -23,6 +23,8 @@ exports.list = (req, res, next) ->
   membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
   price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
 
+  console.log trade_types, membership_types, price_submission_types
+
   promises = []
 
   query = Lot.find()
@@ -42,18 +44,18 @@ exports.list = (req, res, next) ->
   unless _.isEmpty regions
     query.where region: $in: regions
 
-  unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_type) and _.isEmpty(membership_type) and _.isEmpty(price_submission_type)
+  unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
     promises.push new Promise (resolve, reject) ->
       tradeQuery = {}
       unless _.isEmpty etps
         tradeQuery['etp.name'] = $in: etps
       # unless _.isEmpty regions
       #   tradeQuery.region = $in: regions
-      unless _.isEmpty trade_type
+      unless _.isEmpty trade_types
         tradeQuery['trade_type'] = $in: trade_types
-      unless _.isEmpty membership_type
+      unless _.isEmpty membership_types
         tradeQuery['membership_type'] = $in: membership_types
-      unless _.isEmpty price_submission_type
+      unless _.isEmpty price_submission_types
         tradeQuery['price_submission_type'] = $in: price_submission_types
 
       mongoose.connection.collection('trades').find tradeQuery, {'_id': 1}, (err, cursor) ->
