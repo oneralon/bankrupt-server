@@ -22,8 +22,8 @@ exports.list = (req, res, next) ->
   trade_types = req.query.tradeTypes?.map (item) -> item.toLowerCase()
   membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
   price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
-
-  console.log trade_types, membership_types, price_submission_types
+  sort = req.query.sort or '-last_message'
+  sort_order = req.query.sortOrder or 'asc'
 
   promises = []
 
@@ -66,10 +66,9 @@ exports.list = (req, res, next) ->
   unless _.isEmpty text
     query.where $text: $search: text
       .select score: $meta: 'textScore'
-      .sort score: $meta: "textScore"
 
   Promise.all(promises).then ->
-    query.sort(last_message: -1).skip((page - 1) * perPage).limit(perPage)
+    query.sort("#{sort}": "#{sort_order}").skip((page - 1) * perPage).limit(perPage)
 
     query.populate 'trade'
 
@@ -112,7 +111,7 @@ exports.list = (req, res, next) ->
           status: item.status
           region: item.region
           start_price: item.start_price
-          current_price: current_interval?.interval_price or item.current_sum or item.start_price
+          current_price: item.current_sum or item.start_price
           next_interval_start_date: duration
           end_date: end_date
           tags: item.tags
