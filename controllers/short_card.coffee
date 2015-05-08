@@ -112,6 +112,7 @@ exports.list = (req, res, next) ->
           region: item.region
           start_price: item.start_price
           current_price: item.current_sum or item.start_price
+          discount: item.discount
           next_interval_start_date: duration
           end_date: end_date
           tags: item.tags

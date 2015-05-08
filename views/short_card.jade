@@ -47,8 +47,8 @@ block content
                     li
                         label Текущая цена
                         span= lot.current_price
-                        if (lot.start_price - lot.current_price)/lot.start_price > 0
-                            span.price_diff= '-'+(lot.start_price - lot.current_price)/lot.start_price*100 +'%'
+                        if lot.discount > 0
+                            span.price_diff= '-'+lot.discount/lot.start_price*100 +'%'
 
                     li
                         if lot.next_interval_start_date

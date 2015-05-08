@@ -8,6 +8,7 @@ lotSchema = new Schema
   start_price: Number
   current_sum: Number
   discount: Number
+  discount_percent: Number
   status: String
   price_reduction_type: String
   procedure: String
