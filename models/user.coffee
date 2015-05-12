@@ -10,5 +10,10 @@ userSchema = new Schema
     start_date: Date
     end_date: Date
 
+  favourite_lots: [
+    type: Schema.Types.ObjectId
+    ref: 'Lot'
+  ]
+
 
 mongoose.model 'User', userSchema

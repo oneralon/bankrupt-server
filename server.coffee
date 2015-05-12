@@ -9,7 +9,7 @@ mustBeAuth    = require './middlewares/passport'
 dbConfig      = require './config/db'
 
 webAPI        = require './routes/web-api'
-login         = require './routes/login'
+userAPI       = require './routes/user-api'
 
 base          = __dirname
 app           = express()
@@ -37,9 +37,7 @@ app.use passport.session()
 app.set 'views', base + '/views'
 app.set 'view engine', 'jade'
 
-app.use '/user', login
-
-app.use mustBeAuth
+app.use '/user', userAPI
 app.use '/api', webAPI
 
 app.use express.static('public')

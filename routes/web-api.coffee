@@ -3,6 +3,7 @@ mongoose      = require 'mongoose'
 moment        = require 'moment'
 _             = require 'lodash'
 router        = require('express').Router()
+mustBeAuth    = require '../middlewares/passport'
 
 
 cors          = require '../middlewares/cors'
@@ -19,6 +20,7 @@ tags          = require '../controllers/tags'
 mongoose.set 'debug', yes
 
 
+router.use mustBeAuth
 router.use '/*', cors
 
 router.get '/short-cards',    short_cards.list
