@@ -8,7 +8,12 @@ router.get '/login', (req, res) ->
   passport.authenticate('anonymous') req, res, () ->
     res.send()
 
+
 router.use mustBeAuth
+
+router.get '/logout', (req, res) ->
+  req.logOut()
+  res.status(200).send()
 
 favourite_lots = require '../controllers/favourite_lots'
 

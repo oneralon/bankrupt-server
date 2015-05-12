@@ -60,7 +60,7 @@ block content
 
                 .short-card__tag-list
                     for tag in lot.tags
-                        a(href="/api/short-cards?tags[]="+tag+"&render=true")= tag
+                        a(href="/api/short-cards?tags[]="+tag._id+"&render=true" style="color: black;background-color: "+tag.color+";")= tag.title
 
     if lots.length > 1
         .pager

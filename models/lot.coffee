@@ -42,7 +42,6 @@ lotSchema = new Schema
     interval_price: Number
     comment: String
   ]
-  tags: [String]
   tagInputs: [
     input: String
     match: String
@@ -50,6 +49,10 @@ lotSchema = new Schema
   trade:
     type: Schema.Types.ObjectId
     ref: 'Trade'
+  tags: [
+    type: Schema.Types.ObjectId
+    ref: 'Tag'
+  ]
 
 lotSchema.index {title: 'text', information: 'text'}, { default_language: "russian" }
 # lotSchema.set 'autoIndex', false

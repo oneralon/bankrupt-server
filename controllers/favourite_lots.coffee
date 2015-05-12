@@ -14,6 +14,7 @@ exports.add = (req, res) ->
   req.user.favourite_lots.addToSet lot_id
 
   req.user.save (err, result) ->
+    res.status(500).send() if err
     res.status(200).send()
 
 exports.check = (req, res) ->

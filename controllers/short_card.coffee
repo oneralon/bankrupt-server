@@ -71,6 +71,7 @@ exports.list = (req, res, next) ->
     query.sort("#{sort}": "#{sort_order}").skip((page - 1) * perPage).limit(perPage)
 
     query.populate 'trade'
+    query.populate 'tags', 'title color'
 
     query.exec (err, lots) ->
       if err
