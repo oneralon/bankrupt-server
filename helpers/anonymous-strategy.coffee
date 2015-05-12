@@ -1,6 +1,7 @@
 passport  = require 'passport-strategy'
 util      = require 'util'
 mongoose  = require 'mongoose'
+moment    = require 'moment'
 
 require '../models/user'
 
@@ -19,11 +20,18 @@ class Strategy extends passport.Strategy
     device_id = req.device_id or req.query.device_id
     unless device_id?
       return @fail message: 'Missing device_id'
-    user = User.findOne devices: device_id, (err, result) =>
+    user = User.findOne device: device_id, (err, result) =>
       if result?
-        @success result
+        if new Date() < result.license.end_date
+          @success result
+        else
+          @success result
       else
-        user = new User devices: [device_id]
+        user = new User
+          device: device_id
+          license:
+            start_date: moment().format()
+            end_date: moment().add(days: 14)
         user.save (err, user) =>
           @success user
 

@@ -16,8 +16,10 @@ app           = express()
 
 require './modules/passport'
 
+
 if process.env.NODE_ENV is 'development'
   app.use logger
+
 
 app.use cookieParser 'keyboard cat'
 app.use session

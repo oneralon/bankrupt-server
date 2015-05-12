@@ -5,7 +5,10 @@ userSchema = new Schema
   login: String
   email: String
   password: String
-  devices: [String]
+  device: String
+  license:
+    start_date: Date
+    end_date: Date
 
 
 mongoose.model 'User', userSchema

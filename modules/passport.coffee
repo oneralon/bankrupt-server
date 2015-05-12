@@ -8,7 +8,7 @@ AnonymousStrategy = require '../helpers/anonymous-strategy'#require('passport-an
 
 require '../models/user'
 
-User            = mongoose.model 'User'
+User              = mongoose.model 'User'
 
 passport.serializeUser (user, done) ->
   console.log 'serializeUser'
