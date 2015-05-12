@@ -5,6 +5,7 @@ session       = require 'express-session'
 passport      = require 'passport'
 redis         = require './modules/redis-session'
 logger        = require './middlewares/logger'
+mustBeAuth    = require './middlewares/passport'
 dbConfig      = require './config/db'
 
 webAPI        = require './routes/web-api'
@@ -34,10 +35,13 @@ app.use passport.session()
 app.set 'views', base + '/views'
 app.set 'view engine', 'jade'
 
-app.use '/api', webAPI
 app.use '/user', login
 
+app.use mustBeAuth
+app.use '/api', webAPI
+
 app.use express.static('public')
+
 
 # app.use web404
 

@@ -29,7 +29,8 @@
     "jade": "^1.9.2",
     "grunt-contrib-stylus": "^0.21.0",
     "promise": "^7.0.1",
-    "passport-anonymous": "^1.0.1"
+    "passport-anonymous": "^1.0.1",
+    "passport-strategy": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {

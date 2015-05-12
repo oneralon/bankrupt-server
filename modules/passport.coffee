@@ -4,7 +4,7 @@ mongoose          = require 'mongoose'
 
 
 LocalStrategy     = require('passport-local').Strategy
-AnonymousStrategy = require('passport-anonymous').Strategy
+AnonymousStrategy = require '../helpers/anonymous-strategy'#require('passport-anonymous').Strategy
 
 require '../models/user'
 
@@ -18,4 +18,5 @@ passport.deserializeUser (id, done) ->
   console.log 'deserializeUser'
   User.findById id, done
 
-passport.use new AnonymousStrategy
+passport.use new AnonymousStrategy () ->
+  console.log 'verify func'
