@@ -22,9 +22,9 @@ exports.add = (req, res) ->
 exports.delete = (req, res) ->
   lot_id = req.query.lot_id or req.lot_id
   unless lot_id?
-    return res.status(500).json err: err
+    return res.status(500).json err: 'lot_id must be defined'
 
-  req.user.favourite_lots.addToSet lot_id
+  req.user.favourite_lots.pull lot_id
 
   req.user.save (err, result) ->
     res.status(500).json err: err if err
