@@ -72,14 +72,44 @@ exports.setAlias = (req, res) ->
 
 exports.addTag = (req, res) ->
   lot_id = req.query.lot_id or req.lot_id
+  tag_id = req.query.tag_id or req.tag_id
   unless lot_id?
-    return res.status(500).json err: err
+    return res.status(500).json err: 'lot_id must be defined'
+  unless tag_id?
+    return res.status(500).json err: 'tag_id must be defined'
 
-  req.user.favourite_lots.addToSet lot_id
+  Lot.findById lot_id, (err, lot) ->
+    if err?
+      return res.status(500).json err: err
+    unless lot?
+      return res.status(404).send()
+    lot.tags.addToSet tag_id
+    lot.save (err, lot) ->
+      if err?
+        return res.status(500).json err: err
+      res.status(200).send()
 
-  req.user.save (err, result) ->
-    res.status(500).json err: err if err
-    res.status(200).send()
+
+exports.removeTag = (req, res) ->
+  lot_id = req.query.lot_id or req.lot_id
+  tag_id = req.query.tag_id or req.tag_id
+  unless lot_id?
+    return res.status(500).json err: 'lot_id must be defined'
+  unless tag_id?
+    return res.status(500).json err: 'tag_id must be defined'
+
+  Lot.findById lot_id, (err, lot) ->
+    if err?
+      return res.status(500).json err: err
+    unless lot?
+      return res.status(404).send()
+    lot.tags.pull tag_id
+    lot.save (err, lot) ->
+      if err?
+        return res.status(500).json err: err
+      res.status(200).send()
+
+
 
 exports.check = (req, res) ->
   last_check = req.query.last_check or req.last_check
