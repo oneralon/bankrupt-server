@@ -6,8 +6,10 @@ Promise   = require 'promise'
 
 require '../models/trade'
 require '../models/lot'
+require '../models/lot_alias'
 Trade     = mongoose.model 'Trade'
 Lot       = mongoose.model 'Lot'
+LotAlias  = mongoose.model 'LotAlias'
 
 exports.list = (req, res, next) ->
   page = Number(req.query.page) or 1
@@ -72,6 +74,12 @@ exports.list = (req, res, next) ->
 
     query.populate 'trade'
     query.populate 'tags', 'title color'
+    query.populate
+      path: 'aliases'
+      match: user: req.user
+      select: 'title -_id'
+      model: 'LotAlias'
+
 
     query.exec (err, lots) ->
       if err
@@ -117,6 +125,7 @@ exports.list = (req, res, next) ->
           next_interval_start_date: duration
           end_date: end_date
           tags: item.tags
+          aliases: item.aliases or undefined
         }
 
       if req.query.render

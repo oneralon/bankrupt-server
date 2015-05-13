@@ -53,6 +53,10 @@ lotSchema = new Schema
     type: Schema.Types.ObjectId
     ref: 'Tag'
   ]
+  aliases: [
+    type: Schema.Types.ObjectId
+    ref: 'lotAlias'
+  ]
 
 lotSchema.index {title: 'text', information: 'text'}, { default_language: "russian" }
 # lotSchema.set 'autoIndex', false
