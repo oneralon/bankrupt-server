@@ -5,7 +5,15 @@ mustBeAuth  = require '../middlewares/passport'
 
 
 router.get '/login', (req, res) ->
-  passport.authenticate('anonymous') req, res, () ->
+  passport.authenticate(['registered', 'anonymous']) req, res, () ->
+    res.send()
+
+router.get '/register', (req, res) ->
+  passport.authenticate('registration') req, res, () ->
+    res.send()
+
+router.get '/activate', (req, res) ->
+  passport.authenticate('activation') req, res, () ->
     res.send()
 
 

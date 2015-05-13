@@ -22,10 +22,13 @@ class Strategy extends passport.Strategy
       return @fail message: 'Missing device_id'
     user = User.findOne device: device_id, (err, result) =>
       if result?
-        if new Date() < result.license.end_date
-          @success result
+        if result.anonymous
+          if new Date() < result.license.end_date
+            @success result
+          else
+            @success result
         else
-          @success result
+          @fail()
       else
         user = new User
           device: device_id

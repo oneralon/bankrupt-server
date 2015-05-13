@@ -14,7 +14,7 @@ LotAlias  = mongoose.model 'LotAlias'
 exports.list = (req, res, next) ->
   page = Number(req.query.page) or 1
   perPage = Number(req.query.perPage) or 30
-  tags = req.query.tags or ''
+  tags = req.query.tags or []
   statuses = req.query.statuses
   etps = req.query.etps
   regions = req.query.regions
@@ -30,7 +30,13 @@ exports.list = (req, res, next) ->
   promises = []
 
   query = Lot.find()
-
+  console.log page
+  console.log perPage
+  console.log tags
+  console.log tags
+  console.log tags
+  console.log tags
+  console.log tags
   unless _.isEmpty tags
     query.where tags: $in: [tags]
 

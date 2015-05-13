@@ -30,7 +30,8 @@
     "grunt-contrib-stylus": "^0.21.0",
     "promise": "^7.0.1",
     "passport-anonymous": "^1.0.1",
-    "passport-strategy": "^1.0.0"
+    "passport-strategy": "^1.0.0",
+    "bcrypt": "^0.8.3"
   },
   "devDependencies": {},
   "scripts": {
