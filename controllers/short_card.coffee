@@ -30,13 +30,6 @@ exports.list = (req, res, next) ->
   promises = []
 
   query = Lot.find()
-  console.log page
-  console.log perPage
-  console.log tags
-  console.log tags
-  console.log tags
-  console.log tags
-  console.log tags
   unless _.isEmpty tags
     query.where tags: $in: [tags]
 

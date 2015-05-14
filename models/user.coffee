@@ -10,7 +10,9 @@ userSchema = new Schema
     default: yes
   device: String
   activation_hash: String
-  activated: Boolean
+  activated:
+    type: Boolean
+    default: no
   license:
     start_date: Date
     end_date: Date

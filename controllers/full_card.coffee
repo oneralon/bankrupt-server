@@ -12,7 +12,15 @@ exports.get = (req, res, next) ->
   id = req.params.id
   unless id?
     return next new Error 'Задайте id'
-  Lot.findById(id).populate('trade').exec (err, lot) ->
+  Lot.findById(id).populate('trade')
+    .populate('tags')
+    .populate 'tags', 'title color'
+    .populate
+      path: 'aliases'
+      match: user: req.user
+      select: 'title -_id'
+      model: 'LotAlias'
+    .exec (err, lot) ->
     if err
       console.log err
       next err
