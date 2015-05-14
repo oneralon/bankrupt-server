@@ -31,7 +31,8 @@
     "promise": "^7.0.1",
     "passport-anonymous": "^1.0.1",
     "passport-strategy": "^1.0.0",
-    "bcrypt": "^0.8.3"
+    "bcrypt": "^0.8.3",
+    "elasticsearch": "^4.0.2"
   },
   "devDependencies": {},
   "scripts": {

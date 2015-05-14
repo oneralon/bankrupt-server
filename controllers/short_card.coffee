@@ -4,6 +4,8 @@ _         = require 'lodash'
 moment    = require 'moment'
 Promise   = require 'promise'
 
+elastic   = require '../helpers/elastic'
+
 require '../models/trade'
 require '../models/lot'
 require '../models/lot_alias'
@@ -65,8 +67,13 @@ exports.list = (req, res, next) ->
           resolve()
 
   unless _.isEmpty text
-    query.where $text: $search: text
-      .select score: $meta: 'textScore'
+    # query.where $text: $search: text
+    #   .select score: $meta: 'textScore'
+
+    promises.push new Promise (resolve, reject) ->
+      elastic.like ['_id'], ['information', 'title'], text
+      .then (ids) ->
+        resolve query.where _id: $in: ids
 
   Promise.all(promises).then ->
     query.sort("#{sort}": "#{sort_order}").skip((page - 1) * perPage).limit(perPage)
