@@ -71,7 +71,7 @@ exports.list = (req, res, next) ->
     #   .select score: $meta: 'textScore'
 
     promises.push new Promise (resolve, reject) ->
-      elastic.like ['_id'], ['information', 'title'], text
+      elastic.like ['_id'], ['information', 'title^2'], text
       .then (ids) ->
         resolve query.where _id: $in: ids
 

@@ -16,9 +16,25 @@ exports.like = (fields, filter_fields, text, ids) ->
             values: ids
 
     query.query =
-      fuzzy_like_this:
-        fields: filter_fields
-        like_text: text
+      bool:
+        should: [
+          function_score:
+            query:
+              multi_match:
+                query: text,
+                fields: filter_fields
+            ,
+            boost_factor: 100
+        ,
+          function_score:
+            query:
+              fuzzy_like_this:
+                fields: filter_fields,
+                like_text: text
+            ,
+            # boost_factor: 10
+        ]
+
     query.fields = fields
 
     client.search
@@ -27,5 +43,5 @@ exports.like = (fields, filter_fields, text, ids) ->
     .then (resp) ->
       resolve resp.hits.hits.map (hit) -> hit.fields._id
     .catch (err) ->
+      console.log err
       reject err
-
