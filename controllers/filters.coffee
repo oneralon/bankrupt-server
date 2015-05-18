@@ -22,7 +22,7 @@ exports.add = (req, res, next) ->
     return res.status(200).json id: preset._id
 
 exports.get = (req, res, next) ->
-  preset_id = req.query.preset_id
+  preset_id = req.params.preset_id
   unless preset_id?
     return res.status(500).json err: 'preset_id must be defined'
   FilterPreset.findOne
@@ -34,6 +34,16 @@ exports.get = (req, res, next) ->
     unless preset?
       return res.status(404).send()
     return res.status(200).json preset: preset
+
+exports.get_all = (req, res, next) ->
+  FilterPreset.find
+    user: req.user
+  , (err, presets) ->
+    if err?
+      return res.status(500).json err: err
+    unless presets?
+      return res.status(404).send()
+    return res.status(200).json presets: presets
 
 exports.set = (req, res, next) ->
   preset_id = req.query.preset_id or req.preset_id

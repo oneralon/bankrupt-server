@@ -34,7 +34,8 @@ router.get '/favourite-lots/removeTag', favourite_lots.removeTag
 router.get '/favourite-lots/check',     favourite_lots.check
 
 router.get '/filter_presets/add',       filter_presets.add
-router.get '/filter_presets/get',       filter_presets.get
+router.get '/filter_presets/get/:preset_id',  filter_presets.get
+router.get '/filter_presets/get',       filter_presets.get_all
 router.get '/filter_presets/set',       filter_presets.set
 router.get '/filter_presets/delete',    filter_presets.delete
 
