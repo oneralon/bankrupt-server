@@ -85,4 +85,6 @@ module.exports = (lot_ids, cb) ->
       , (err, stdout, stderr) ->
         if err?
           return cb err
-        cb null, dir_name
+        setTimeout ->
+          cb null, dir_name
+        , 2000
