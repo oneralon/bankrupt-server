@@ -32,7 +32,10 @@
     "passport-anonymous": "^1.0.1",
     "passport-strategy": "^1.0.0",
     "bcrypt": "^0.8.3",
-    "elasticsearch": "^4.0.2"
+    "elasticsearch": "^4.0.2",
+    "ect": "^0.5.9",
+    "moment-countdown": "0.0.1",
+    "countdown": "^2.3.0"
   },
   "devDependencies": {},
   "scripts": {
