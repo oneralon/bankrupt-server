@@ -74,7 +74,7 @@ module.exports = (lot_ids, cb) ->
     for k, v of latex_special_symbols
       console.log k, v
       regex = new RegExp k, 'img'
-      tex.replace regex, v
+      tex = tex.replace regex, v
 
     time = new Date().getTime()
 
