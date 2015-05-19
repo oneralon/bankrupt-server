@@ -298,12 +298,12 @@
 	% \addcontentsline{toc}{subsection}{Документы лота}
 
 	<% for doc in lot.trade.documents :%>
-		\href{<%- escape(doc.url) %>}{<%- doc.name%>}
+		\href{<%- escape(doc.url) %>}{<%- escape(doc.name) %>}
 		\par
 	<% end %>
 
 	<% for doc in lot.documents :%>
-		\href{<%- escape(doc.url) %>}{<%- doc.name%>}
+		\href{<%- escape(doc.url) %>}{<%- escape(doc.name) %>}
 		\par
 	<% end %>
 
