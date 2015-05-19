@@ -57,9 +57,9 @@
 	\par
 	{\color{Gray} Начальная цена:} <%- lot.start_price %> руб.
 	\par
-	<% if lot.next_interval : %>
+	<% if lot.next_interval? : %>
 		{\color{Gray} До следующего понижения:} <%- lot.next_interval_transcription %>
-		(<%- lot.next_interval.format('YYYY.MM.DD, h:mm:ss') %>)
+		(<%- lot.next_interval.format('YYYY.MM.DD в hh:mm:ss') %>)
 		\par
 	<% end %>
 	<% if lot.end_date : %>
@@ -67,7 +67,7 @@
 		<% if lot.end_date.toDate() < new Date() : %>
 			назад
 		<% end %>
-		{\color{Gray} (<%- lot.end_date.format('YYYY.MM.DD в h:mm:ss') %>)}
+		{\color{Gray} (<%- lot.end_date.format('YYYY.MM.DD в hh:mm:ss') %>)}
 	<% end %>
 
 
