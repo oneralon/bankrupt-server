@@ -27,7 +27,7 @@ countdown.setLabels(
   ', ',
   '')
 
-latex_special_symbols = ['_': '\\_', '\\': '\\\\', '#': '\\#', '$': '\\$', '%': '\\%', '^': '\\textasciicircum', '&': '\\textampersand', '{': '\\{', '}': '\\}', '~': '\\textasciitilde']
+latex_special_symbols = {'_': '\\_', '\\': '\\\\', '#': '\\#', '$': '\\$', '%': '\\%', '^': '\\textasciicircum', '&': '\\textampersand', '{': '\\{', '}': '\\}', '~': '\\textasciitilde'}
 
 module.exports = (lot_ids, cb) ->
   Lot.find(_id: $in: lot_ids).populate('trade').populate('tags').exec (err, lots) ->
@@ -72,6 +72,7 @@ module.exports = (lot_ids, cb) ->
       lots: lots
 
     for k, v of latex_special_symbols
+      console.log k, v
       regex = new RegExp k, 'img'
       tex.replace regex, v
 
