@@ -77,11 +77,11 @@ module.exports = (lot_ids, cb) ->
 
     fs.writeFileSync path.join(dir_name, 'compiled-template.tex'), tex
 
-    child_process.exec "pdflatex -output-directory=#{dir_name} --shell-escape #{path.join(dir_name, 'compiled-template.tex')}"
+    child_process.exec "pdflatex -output-directory=#{dir_name} #{path.join(dir_name, 'compiled-template.tex')}"
     , (err, stdout, stderr) ->
       if err?
         return cb err
-      child_process.exec "pdflatex -output-directory=#{dir_name} --shell-escape #{path.join(dir_name, 'compiled-template.tex')}"
+      child_process.exec "pdflatex -output-directory=#{dir_name} #{path.join(dir_name, 'compiled-template.tex')}"
       , (err, stdout, stderr) ->
         if err?
           return cb err
