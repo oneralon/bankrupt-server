@@ -30,6 +30,7 @@ module.exports = (lot_ids, cb) ->
   Lot.find(_id: $in: lot_ids).populate('trade').populate('tags').exec (err, lots) ->
     if err?
       console.error err
+      return cb err
     renderer = ECT root : path.join __dirname, '../assets/docs'
 
     lots.forEach (item) ->
@@ -77,6 +78,10 @@ module.exports = (lot_ids, cb) ->
 
     child_process.exec "pdflatex -output-directory=#{dir_name} #{path.join(dir_name, 'compiled-template.tex')}"
     , (err, stdout, stderr) ->
+      if err?
+        return cb err
       child_process.exec "pdflatex -output-directory=#{dir_name} #{path.join(dir_name, 'compiled-template.tex')}"
       , (err, stdout, stderr) ->
+        if err?
+          return cb err
         cb null, dir_name

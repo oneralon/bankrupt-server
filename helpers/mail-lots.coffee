@@ -13,6 +13,8 @@ Lot         = mongoose.model 'Lot'
 
 module.exports = (params, cb) ->
   Lot.find _id: $in: params.ids, (err, lots) ->
+    if err?
+      return cb err
     renderer = ECT root : path.join __dirname, '../views'
     html = renderer.render 'upload_lots.ect',
       lots: lots
