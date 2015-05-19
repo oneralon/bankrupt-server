@@ -23,8 +23,9 @@ router.get '/logout', (req, res) ->
   req.logOut()
   res.status(200).send()
 
-favourite_lots = require '../controllers/favourite_lots'
-filter_presets = require '../controllers/filters'
+favourite_lots  = require '../controllers/favourite_lots'
+filter_presets  = require '../controllers/filters'
+upload_lots     = require '../controllers/upload_lots'
 
 router.get '/favourite-lots/add',       favourite_lots.add
 router.get '/favourite-lots/delete',    favourite_lots.delete
@@ -38,5 +39,7 @@ router.get '/filter_presets/get/:preset_id',  filter_presets.get
 router.get '/filter_presets/get',       filter_presets.get_all
 router.get '/filter_presets/set',       filter_presets.set
 router.get '/filter_presets/delete',    filter_presets.delete
+
+router.get '/upload_lots/',             upload_lots.get
 
 module.exports = router
