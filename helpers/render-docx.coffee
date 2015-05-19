@@ -27,8 +27,6 @@ countdown.setLabels(
   ', ',
   '')
 
-latex_special_symbols = {'_': '\\_', '\\': '\\\\', '#': '\\#', '$': '\\$', '%': '\\%', '^': '\\textasciicircum', '&': '\\textampersand', '{': '\\{', '}': '\\}', '~': '\\textasciitilde'}
-
 module.exports = (lot_ids, cb) ->
   Lot.find(_id: $in: lot_ids).populate('trade').populate('tags').exec (err, lots) ->
     if err?
@@ -71,11 +69,6 @@ module.exports = (lot_ids, cb) ->
     tex = renderer.render 'template.tex',
       lots: lots
 
-    for k, v of latex_special_symbols
-      console.log k, v
-      regex = new RegExp k, 'img'
-      tex = tex.replace regex, v
-
     time = new Date().getTime()
 
     dir_name = path.join __dirname, '../assets/docs/letter' + time
@@ -84,11 +77,11 @@ module.exports = (lot_ids, cb) ->
 
     fs.writeFileSync path.join(dir_name, 'compiled-template.tex'), tex
 
-    child_process.exec "pdflatex -output-directory=#{dir_name} #{path.join(dir_name, 'compiled-template.tex')}"
+    child_process.exec "pdflatex -output-directory=#{dir_name} --shell-escape #{path.join(dir_name, 'compiled-template.tex')}"
     , (err, stdout, stderr) ->
       if err?
         return cb err
-      child_process.exec "pdflatex -output-directory=#{dir_name} #{path.join(dir_name, 'compiled-template.tex')}"
+      child_process.exec "pdflatex -output-directory=#{dir_name} --shell-escape #{path.join(dir_name, 'compiled-template.tex')}"
       , (err, stdout, stderr) ->
         if err?
           return cb err
