@@ -56,7 +56,7 @@ module.exports = (lot_ids, cb) ->
 
       if duration?
         item.next_interval_transcription = countdown(duration.toDate(), new Date(), countdown.DEFAULTS, 2).toString()
-        item.next_interval = duration.format('YYYY.MM.DD, h:mm:ss')
+        item.next_interval = duration
       if end_date?
         item.end_date = end_date
         item.end_date_transcription = countdown(end_date, Date(), countdown.DEFAULTS, 2).toString()
