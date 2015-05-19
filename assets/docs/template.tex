@@ -3,21 +3,20 @@
 \documentclass[a4paper,12pt]{article}
 
 \usepackage[utf8x]{inputenc}
-% \usepackage[sfdefault]{roboto}  %% Option 'sfdefault' only if the base font of the document is to be sans serif
-% \usepackage{PTSansCaption}
-% \renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif
 \usepackage[T2A]{fontenc}
 \usepackage[unicode, pdftex, hidelinks]{hyperref}
 \usepackage{color}
 \usepackage[usenames,dvipsnames]{xcolor}
-\usepackage[a4paper,bindingoffset=0.2in,left=1.2cm,right=1.2cm,top=1.2cm,bottom=1.2cm,footskip=.25in]{geometry}
+\usepackage[a4paper,bindingoffset=0.2in,left=1.2cm,right=1.2cm,top=1.2cm,bottom=1.5cm,footskip=.25in]{geometry}
 \usepackage{graphicx}
-% \DeclareGraphicsExtensions{.pdf,.png,.jpg}
 \graphicspath{ {<%- path.join process.cwd(), 'assets', 'images/' %>} }
+\usepackage{sectsty}
+\sectionfont{\fontsize{15}{17}\selectfont}
 
 
 
 
+\definecolor{Gray}{HTML}{444444}
 <% for lot in @lots : %>
 	<% for tag in lot.tags : %>
 		\definecolor{<%- tag._id %>}{HTML}{<%- tag.color %>}
@@ -26,14 +25,15 @@
 
 \newcounter{lotNumber}
 \setcounter{lotNumber}{1}
-\renewcommand\contentsname{Экспорт данных из приложения «Охота на Банкрота» от <%- moment().format('DD.MM.YYYY hh:mm') %>}
+\renewcommand\contentsname{\begin{large}Экспорт данных из приложения «Охота на Банкрота» {\mdseriesот <%- moment().format('DD.MM.YYYY hh:mm') %>}\end{large}}
+
 
 \makeatletter
 \renewcommand*\l@section{\@dottedtocline{1}{1.5em}{2.3em}}
 \makeatother
 
 \begin{document}
-\fontsize{12pt}{17pt}\selectfont
+\fontsize{13pt}{15pt}\selectfont
 
 \begin{center}
 	\includegraphics[width=3.5cm, height=3.5cm]{favicon}
@@ -43,24 +43,24 @@
 \flushleft
 
 <% for lot in @lots : %>
+	\fontsize{13pt}{15pt}\selectfont
 	\phantomsection
 	\begin{center}
-		\section*{\href{<%- lot.url %>}{\arabic{lotNumber} <%- lot.title %>}}
+		\section*{\href{<%- lot.url %>}{\arabic{lotNumber}. <%- lot.title %>}}
 	\end{center}
-	\addcontentsline{toc}{section}{\arabic{lotNumber} <%- lot.title %>}
-	\center\textbf{}
+	\addcontentsline{toc}{section}{\arabic{lotNumber}. <%- lot.title %>}
 	\flushleft
 	{\color{Gray} Текущая цена:} \textcolor{Blue}{\textbf{<%- lot.current_sum %>}} руб.
 	<% if lot.discount_percent > 0 : %>
 		({\color{Green} - <%- lot.discount_percent * 100 %>\%})
 	<% end %>
-	\linebreak
+	\par
 	{\color{Gray} Начальная цена:} <%- lot.start_price %> руб.
-	\linebreak
+	\par
 	<% if lot.next_interval : %>
 		{\color{Gray} До следующего понижения:} <%- lot.next_interval_transcription %>
 		(<%- lot.next_interval.format('YYYY.MM.DD, h:mm:ss') %>)
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.end_date : %>
 		{\color{Gray} Завершение:} <%- lot.end_date_transcription %>
@@ -72,66 +72,64 @@
 
 
 	\textcolor{Gray}{\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}}
-	\vspace{3mm}
 	<% for tag in lot.tags : %>
 		\textcolor{White}{\colorbox{<%- tag._id %>}{<%- tag.title %>}}
 	<% end %>
 	\textcolor{Gray}{\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}}
 
-	\vspace{3mm}
 	<% if lot.intervals? : %>
 		{\color{Gray} Размер задатка на текущем интервале:} <%- lot.deposit_size %>
-		\linebreak
+		\par
 	<% else : %>
 		{\color{Gray} Размер задатка, руб.:} <%- lot.deposit_size %>
-		\linebreak
+		\par
 	<% end %>
 	\textcolor{Gray}{\makebox[\linewidth]{\rule{\textwidth}{0.4pt}}}
 
 	{\color{Gray} Тип:} <%- lot.trade.trade_type %>
-	\linebreak
+	\par
 	{\color{Gray} Статус:} <%- lot.status %>
-	\linebreak
+	\par
 	{\color{Gray} Регион:} <%- lot.region %>
-	\linebreak
+	\par
 	{\color{Gray} Площадка:} <%- lot.trade.etp.name %>
-	\linebreak
+	\par
 	{\color{Gray} Организатор торгов:} <%- lot.trade.owner.full_name %>
-	\linebreak
 
+	\fontsize{12pt}{14pt}\selectfont
 
 	\subsection*{Должник}
 	% \addcontentsline{toc}{subsection}{Должник}
         {\color{Gray} Тип должника:} <%- lot.trade.debtor.debtor_type %>
-        \linebreak
+        \par
         {\color{Gray} ИНН:} <%- lot.trade.debtor.inn %>
-        \linebreak
+        \par
         <% if lot.trade.debtor.short_name : %>
             {\color{Gray} Сокращенное наименование:} <%- lot.trade.debtor.short_name %>
-        	\linebreak
+        	\par
         <% end %>
         {\color{Gray} Полное наименование:} <%- lot.trade.debtor.full_name %>
-        \linebreak
+        \par
         {\color{Gray} ОГРН:} <%- lot.trade.debtor.ogrn %>
-        \linebreak
+        \par
         {\color{Gray} Основание для проведения торгов:} <%- lot.trade.debtor.judgment %>
-        \linebreak
+        \par
         <% if lot.trade.debtor.reviewing_property : %>
             {\color{Gray} Порядок ознакомления с имуществом:} <%- lot.trade.debtor.reviewing_property %>
-        	\linebreak
+        	\par
         <% end %>
         {\color{Gray} Регион:} <%- lot.trade.debtor.region || lot.region || lot.trade.region %>
-        \linebreak
+        \par
         {\color{Gray} Наименование арбитражного суда:} <%- lot.trade.debtor.arbitral_name %>
-        \linebreak
+        \par
         {\color{Gray} Номер дела о банкротстве:} <%- lot.trade.debtor.bankruptcy_number %>
-        \linebreak
+        \par
         {\color{Gray} Арбитражный управляющий:} <%- lot.trade.debtor.arbitral_commissioner %>
-        \linebreak
+        \par
         {\color{Gray} Наименование организации арбитражных управляющих:} <%- lot.trade.debtor.arbitral_organization %>
-        \linebreak
+        \par
         {\color{Gray} Порядок и срок заключения договора купли-продажи:} <%- lot.trade.debtor.contract_procedure %>
-        \linebreak
+        \par
         {\color{Gray} Сроки платежей, реквизиты счетов:} <%- lot.trade.debtor.payment_terms %>
 
 
@@ -143,175 +141,168 @@
 	% \addcontentsline{toc}{subsection}{Информация об организаторе торгов}
         <% if lot.trade.owner.short_name : %>
             {\color{Gray} Сокращенное наименование:} <%- lot.trade.owner.short_name %>
-            \linebreak
+            \par
         <% end %>
         {\color{Gray} Полное наименование:} <%- lot.trade.owner.full_name %>
-        \linebreak
+        \par
         <% if lot.trade.owner.internet_address : %>
             {\color{Gray} Адрес сайта:} <%- lot.trade.owner.internet_address %>
-        	\linebreak
+        	\par
         <% end %>
         {\color{Gray} ИНН:} <%- lot.trade.owner.inn %>
-        \linebreak
+        \par
         <% if lot.trade.owner.kpp : %>
             {\color{Gray} КПП:} <%- lot.trade.owner.kpp %>
-        	\linebreak
+        	\par
         <% end %>
         <% if lot.trade.owner.ogrn : %>
             {\color{Gray} ОГРН:} <%- lot.trade.owner.ogrn %>
-        	\linebreak
+        	\par
         <% end %>
         <% if lot.trade.owner.ogrnip : %>
             {\color{Gray} ОГРНИП:} <%- lot.trade.owner.ogrnip %>
-        	\linebreak
+        	\par
         <% end %>
         <% if lot.trade.owner.contact.name : %>
             {\color{Gray} Ф.И.О.:} <%- lot.trade.owner.contact.name %>
-        	\linebreak
+        	\par
         <% end %>
         {\color{Gray} Телефон:} <%- lot.trade.owner.contact.phone %>
-    	\linebreak
+    	\par
         <% if lot.trade.owner.contact.fax : %>
             {\color{Gray} Факс:} <%- lot.trade.owner.contact.fax %>
-        	\linebreak
+        	\par
         <% end %>
 
     {\color{Gray} Дата внесения в ЕФРСБ:} <%- moment(lot.trade.debtor.bankrot_date).format 'YYYY.MM.DD' %>
-    \linebreak
+    \par
     {\color{Gray} Основание для проведения торгов:} <%- lot.trade.debtor.bankruptcy_number %> <%- lot.trade.debtor.judgment %>
-    \linebreak
 
 	\subsection*{Информация о торгах}
 	% \addcontentsline{toc}{subsection}{Информация о торгах}
 	{\color{Gray} Форма торга по составу участников:} <%- lot.trade.membership_type %>
-	\linebreak
+	\par
 	{\color{Gray} Форма представления предложений о цене:} <%- lot.trade.price_submission_type %>
-	\linebreak
+	\par
 	{\color{Gray} Дополнительные сведения:} <%- lot.trade.additional %>
-	\linebreak
+	\par
 	{\color{Gray} Порядок и критерии определения победителя торгов:} <%- lot.trade.win_procedure %>
-	\linebreak
+	\par
 	{\color{Gray} Порядок представления заявок на участие в торгах:} <%- lot.trade.submission_procedure %>
-	\linebreak
+	\par
 	<% if lot.trade.holding_date : %>
 		{\color{Gray} Дата проведения:} <%- moment(lot.trade.holding_date).format 'YYYY.MM.DD' %>
-		\linebreak
+		\par
 	<% end %>
 	{\color{Gray} Дата начала представления заявок на участие:} <%- moment(lot.trade.requests_start_date).format 'YYYY.MM.DD' %>
-	\linebreak
+	\par
 	{\color{Gray} Дата окончания представления заявок на участие:} <%- moment(lot.trade.requests_end_date).format 'YYYY.MM.DD' %>
-	\linebreak
+	\par
 	<% if lot.trade.intervals_start_date : %>
 		{\color{Gray} Дата начала первого интервала:} <%- moment(lot.trade.intervals_start_date).format 'YYYY.MM.DD' %>
-		\linebreak
+		\par
 		{\color{Gray} Дата окончания последнего интервала:} <%- moment(lot.trade.interval_end_date).format 'YYYY.MM.DD' %>
-		\linebreak
+		\par
 	<% end %>
 	{\color{Gray} Дата публикации сообщения о проведении открытых торгов в официальном издании:} <%- moment(lot.trade.official_publish_date).format 'YYYY.MM.DD' %>
-	\linebreak
+	\par
 	{\color{Gray} Дата публикации в печатном органе по месту нахождения должника:} <%- moment(lot.trade.print_publish_date).format 'YYYY.MM.DD' %>
-	\linebreak
+	\par
 	{\color{Gray} Дата размещения сообщения в Едином федеральном реестре сведений о банкротстве:} <%- moment(lot.trade.bankrot_date).format 'YYYY.MM.DD' %>
-	\linebreak
+	\par
 	{\color{Gray} Место подведения итогов:} <%- lot.trade.results_place %>
-	\linebreak
+	\par
 	{\color{Gray} Дата подведения итогов:} <%- moment(lot.trade.results_date).format 'YYYY.MM.DD' %>
-	\linebreak
+	\par
 	{\color{Gray} Лицо, подписывающее договор:} <%- lot.trade.contract_signing_person %>
-	\linebreak
-	\linebreak
-
-
 
 	\subsection*{Информация о лоте}
 	% \addcontentsline{toc}{subsection}{Информация о лоте}
 	{\color{Gray} Номер:} <%- lot.number %>
-	\linebreak
+	\par
 	{\color{Gray} Наименование:} <%- lot.title %>
-	\linebreak
+	\par
 	{\color{Gray} Статус:} <%- lot.status %>
-	\linebreak
+	\par
 	{\color{Gray} Порядок оформления участия в торгах, перечень представляемых участниками торгов документов и требования к их оформлению:} <%- lot.procedure %>
-	\linebreak
+	\par
 	{\color{Gray} Категория лота:} <%- lot.category %>
-	\linebreak
+	\par
 	<% if lot.currency : %>
 		{\color{Gray} Валюта цены по ОКВ:} <%- lot.currency %>
-		\linebreak
+		\par
 	<% end %>
 	{\color{Gray} Начальная цена, руб.:} <%- lot.start_price %>
-	\linebreak
+	\par
 	{\color{Gray} Сведения об имуществе должника, его составе, характеристиках, описание, порядок ознакомления:} <%- lot.information %>
-	\linebreak
+	\par
 	<% if lot.step_percent or lot.step_sum : %>
 		{\color{Gray} Шаг:}, % от начальной цены: <%- lot.step_percent %>
-		\linebreak
+		\par
 		<% if lot.step_sum : %>
 			{\color{Gray} Шаг, руб.:} <%- lot.step_sum %>
 		<% else : %>
 			{\color{Gray} Шаг, руб.:} <%- (lot.start_price * lot.step_percent / 100) %>
 		<% end %>
-	\linebreak
+	\par
 	<% end %>
-	{\color{Gray} Тип снижения цены публичного предложения:} <%- lot.price_reduction_type %>
-	\linebreak
+	<% if lot.price_reduction_type : %>
+		{\color{Gray} Тип снижения цены публичного предложения:} <%- lot.price_reduction_type %>
+		\par
+	<% end %>
 	{\color{Gray} Текущая цена, руб.:} <%- lot.current_sum %>
-	\linebreak
-
-
 
 	\subsection*{Обеспечение задатка}
 	% \addcontentsline{toc}{subsection}{Обеспечение задатка}
 
 	<% if lot.calc_method : %>
 		{\color{Gray} Способ расчета обеспечения:} <%- lot.calc_method %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.deposit_size : %>
 		{\color{Gray} Размер задатка, руб.:} <%- lot.deposit_size %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.deposit_payment_date : %>
 		{\color{Gray} Дата внесения задатка:} <%- moment(lot.deposit_payment_date).format 'YYYY.MM.DD' %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.deposit_return_date : %>
 		{\color{Gray} Дата возврата задатка:} <%- moment(lot.deposit_return_date).format 'YYYY.MM.DD' %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.deposit_procedure : %>
 		{\color{Gray} Порядок внесения и возврата задатка:} <%- lot.deposit_procedure %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.banl_name : %>
 		{\color{Gray} Название банка:} <%- lot.banl_name %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.payment_account : %>
 		{\color{Gray} Расчетный счет:} <%- lot.payment_account %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.correspondent_account : %>
 		{\color{Gray} Кор. счет:} <%- lot.correspondent_account %>
-		\linebreak
+		\par
 	<% end %>
 	<% if lot.bik : %>
 		{\color{Gray} БИК:} <%- lot.bik %>
-		\linebreak
+		\par
 	<% end %>
-
 
 	\subsection*{Документы лота}
 	% \addcontentsline{toc}{subsection}{Документы лота}
 
 	<% for doc in lot.trade.documents :%>
 		\href{<%- doc.url %>}{<%- doc.name%>}
-		\linebreak
+		\par
 	<% end %>
 
 	<% for doc in lot.documents :%>
 		\href{<%- doc.url %>}{<%- doc.name%>}
-		\linebreak
+		\par
 	<% end %>
 
 
