@@ -21,7 +21,7 @@
 \definecolor{Gray}{HTML}{444444}
 <% for lot in @lots : %>
 	<% for tag in lot.tags : %>
-		\definecolor{<%- escape(tag._id %>}{HTML}{<%- tag.color) %>}
+		\definecolor{<%- escape(tag._id %>}{HTML}{<%- tag.color.toUpperCase()) %>}
 	<% end %>
 <% end %>
 
