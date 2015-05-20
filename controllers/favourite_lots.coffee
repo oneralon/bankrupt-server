@@ -113,6 +113,6 @@ exports.get = (req, res) ->
   res.status(200).json req.user.favourite_lots
 
 exports.check = (req, res) ->
-  last_check = new Date req.query.last_check or req.last_check or 0
+  last_check = new Date Number req.query.last_check or req.last_check or 0
   Lot.find({_id: {$in: req.user.favourite_lots}, last_message: $gt: last_check}, {_id: 1}).exec (err, result) ->
     res.status(200).json result
