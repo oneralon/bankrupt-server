@@ -27,7 +27,7 @@
 
 \newcounter{lotNumber}
 \setcounter{lotNumber}{1}
-\renewcommand\contentsname{\begin{large}Экспорт данных из приложения «Охота на Банкрота» {\mdseriesот <%- escape(moment().format('DD.MM.YYYY hh:mm')) %>}\end{large}}
+\renewcommand\contentsname{\begin{large}Экспорт данных из приложения «Охота на Банкрота» {\mdseriesот <%- escape(moment().format('DD.MM.YYYY HH:mm')) %>}\end{large}}
 
 
 \makeatletter
@@ -61,7 +61,7 @@
 	\par
 	<% if lot.next_interval? : %>
 		{\color{Gray} До следующего понижения:} <%- escape(lot.next_interval_transcription) %>
-		(<%- escape(lot.next_interval.format('YYYY.MM.DD в hh:mm:ss')) %>)
+		(<%- escape(lot.next_interval.format('YYYY.MM.DD в HH:mm:ss')) %>)
 		\par
 	<% end %>
 	<% if lot.end_date : %>
@@ -69,7 +69,7 @@
 		<% if lot.end_date.toDate() < new Date() : %>
 			назад
 		<% end %>
-		{\color{Gray} (<%- escape(lot.end_date.format('YYYY.MM.DD в hh:mm:ss')) %>)}
+		{\color{Gray} (<%- escape(lot.end_date.format('YYYY.MM.DD в HH:mm:ss')) %>)}
 	<% end %>
 
 
