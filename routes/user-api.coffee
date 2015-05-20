@@ -2,6 +2,7 @@ passport    = require 'passport'
 pass        = require '../modules/passport'
 router      = require('express').Router()
 mustBeAuth  = require '../middlewares/passport'
+cors        = require '../middlewares/cors'
 
 
 router.get '/login', (req, res) ->
@@ -17,15 +18,19 @@ router.get '/activate', (req, res) ->
     res.send()
 
 
-router.use mustBeAuth
-
-router.get '/logout', (req, res) ->
-  req.logOut()
-  res.status(200).send()
 
 favourite_lots  = require '../controllers/favourite_lots'
 filter_presets  = require '../controllers/filters'
 upload_lots     = require '../controllers/upload_lots'
+
+
+
+router.use mustBeAuth
+router.use '/*', cors
+
+router.get '/logout', (req, res) ->
+  req.logOut()
+  res.status(200).send()
 
 router.get '/favourite-lots/add',       favourite_lots.add
 router.get '/favourite-lots/get',       favourite_lots.get
