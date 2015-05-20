@@ -109,12 +109,10 @@ exports.removeTag = (req, res) ->
         return res.status(500).json err: err
       res.status(200).send()
 
-
+exports.get = (req, res) ->
+  res.status(200).json req.user.favourite_lots
 
 exports.check = (req, res) ->
-  last_check = req.query.last_check or req.last_check
-  unless last_check?
-    last_check = new Date(0)
-  console.log req.user.favourite_lots
+  last_check = new Date req.query.last_check or req.last_check or 0
   Lot.find({_id: {$in: req.user.favourite_lots}, last_message: $gt: last_check}, {_id: 1}).exec (err, result) ->
     res.status(200).json result

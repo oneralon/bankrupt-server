@@ -28,6 +28,7 @@ filter_presets  = require '../controllers/filters'
 upload_lots     = require '../controllers/upload_lots'
 
 router.get '/favourite-lots/add',       favourite_lots.add
+router.get '/favourite-lots/get',       favourite_lots.get
 router.get '/favourite-lots/delete',    favourite_lots.delete
 router.get '/favourite-lots/setAlias',  favourite_lots.setAlias
 router.get '/favourite-lots/addTag',    favourite_lots.addTag
