@@ -35,8 +35,10 @@ module.exports = (lot_ids, cb) ->
     renderer = ECT root : path.join __dirname, '../assets/docs'
 
     lots.forEach (item) ->
-      if item.title.substr(0, 99) isnt item.title
-        item.title = item.title.substr(0, 99) + '...'
+      item.display_title = if item.title.substr(0, 99) isnt item.title
+        item.title.substr(0, 99) + '...'
+      else
+        item.title
       unless _.isEmpty item.intervals
         current_interval = item.intervals[0]
         unless new Date() > item.intervals[item.intervals.length - 1].interval_end_date
