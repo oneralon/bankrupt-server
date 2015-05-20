@@ -6,11 +6,11 @@ cors        = require '../middlewares/cors'
 
 
 router.get '/login', (req, res) ->
-  passport.authenticate(['registered', 'anonymous']) req, res, () ->
+  passport.authenticate(['registered', 'facebook', 'anonymous']) req, res, () ->
     res.send()
 
 router.get '/register', (req, res) ->
-  passport.authenticate('registration') req, res, () ->
+  passport.authenticate(['registration', 'facebook-registration']) req, res, () ->
     res.send()
 
 router.get '/activate', (req, res) ->
@@ -23,6 +23,8 @@ favourite_lots  = require '../controllers/favourite_lots'
 filter_presets  = require '../controllers/filters'
 upload_lots     = require '../controllers/upload_lots'
 
+facebook        = require '../controllers/facebook'
+
 
 
 router.use mustBeAuth
@@ -31,6 +33,10 @@ router.use '/*', cors
 router.get '/logout', (req, res) ->
   req.logOut()
   res.status(200).send()
+
+
+router.get '/social/facebook/attach',   facebook.attach
+
 
 router.get '/favourite-lots/add',       favourite_lots.add
 router.get '/favourite-lots/get',       favourite_lots.get

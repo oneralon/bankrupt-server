@@ -5,6 +5,9 @@ userSchema = new Schema
   login: String
   email: String
   password: String
+  avatar: String
+  name: String
+  surname: String
   anonymous:
     type: Boolean
     default: yes
@@ -16,11 +19,12 @@ userSchema = new Schema
   license:
     start_date: Date
     end_date: Date
-
+  third_party_ids: [Schema.Types.Mixed]
   favourite_lots: [
     type: Schema.Types.ObjectId
     ref: 'Lot'
   ]
+
 
 
 mongoose.model 'User', userSchema

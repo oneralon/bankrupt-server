@@ -2,4 +2,4 @@ public
 node_modules
 development.log
 assets/docs/letter*
-config/email*
+config/*
