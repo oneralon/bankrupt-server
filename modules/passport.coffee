@@ -12,6 +12,8 @@ FacebookStrategy          = require '../helpers/facebook-strategy'#require('pass
 FacebookRegisterStrategy  = require '../helpers/facebook-registration'#require('passport-anonymous').Strategy
 TwitterStrategy           = require '../helpers/twitter-strategy'#require('passport-anonymous').Strategy
 TwitterRegisterStrategy   = require '../helpers/twitter-registration'#require('passport-anonymous').Strategy
+VKStrategy                = require '../helpers/vk-strategy'#require('passport-anonymous').Strategy
+VKRegisterStrategy        = require '../helpers/vk-registration'#require('passport-anonymous').Strategy
 
 require '../models/user'
 
@@ -48,6 +50,11 @@ passport.use new FacebookRegisterStrategy () ->
 passport.use new FacebookStrategy () ->
   console.log 'verify func'
 
+passport.use new VKStrategy () ->
+  console.log 'verify func'
+
+passport.use new VKRegisterStrategy () ->
+  console.log 'verify func'
 
 passport.use new TwitterRegisterStrategy () ->
   console.log 'verify func'
