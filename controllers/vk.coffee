@@ -41,9 +41,11 @@ exports.attach = (req, res) ->
   vk_token  = req.vk_token  or req.query.vk_token
   check_vk vk_token, (err, result) ->
     if err?
+      console.log err, result
       return res.status(500).send()
     get_vk_info (err, vk_info) ->
       if err?
+        console.log err, vk_info
         return res.status(500).send()
       User.find
         third_party_ids: vk: vk_info.id
@@ -59,5 +61,6 @@ exports.attach = (req, res) ->
         req.user.email = req.user.email or vk_info.email
         req.user.save (err, user) ->
           if err?
+            console.log err
             return res.status(500).send()
           res.status(200).send()
