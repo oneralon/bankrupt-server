@@ -40,7 +40,7 @@ class Strategy extends passport.Strategy
       if err?
         return me.fail err
       console.log 'get vk user info'
-      me.get_vk_info (err, user_info) ->
+      me.get_vk_info res.user_id, (err, user_info) ->
         console.log user_info
         if err?
           return me.fail err
@@ -68,25 +68,24 @@ class Strategy extends passport.Strategy
               return me.success()
 
   check_vk: (token, cb) ->
-    userToken = token
-    vk.setToken token
+    # userToken = token
+    # vk.setToken token
     vk.setSecureRequests true
     vk.requestServerToken (res) ->
-      console.log 'serverTokenReady', res
       vk.setToken res.access_token
       vk.request 'secure.checkToken', token: token
       , (res) ->
         if res.error?
           return cb res.error
-        vk.setToken userToken
-        return cb null, token
+        # vk.setToken userToken
+        vk.setToken undefined
+        return cb null, res.response
 
-  get_vk_info: (cb) ->
+  get_vk_info: (user_id, cb) ->
     fields = 'sex,city,country,photo_50'
-    vk.request 'users.get', {user_id: '122263003', fields: fields}, (result) ->
+    vk.request 'users.get', {user_id: user_id, fields: fields}, (result) ->
       if result.error?
         return cb result.error
       cb null, result.response?[0]
-
 
 module.exports = Strategy
