@@ -6,11 +6,11 @@ cors        = require '../middlewares/cors'
 
 
 router.get '/login', (req, res) ->
-  passport.authenticate(['registered', 'vk', 'facebook', 'twitter', 'anonymous']) req, res, () ->
+  passport.authenticate(['registered', 'vk', 'facebook', 'twitter', 'linkedin', 'anonymous']) req, res, () ->
     res.send()
 
 router.get '/register', (req, res) ->
-  passport.authenticate(['registration', 'vk-registration', 'facebook-registration', 'twitter-registration']) req, res, () ->
+  passport.authenticate(['registration', 'vk-registration', 'facebook-registration', 'twitter-registration', 'linkedin-registration']) req, res, () ->
     res.send()
 
 router.get '/activate', (req, res) ->
@@ -26,6 +26,7 @@ upload_lots     = require '../controllers/upload_lots'
 facebook        = require '../controllers/facebook'
 vk              = require '../controllers/vk'
 twitter         = require '../controllers/twitter'
+linkedin        = require '../controllers/linkedin'
 
 
 
@@ -40,6 +41,7 @@ router.get '/logout', (req, res) ->
 router.get '/social/facebook/attach',   facebook.attach
 router.get '/social/vk/attach',         vk.attach
 router.get '/social/twitter/attach',    twitter.attach
+router.get '/social/linkedin/attach',   linkedin.attach
 
 
 router.get '/favourite-lots/add',       favourite_lots.add

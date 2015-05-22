@@ -14,6 +14,8 @@ TwitterStrategy           = require '../helpers/twitter-strategy'#require('passp
 TwitterRegisterStrategy   = require '../helpers/twitter-registration'#require('passport-anonymous').Strategy
 VKStrategy                = require '../helpers/vk-strategy'#require('passport-anonymous').Strategy
 VKRegisterStrategy        = require '../helpers/vk-registration'#require('passport-anonymous').Strategy
+LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
+LinkedInRegistration      = require '../helpers/linkedin-registration'#require('passport-anonymous').Strategy
 
 require '../models/user'
 
@@ -61,4 +63,12 @@ passport.use new TwitterRegisterStrategy () ->
 
 
 passport.use new TwitterStrategy () ->
+  console.log 'verify func'
+
+
+passport.use new LinkedInStrategy () ->
+  console.log 'verify func'
+
+
+passport.use new LinkedInRegistration () ->
   console.log 'verify func'
