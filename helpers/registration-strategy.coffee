@@ -43,6 +43,7 @@ class Strategy extends passport.Strategy
           return @fail err
         user = user or new User
           device: device_id
+          anonymous: yes
         if user?.anonymous
           user.email    = email
           user.name     = name if name?
