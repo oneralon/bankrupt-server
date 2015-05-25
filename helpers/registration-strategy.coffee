@@ -3,8 +3,10 @@ util      = require 'util'
 mongoose  = require 'mongoose'
 moment    = require 'moment'
 bcrypt    = require 'bcrypt'
+_         = require 'lodash'
 
-config    = require "../config/db"
+config    = require '../config/db'
+errors    = require './error-codes'
 
 require '../models/user'
 
@@ -31,11 +33,13 @@ class Strategy extends passport.Strategy
       if err?
         return @fail err
       if mail_user?
+        error = _.where(errors, val: 'email_exists')?[0]
         return req.res.status(400).json
-          error_code: 100
-          error_message: 'email занят'
+          error_code: error?.code
+          error_message: error?.message
       User.findOne device: device_id, (err, user) =>
         if err?
+          console.log err
           return @fail err
         if user?.anonymous
           user.email    = email
