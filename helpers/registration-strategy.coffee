@@ -41,6 +41,8 @@ class Strategy extends passport.Strategy
         if err?
           console.log err
           return @fail err
+        user = user or new User
+          device: device_id
         if user?.anonymous
           user.email    = email
           user.name     = name if name?

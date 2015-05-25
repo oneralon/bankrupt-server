@@ -26,7 +26,7 @@ class Strategy extends passport.Strategy
     unless device_id? and email? and pass?
       return @fail()
     User.findOne
-      device: device_id
+      # device: device_id
       email: email
     , (err, user) =>
       if err?
