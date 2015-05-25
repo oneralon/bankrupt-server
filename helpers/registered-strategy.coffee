@@ -39,6 +39,7 @@ class Strategy extends passport.Strategy
         else
           @fail()
       else
+        req.res.status(401).send()
         return @fail()
 
 module.exports = Strategy
