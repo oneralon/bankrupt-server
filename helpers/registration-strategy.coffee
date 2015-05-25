@@ -39,8 +39,8 @@ class Strategy extends passport.Strategy
           return @fail err
         if user?.anonymous
           user.email    = email
-          user.name     = name
-          user.surname  = surname
+          user.name     = name if name?
+          user.surname  = surname if surname?
           user.password = bcrypt.hashSync pass, 10
           user.anonymous = no
           user.save (err, user) =>
