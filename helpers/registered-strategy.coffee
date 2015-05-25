@@ -5,6 +5,7 @@ moment    = require 'moment'
 bcrypt    = require 'bcrypt'
 
 config    = require "../config/db"
+errors    = require './error-codes'
 
 require '../models/user'
 
@@ -37,9 +38,16 @@ class Strategy extends passport.Strategy
         if bcrypt.compareSync pass, user.password
           @success user
         else
+          error = errors.auth_fail_credentials
+          req.res.status(401).json
+            error_code: error?.code
+            error_message: error?.message
           @fail()
       else
-        req.res.status(401).send()
+        error = errors.auth_fail_credentials
+        req.res.status(401).json
+          error_code: error?.code
+          error_message: error?.message
         return @fail()
 
 module.exports = Strategy

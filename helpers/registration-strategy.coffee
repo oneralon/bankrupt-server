@@ -33,7 +33,7 @@ class Strategy extends passport.Strategy
       if err?
         return @fail err
       if mail_user?
-        error = _.where(errors, val: 'email_exists')?[0]
+        error = errors.email_exists
         return req.res.status(400).json
           error_code: error?.code
           error_message: error?.message
