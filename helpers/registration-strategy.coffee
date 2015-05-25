@@ -27,23 +27,30 @@ class Strategy extends passport.Strategy
     surname   = req.surname   or req.query.surname
     unless device_id? and email? and pass?
       return @fail()
-    User.findOne device: device_id, (err, user) =>
+    User.findOne email: email, (err, mail_user) =>
       if err?
         return @fail err
-      if user?.anonymous
-        user.email    = email
-        user.name     = name
-        user.surname  = surname
-        user.password = bcrypt.hashSync pass, 10
-        user.anonymous = no
-        user.save (err, user) =>
-          if err?
-            return @fail err
-          if user?
-            @success user
-          else
-            @fail()
-      else
-        return @fail()
+      if mail_user?
+        return req.res.status(400).json
+          error_code: 100
+          error_message: 'email занят'
+      User.findOne device: device_id, (err, user) =>
+        if err?
+          return @fail err
+        if user?.anonymous
+          user.email    = email
+          user.name     = name
+          user.surname  = surname
+          user.password = bcrypt.hashSync pass, 10
+          user.anonymous = no
+          user.save (err, user) =>
+            if err?
+              return @fail err
+            if user?
+              @success user
+            else
+              @fail()
+        else
+          return @fail()
 
 module.exports = Strategy
