@@ -45,6 +45,7 @@ exports.list = (req, res, next) ->
     query.where start_price: $lte: end_price
 
   unless _.isEmpty regions
+    regions.push 'Не определен'
     query.where region: $in: regions
 
   unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
