@@ -6,7 +6,7 @@ client = new elasticsearch.Client
   host: 'localhost:9200'
   log: 'error'
 
-exports.like = (fields, filter_fields, text, ids) ->
+exports.like = (fields, filter_fields, text, from, take, ids) ->
   new Promise (resolve, reject) ->
     query = {}
     if ids?
@@ -14,6 +14,9 @@ exports.like = (fields, filter_fields, text, ids) ->
         query:
           ids:
             values: ids
+
+    query.from = from
+    query.size = take
 
     query.query =
       bool:

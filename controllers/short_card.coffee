@@ -71,12 +71,15 @@ exports.list = (req, res, next) ->
     #   .select score: $meta: 'textScore'
 
     promises.push new Promise (resolve, reject) ->
-      elastic.like ['_id'], ['information', 'title^2'], text
+      elastic.like ['_id'], ['information', 'title^2'], text, (page - 1) * perPage, perPage
       .then (ids) ->
         resolve query.where _id: $in: ids
 
   Promise.all(promises).then ->
-    query.sort("#{sort}": "#{sort_order}").skip((page - 1) * perPage).limit(perPage)
+    query.sort("#{sort}": "#{sort_order}")
+
+    unless text?
+      query.skip((page - 1) * perPage).limit(perPage)
 
     query.populate 'trade'
     query.populate 'tags', 'title color'
