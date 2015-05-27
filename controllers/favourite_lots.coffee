@@ -1,5 +1,7 @@
 mongoose    = require 'mongoose'
 
+errors      = require '../helpers/error-codes'
+
 require '../models/user'
 require '../models/lot'
 require '../models/tag'
@@ -14,6 +16,8 @@ exports.add = (req, res) ->
   lot_id = req.query.lot_id or req.lot_id
   unless lot_id?
     return res.status(500).json err: err
+  if req.user.favourite_lots.length > 24
+    return res.status(500).json errors.max_favourite_lots
 
   req.user.favourite_lots.addToSet lot_id
 

@@ -7,6 +7,10 @@ errors =
     code: 101
     message: 'Неверная комбинация логин/пароль'
 
+  max_favourite_lots:
+    code: 102
+    message: 'Достигнут предел количества "моих лотов"'
+
   strange_error:
     code: 666
     message: 'Странная ошибка'
