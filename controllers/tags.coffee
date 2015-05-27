@@ -13,6 +13,7 @@ Lot       = mongoose.model 'Lot'
 exports.get = (req, res, next) ->
   id      = req.id      or req.query.id
   system  = req.system  or req.query.system
+  system  = system is 'true'
 
   unless _.isEmpty id
     query = Tag.find _id: id
