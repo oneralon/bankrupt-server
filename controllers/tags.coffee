@@ -28,7 +28,7 @@ exports.add = (req, res, next) ->
   title = req.title or req.query.title
   color = req.color or req.query.color
 
-  if (color[0] isnt '#') and color.length is 6
+  if color? and (color[0] isnt '#') and color.length is 6
     color = '#' + color
 
   if _.isEmpty title
