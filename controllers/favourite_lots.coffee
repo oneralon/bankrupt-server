@@ -2,10 +2,12 @@ mongoose    = require 'mongoose'
 
 require '../models/user'
 require '../models/lot'
+require '../models/tag'
 require '../models/lot_alias'
 
 User        = mongoose.model 'User'
 Lot         = mongoose.model 'Lot'
+Tag         = mongoose.model 'Tag'
 LotAlias    = mongoose.model 'LotAlias'
 
 exports.add = (req, res) ->
@@ -78,16 +80,21 @@ exports.addTag = (req, res) ->
   unless tag_id?
     return res.status(500).json err: 'tag_id must be defined'
 
-  Lot.findById lot_id, (err, lot) ->
+  Tag.findOne _id: tag_id, user: req.user, (err, tag) ->
     if err?
       return res.status(500).json err: err
-    unless lot?
-      return res.status(404).send()
-    lot.tags.addToSet tag_id
-    lot.save (err, lot) ->
+    if _.isEmpty tag
+      return res.status(404).json err: 'tag not found'
+    Lot.findById lot_id, (err, lot) ->
       if err?
         return res.status(500).json err: err
-      res.status(200).send()
+      unless lot?
+        return res.status(404).send()
+      lot.tags.addToSet tag_id
+      lot.save (err, lot) ->
+        if err?
+          return res.status(500).json err: err
+        res.status(200).send()
 
 
 exports.removeTag = (req, res) ->
