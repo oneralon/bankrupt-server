@@ -24,7 +24,10 @@ router.use '/*', cors
 router.get '/etps',           etps.get
 router.get '/statuses',       statuses.get
 router.get '/regions',        regions.get
+
 router.get '/tags',           tags.get
+router.get '/tags/add',       tags.add
+router.get '/tags/delete',    tags.delete
 
 router.use mustBeAuth
 

@@ -7,5 +7,8 @@ tagSchema = new Schema
   alone: Boolean
   system: Boolean
   color: String
+  user:
+    type: Schema.Types.ObjectId
+    ref: 'User'
 
 mongoose.model 'Tag', tagSchema
