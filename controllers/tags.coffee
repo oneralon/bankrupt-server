@@ -18,7 +18,7 @@ exports.get = (req, res, next) ->
   else
     query = Tag.find()
   query.where $or: [{user: null}, {user: req.user}]
-  query.select '_id title color'
+  query.select '_id title color system'
   query.exec (err, tags) ->
     if err?
       return res.status(500).send()

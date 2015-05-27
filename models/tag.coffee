@@ -5,7 +5,9 @@ tagSchema = new Schema
   title: String
   keywords: Schema.Types.Mixed
   alone: Boolean
-  system: Boolean
+  system:
+    type: Boolean
+    default: false
   color: String
   user:
     type: Schema.Types.ObjectId
