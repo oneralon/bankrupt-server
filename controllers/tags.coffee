@@ -13,7 +13,6 @@ Lot       = mongoose.model 'Lot'
 exports.get = (req, res, next) ->
   id      = req.id      or req.query.id
   system  = req.system  or req.query.system
-  system  = system is 'true'
 
   unless _.isEmpty id
     query = Tag.find _id: id
@@ -23,7 +22,7 @@ exports.get = (req, res, next) ->
   query.select '_id title color system'
 
   if system?
-    query.where system: system
+    query.where system: system is 'true'
 
   query.exec (err, tags) ->
     if err?
