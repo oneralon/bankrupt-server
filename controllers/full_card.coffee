@@ -25,7 +25,13 @@ exports.get = (req, res, next) ->
       console.log err
       next err
     unless lot?
-      lot = {}
+      return res.status(404).send()
+
+    lot = lot.toObject()
+    lot.end_date = lot.trade.requests_end_date or
+      lot.intervals[lot.intervals.length - 1]?.request_end_date or
+      lot.trade.holding_date or
+      lot.trade.results_date
 
     if req.query.render
       res.render 'full_card',
