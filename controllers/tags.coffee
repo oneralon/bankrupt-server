@@ -11,14 +11,19 @@ Tag       = mongoose.model 'Tag'
 Lot       = mongoose.model 'Lot'
 
 exports.get = (req, res, next) ->
-  id    = req.id or req.query.id
-  console.log id
+  id      = req.id      or req.query.id
+  system  = req.system  or req.query.system
+
   unless _.isEmpty id
     query = Tag.find _id: id
   else
     query = Tag.find()
   query.where $or: [{user: null}, {user: req.user}]
   query.select '_id title color system'
+
+  if system?
+    query.where system: system
+
   query.exec (err, tags) ->
     if err?
       return res.status(500).send()
