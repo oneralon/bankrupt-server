@@ -33,6 +33,9 @@ exports.list = (req, res, next) ->
   promises = []
 
   query = Lot.find()
+
+  query.where _id: $nin: req.user.hidden_lots
+
   unless _.isEmpty tags
     query.where tags: $in: [tags]
 

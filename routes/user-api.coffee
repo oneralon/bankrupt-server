@@ -24,6 +24,7 @@ router.get '/activate', (req, res) ->
 
 
 favourite_lots  = require '../controllers/favourite_lots'
+hidden_lots     = require '../controllers/hidden_lots'
 filter_presets  = require '../controllers/filters'
 upload_lots     = require '../controllers/upload_lots'
 
@@ -47,6 +48,9 @@ router.get '/social/vk/attach',         vk.attach
 router.get '/social/twitter/attach',    twitter.attach
 router.get '/social/linkedin/attach',   linkedin.attach
 
+
+router.get '/hidden-lots/add',          hidden_lots.add
+router.get '/hidden-lots/delete',       hidden_lots.delete
 
 router.get '/favourite-lots/add',       favourite_lots.add
 router.get '/favourite-lots/get',       favourite_lots.get

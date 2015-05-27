@@ -24,6 +24,10 @@ userSchema = new Schema
     type: Schema.Types.ObjectId
     ref: 'Lot'
   ]
+  hidden_lots: [
+    type: Schema.Types.ObjectId
+    ref: 'Lot'
+  ]
 
 
 
