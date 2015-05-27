@@ -49,9 +49,6 @@ exports.list = (req, res, next) ->
     regions.push 'Не определен'
     query.where region: $in: regions
 
-  if my_lots_only
-    query.where _id: $in: req.user.favourite_lots
-
   unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
     promises.push new Promise (resolve, reject) ->
       tradeQuery = {}
@@ -78,7 +75,12 @@ exports.list = (req, res, next) ->
     promises.push new Promise (resolve, reject) ->
       elastic.like ['_id'], ['information', 'title^2'], text, (page - 1) * perPage, perPage
       .then (ids) ->
+        if my_lots_only
+          ids = _.intersection ids, req.user.favourite_lots.map (item) -> item.toString()
         resolve query.where _id: $in: ids
+  else
+    if my_lots_only and _.isEmpty text
+      query.where _id: $in: req.user.favourite_lots
 
   Promise.all(promises).then ->
     query.sort("#{sort}": "#{sort_order}")
