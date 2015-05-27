@@ -120,10 +120,10 @@ exports.list = (req, res, next) ->
           if nextInterval?
             duration = moment(nextInterval.interval_start_date)
 
-        end_date = moment(item.trade.requests_end_date or
-          item.intervals[item.intervals.length - 1]?.request_end_date or
+        end_date = moment(item.trade.results_date or
           item.trade.holding_date or
-          item.trade.results_date)
+          item.trade.requests_end_date or
+          item.intervals[item.intervals.length - 1]?.request_end_date)
 
         if req.query.render
           duration = moment.duration(duration.diff new Date()).humanize() if duration?

@@ -28,10 +28,10 @@ exports.get = (req, res, next) ->
       return res.status(404).send()
 
     lot = lot.toObject()
-    lot.end_date = lot.trade.requests_end_date or
-      lot.intervals[lot.intervals.length - 1]?.request_end_date or
+    lot.end_date = lot.trade.results_date or
       lot.trade.holding_date or
-      lot.trade.results_date
+      lot.trade.requests_end_date or
+      lot.intervals[lot.intervals.length - 1]?.request_end_date
 
     if req.query.render
       res.render 'full_card',
