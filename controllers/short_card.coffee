@@ -23,6 +23,7 @@ exports.list = (req, res, next) ->
   start_price = req.query.startPrice
   end_price = req.query.endPrice
   text = req.query.text
+  my_lots_only = req.query.my_lots or req.my_lots
   trade_types = req.query.tradeTypes?.map (item) -> item.toLowerCase()
   membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
   price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
@@ -47,6 +48,9 @@ exports.list = (req, res, next) ->
   unless _.isEmpty regions
     regions.push 'Не определен'
     query.where region: $in: regions
+
+  if my_lots_only
+    query.where _id: $in: req.user.favourite_lots
 
   unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
     promises.push new Promise (resolve, reject) ->
