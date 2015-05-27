@@ -50,6 +50,33 @@ exports.add = (req, res, next) ->
       return res.status(500).send()
     res.status(200).json _id: tag._id
 
+exports.update = (req, res, next) ->
+  id    = req.id    or req.query.id
+  title = req.title or req.query.title
+  color = req.color or req.query.color
+
+  if color? and (color[0] isnt '#') and color.length is 6
+    color = '#' + color
+
+  unless id
+    return res.status(500).json err: 'id must be defined'
+
+  Tag.findOne _id: id, user: req.user, (err, tag) ->
+    if err?
+      return res.status(500).json err: err
+    if _.isEmpty tag
+      return res.status(404).send()
+
+    if color?
+      tag.color = color
+    if title?
+      tag.title = title
+
+    tag.save (err, tag) ->
+      if err?
+        return res.status(500).send()
+      res.status(200).json _id: tag._id
+
 exports.delete = (req, res, next) ->
   id    = req.id or req.query.id
 
