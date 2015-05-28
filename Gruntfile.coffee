@@ -20,20 +20,20 @@ module.exports = (grunt) ->
       #   files: ['**/*.coffee']
       #   tasks: ['coffee']
       express:
-        files: ['**/*.coffee', 'server.coffee', 'index.coffee']
+        files: ['**/*.coffee', 'server.coffee']
         tasks: ['express:dev']
         options:
           spawn: no
     express:
       dev:
         options:
-          script: 'index.coffee' #'server.coffee'
+          script: 'server.coffee'
           opts: ['/usr/local/bin/coffee']
           node_env: 'development'
           #port: 8080
       prod:
         options:
-          script: 'index.coffee' #'server.coffee'
+          script: 'server-multithread.coffee'
           opts: ['/usr/local/bin/coffee']
           background: yes
           node_env: 'production'
