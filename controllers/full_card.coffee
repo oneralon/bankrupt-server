@@ -14,7 +14,7 @@ exports.get = (req, res, next) ->
     return next new Error 'Задайте id'
   Lot.findById(id).populate('trade')
   .populate('tags')
-  .populate 'tags', 'title color'
+  .populate 'tags', 'title color system'
   .populate
     path: 'aliases'
     match: user: req.user

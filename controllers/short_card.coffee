@@ -92,7 +92,7 @@ exports.list = (req, res, next) ->
       query.skip((page - 1) * perPage).limit(perPage)
 
     query.populate 'trade'
-    query.populate 'tags', 'title color'
+    query.populate 'tags', 'title color system'
     query.populate
       path: 'aliases'
       match: user: req.user

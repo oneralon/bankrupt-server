@@ -1,3 +1,4 @@
+_           = require 'lodash'
 mongoose    = require 'mongoose'
 
 errors      = require '../helpers/error-codes'
