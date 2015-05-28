@@ -11,7 +11,7 @@
 \usepackage[usenames,dvipsnames]{xcolor}
 \usepackage[a4paper,bindingoffset=0.2in,left=1.2cm,right=1.2cm,top=1.2cm,bottom=1.5cm,footskip=.25in]{geometry}
 \usepackage{graphicx}
-\graphicspath{ {<%- escape(path.join process.cwd(), 'assets', 'images/') %>} }
+\graphicspath{ {<%- escape(path.join process.cwd(), 'assets', 'images/').replace /[\uE000-\uF8FF]/ig, '' %>} }
 \usepackage{sectsty}
 \sectionfont{\fontsize{15}{17}\selectfont}
 

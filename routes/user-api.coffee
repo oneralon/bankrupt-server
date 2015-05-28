@@ -23,6 +23,7 @@ router.get '/activate', (req, res) ->
 
 
 
+
 favourite_lots  = require '../controllers/favourite_lots'
 hidden_lots     = require '../controllers/hidden_lots'
 filter_presets  = require '../controllers/filters'
@@ -37,6 +38,9 @@ linkedin        = require '../controllers/linkedin'
 
 router.use mustBeAuth
 router.use '/*', cors
+
+router.get '/me', (req, res) ->
+  res.status(200).json req.user
 
 router.get '/logout', (req, res) ->
   req.logOut()
