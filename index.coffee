@@ -8,6 +8,6 @@ if cluster.isMaster
   cluster.on 'online', () ->
     console.log 'Worker started'
 
-  for i in [0..cCPUs]
+  for i in [1..cCPUs]
     cluster.fork()
 
