@@ -37,7 +37,7 @@ exports.list = (req, res, next) ->
   query.where _id: $nin: req.user.hidden_lots
 
   unless _.isEmpty tags
-    query.where tags: $in: [tags]
+    query.where tags: $in: tags
 
   unless _.isEmpty statuses
     query.where status: $in: statuses
