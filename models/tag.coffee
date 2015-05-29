@@ -13,4 +13,7 @@ tagSchema = new Schema
     type: Schema.Types.ObjectId
     ref: 'User'
 
+tagSchema.index user: 1
+tagSchema.index system: 1
+
 mongoose.model 'Tag', tagSchema

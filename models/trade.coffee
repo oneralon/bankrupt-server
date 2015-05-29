@@ -65,4 +65,9 @@ tradeSchema = new Schema
 ,
   versionKey: false
 
+tradeSchema.index trade_type: 1
+tradeSchema.index membership_type: 1
+tradeSchema.index price_submission_type: 1
+tradeSchema.index 'etps.name': 1
+
 mongoose.model 'Trade', tradeSchema

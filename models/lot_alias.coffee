@@ -10,4 +10,7 @@ lotAliasSchema = new Schema
     type: Schema.Types.ObjectId
     ref: 'User'
 
+lotAliasSchema.index lot: 1
+lotAliasSchema.index user: 1
+
 mongoose.model 'LotAlias', lotAliasSchema

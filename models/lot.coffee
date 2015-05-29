@@ -60,6 +60,11 @@ lotSchema = new Schema
 
 # lotSchema.index {title: 'text', information: 'text'}, { default_language: "russian" }
 lotSchema.index last_message: 1
+lotSchema.index trade: 1
+lotSchema.index current_sum: 1
+lotSchema.index start_price: 1
+lotSchema.index region: 1
+lotSchema.index tags: 1
 # lotSchema.set 'autoIndex', false
 
 mongoose.model 'Lot', lotSchema
