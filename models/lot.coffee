@@ -58,7 +58,8 @@ lotSchema = new Schema
     ref: 'lotAlias'
   ]
 
-lotSchema.index {title: 'text', information: 'text'}, { default_language: "russian" }
+# lotSchema.index {title: 'text', information: 'text'}, { default_language: "russian" }
+lotSchema.index last_message: 1
 # lotSchema.set 'autoIndex', false
 
 mongoose.model 'Lot', lotSchema
