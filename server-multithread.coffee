@@ -5,6 +5,7 @@ session       = require 'express-session'
 passport      = require 'passport'
 cluster       = require 'cluster'
 path          = require 'path'
+compression   = require 'compression'
 cCPUs         = require('os').cpus().length
 
 redis         = require './modules/redis-session'
@@ -30,6 +31,7 @@ else
   if process.env.NODE_ENV is 'development'
     app.use logger
 
+  app.use compression()
   app.use cookieParser 'keyboard cat'
   app.use session
     secret: 'keyboard cat'
