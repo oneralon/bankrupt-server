@@ -46,5 +46,5 @@ app.use express.static('assets')
 
 # app.use web404
 
-app.listen process.env.PORT, ->
+app.listen process.env.PORT or 3000, ->
   console.log "Server listening on port #{process.env.PORT}"

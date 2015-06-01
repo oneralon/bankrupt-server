@@ -30,6 +30,7 @@ module.exports = (grunt) ->
           script: 'server.coffee'
           opts: ['/usr/local/bin/coffee']
           node_env: 'development'
+          nodeArgs: ['--nodejs', '--debug']
           #port: 8080
       prod:
         options:
@@ -38,12 +39,25 @@ module.exports = (grunt) ->
           background: yes
           node_env: 'production'
           #port: 8080
+    nodemon:
+      dev:
+        script: './server.coffee'
+        options:
+          nodeArgs: ['--nodejs', '--debug']
+          ignore: [
+            'node_modules/**'
+            'public/**'
+          ]
+          ext: 'js,coffee'
+          watch: ['**/*.coffee', 'server.coffee']
+
 
 
   grunt.loadNpmTasks 'grunt-contrib-coffee'
   grunt.loadNpmTasks 'grunt-contrib-stylus'
   grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-express-server'
+  grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-keepalive'
-  grunt.registerTask 'default', ['stylus', 'express:dev', 'watch']
+  grunt.registerTask 'default', ['stylus', 'nodemon:dev', 'watch']
   grunt.registerTask 'production', ['stylus', 'express:prod', 'keepalive']

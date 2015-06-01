@@ -15,11 +15,14 @@ etps          = require '../controllers/etps'
 statuses      = require '../controllers/statuses'
 regions       = require '../controllers/regions'
 tags          = require '../controllers/tags'
+error_logs    = require '../controllers/error_logs'
 
 
 mongoose.set 'debug', yes
 
 router.use '/*', cors
+
+router.get '/log',            error_logs.add
 
 router.get '/etps',           etps.get
 router.get '/statuses',       statuses.get
