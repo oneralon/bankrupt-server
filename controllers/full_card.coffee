@@ -13,8 +13,10 @@ exports.get = (req, res, next) ->
   unless id?
     return next new Error 'Задайте id'
   Lot.findById(id).populate('trade')
-  .populate('tags')
-  .populate 'tags', 'title color system'
+  .populate
+    path: 'tags'
+    match: $or: [{user: null}, {user: req.user}]
+    select: 'title color system'
   .populate
     path: 'aliases'
     match: user: req.user
