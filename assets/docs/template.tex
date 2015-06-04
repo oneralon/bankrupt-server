@@ -47,9 +47,8 @@
 <% for lot in @lots : %>
 	\fontsize{13pt}{15pt}\selectfont
 	\phantomsection
-	\begin{center}
+	\center
 		\section*{\href{<%- escape(lot.url) %>}{\arabic{lotNumber}. <%- escape(lot.display_title) %>}}
-	\end{center}
 	\addcontentsline{toc}{section}{\arabic{lotNumber}. <%- escape(lot.display_title) %>}
 	\flushleft
 	{\color{Gray} Текущая цена:} \textcolor{Blue}{\textbf{<%- escape(lot.current_sum) %>}} руб.
