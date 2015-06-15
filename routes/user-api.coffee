@@ -28,6 +28,7 @@ favourite_lots  = require '../controllers/favourite_lots'
 hidden_lots     = require '../controllers/hidden_lots'
 filter_presets  = require '../controllers/filters'
 upload_lots     = require '../controllers/upload_lots'
+profile         = require '../controllers/profile'
 
 facebook        = require '../controllers/facebook'
 vk              = require '../controllers/vk'
@@ -42,10 +43,12 @@ router.use '/*', cors
 router.get '/me', (req, res) ->
   res.status(200).json req.user
 
+
 router.get '/logout', (req, res) ->
   req.logOut()
   res.status(200).send()
 
+router.get '/update',                   profile.update
 
 router.get '/social/facebook/attach',   facebook.attach
 router.get '/social/vk/attach',         vk.attach
