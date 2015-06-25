@@ -88,7 +88,7 @@ exports.list = (req, res, next) ->
   Promise.all(promises).then ->
     query.sort("#{sort}": "#{sort_order}")
 
-    unless text?
+    if _.isEmpty text
       query.skip((page - 1) * perPage).limit(perPage)
 
     query.populate 'trade'
@@ -122,6 +122,10 @@ exports.list = (req, res, next) ->
                 break
 
             nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
+
+            unless nextInterval? and date > item.intervals[item.intervals.length - 1]
+              nextInterval = item.intervals[item.intervals.length - 1]
+
             if nextInterval?
               duration = moment(nextInterval.interval_start_date)
 
