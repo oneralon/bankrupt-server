@@ -123,7 +123,7 @@ exports.list = (req, res, next) ->
 
             nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
 
-            unless nextInterval? and date > item.intervals[item.intervals.length - 1]
+            if date > item.intervals[item.intervals.length - 1]
               nextInterval = item.intervals[item.intervals.length - 1]
 
             if nextInterval?
