@@ -123,10 +123,11 @@ exports.list = (req, res, next) ->
 
             nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
 
-            if nextInterval?
-              duration = moment(nextInterval.interval_start_date)
           else
             nextInterval = item.intervals[item.intervals.length - 1]
+
+          if nextInterval?
+            duration = moment(nextInterval.interval_start_date)
 
         # unless _.isEmpty item.intervals
         #   current_interval = item.intervals[0]
