@@ -114,14 +114,27 @@ exports.list = (req, res, next) ->
       lots = lots.map (item) ->
         unless _.isEmpty item.intervals
           current_interval = item.intervals[0]
-          date = new Date()
-          for interval in item.intervals
-            if interval.interval_start_date < date < interval.interval_end_date
-              current_interval = interval
-              break
-          nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
-          if nextInterval?
-            duration = moment(nextInterval.interval_start_date)
+          unless new Date() > item.intervals[item.intervals.length - 1].interval_end_date
+            date = new Date()
+            for interval in item.intervals
+              if interval.interval_start_date < date < interval.interval_end_date
+                current_interval = interval
+                break
+
+            nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
+            if nextInterval?
+              duration = moment(nextInterval.interval_start_date)
+
+        # unless _.isEmpty item.intervals
+        #   current_interval = item.intervals[0]
+        #   date = new Date()
+        #   for interval in item.intervals
+        #     if interval.interval_start_date < date < interval.interval_end_date
+        #       current_interval = interval
+        #       break
+        #   nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
+        #   if nextInterval?
+        #     duration = moment(nextInterval.interval_start_date)
 
         end_date = moment(item.trade.results_date or
           item.trade.holding_date or
