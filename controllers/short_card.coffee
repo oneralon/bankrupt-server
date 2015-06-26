@@ -30,7 +30,8 @@ exports.list = (req, res, next) ->
   sort = req.query.sort or 'last_message'
   sort_order = req.query.sortOrder or 'desc'
 
-  promises = []
+  promises  = []
+  lot_ids   = []
 
   query = Lot.find()
 
@@ -66,30 +67,51 @@ exports.list = (req, res, next) ->
       unless _.isEmpty price_submission_types
         tradeQuery['price_submission_type'] = $in: price_submission_types
 
-      mongoose.connection.collection('trades').find tradeQuery, {'_id': 1}, (err, cursor) ->
-        cursor.toArray (err, ids) ->
-          query.where trade: $in: ids
-          resolve()
+      mongoose.connection.collection('trades').find tradeQuery, {'lots': 1}, (err, cursor) ->
+        cursor.toArray (err, trades) ->
+          lots = []
+          for trade in trades
+            lots = lots.concat trade.lots
+          public_lots = lots.map (item) -> return item.toString()
+
+          console.log 'Mongo has ', public_lots.length
+
+          unless _.isEmpty lot_ids
+            lot_ids = _.intersection lot_ids, public_lots
+          else
+            lot_ids = public_lots
+          resolve public_lots
 
   unless _.isEmpty text
-    # query.where $text: $search: text
-    #   .select score: $meta: 'textScore'
-
     promises.push new Promise (resolve, reject) ->
-      elastic.like ['_id'], ['information', 'title^2'], text, (page - 1) * perPage, perPage
+      elastic.like ['_id'], ['information', 'title^2'], text, 0, 1000000
       .then (ids) ->
-        if my_lots_only
-          ids = _.intersection ids, req.user.favourite_lots.map (item) -> item.toString()
-        resolve query.where _id: $in: ids
-  else
-    if my_lots_only and _.isEmpty text
-      query.where _id: $in: req.user.favourite_lots
+        text_lots = ids
+
+        console.log 'Elastic has ', text_lots.length
+
+        unless _.isEmpty lot_ids
+          lot_ids = _.intersection lot_ids, text_lots
+        else
+          lot_ids = text_lots
+        resolve text_lots # query.where _id: $in: ids
+
+  if my_lots_only
+    unless _.isEmpty lot_ids
+      lot_ids = _.intersection lot_ids, req.user.favourite_lots.map (item) -> item.toString()
+    else
+      lot_ids = req.user.favourite_lots.map (item) -> item.toString()
 
   Promise.all(promises).then ->
+
+    console.log 'All promises resolved'
+
+    unless _.isEmpty lot_ids
+      query.where _id: $in: lot_ids
+
     query.sort("#{sort}": "#{sort_order}")
 
-    if _.isEmpty text
-      query.skip((page - 1) * perPage).limit(perPage)
+    query.skip((page - 1) * perPage).limit(perPage)
 
     query.populate 'trade'
     query.populate
@@ -104,6 +126,8 @@ exports.list = (req, res, next) ->
 
 
     query.exec (err, lots) ->
+      console.log 'query executed'
+
       if err
         console.log err
         res.status(500)
@@ -175,3 +199,5 @@ exports.list = (req, res, next) ->
           currentPage: page
       else
         res.status(200).json lots: lots
+  .catch (err) ->
+    console.log err
