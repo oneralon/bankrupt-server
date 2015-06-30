@@ -136,6 +136,7 @@ exports.list = (req, res, next) ->
         lots = []
 
       lots = lots.map (item) ->
+        current_interval = null
         unless _.isEmpty item.intervals
           current_interval = item.intervals[0]
           unless new Date() > item.intervals[item.intervals.length - 1].interval_end_date
@@ -183,7 +184,7 @@ exports.list = (req, res, next) ->
           status: item.status
           region: item.region
           start_price: item.start_price
-          current_price: item.current_sum or item.start_price
+          current_price: current_interval?.interval_price or item.current_sum or item.start_price
           discount: item.discount
           next_interval_start_date: duration
           end_date: end_date
