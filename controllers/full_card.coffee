@@ -30,6 +30,21 @@ exports.get = (req, res, next) ->
       return res.status(404).send()
 
     lot = lot.toObject()
+
+    current_interval = null
+    unless _.isEmpty lot.intervals
+      current_interval = lot.intervals[0]
+      unless new Date() > lot.intervals[lot.intervals.length - 1].interval_end_date
+        date = new Date()
+        for interval in lot.intervals
+          if interval.interval_start_date < date < interval.interval_end_date
+            current_interval = interval
+            break
+      else
+        current_interval = lot.intervals[lot.intervals.length - 1]
+
+    lot.current_sum = current_interval?.interval_price or lot.current_sum or lot.start_price
+
     lot.end_date = lot.trade.results_date or
       lot.trade.holding_date or
       lot.trade.requests_end_date or

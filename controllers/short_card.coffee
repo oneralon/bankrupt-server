@@ -150,6 +150,7 @@ exports.list = (req, res, next) ->
 
           else
             nextInterval = item.intervals[item.intervals.length - 1]
+            current_interval = item.intervals[item.intervals.length - 1]
 
           if nextInterval?
             duration = moment(nextInterval.interval_start_date)
