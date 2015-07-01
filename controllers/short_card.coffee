@@ -140,7 +140,7 @@ exports.list = (req, res, next) ->
       if res.repeated
         lots = res.lots.concat lots
 
-      if lots.length < perPage and not res.repeated
+      if lots.length < perPage and not res.repeated and not _.isEmpty regions
         res.repeated = yes
         res.lots = lots
         return exports.list req, res, next
