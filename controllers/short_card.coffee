@@ -51,6 +51,7 @@ exports.list = (req, res, next) ->
 
   unless _.isEmpty regions
     if res.repeated
+      perPage = perPage - res.lots.length
       regions = ['Не определен']
     query.where region: $in: regions
 
