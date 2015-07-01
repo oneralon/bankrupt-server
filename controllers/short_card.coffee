@@ -50,7 +50,8 @@ exports.list = (req, res, next) ->
     query.where start_price: $lte: end_price
 
   unless _.isEmpty regions
-    regions.push 'Не определен'
+    if res.repeated
+      regions = ['Не определен']
     query.where region: $in: regions
 
   unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
@@ -134,6 +135,14 @@ exports.list = (req, res, next) ->
         return next err
       if not lots? or lots.length is 0
         lots = []
+
+      if res.repeated
+        lots = res.lots.concat lots
+
+      if lots.length < perPage and not res.repeated
+        res.repeated = yes
+        res.lots = lots
+        return exports.list req, res, next
 
       lots = lots.map (item) ->
         current_interval = null
