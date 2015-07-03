@@ -100,8 +100,11 @@ exports.list = (req, res, next) ->
 
   if my_lots_only
     unless _.isEmpty lot_ids
+      console.log 'not empty lot ids'
+      console.log req.user.favourite_lots
       lot_ids = _.intersection lot_ids, req.user.favourite_lots.map (item) -> item.toString()
     else
+      console.log 'empty lot ids'
       lot_ids = req.user.favourite_lots.map (item) -> item.toString()
 
   Promise.all(promises).then ->
