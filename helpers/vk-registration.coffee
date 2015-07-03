@@ -38,11 +38,13 @@ class Strategy extends passport.Strategy
     me = @
     @check_vk vk_token, (err, res) ->
       if err?
+        console.log err
         return me.fail err
       console.log 'get vk user info'
       me.get_vk_info res.user_id, (err, user_info) ->
         console.log user_info
         if err?
+          console.log err
           return me.fail err
         User.findOne
           device: device_id
