@@ -100,7 +100,7 @@ exports.list = (req, res, next) ->
 
   if my_lots_only
     if _.isEmpty req.user.favourite_lots
-      return res.status(200).json []
+      return res.status(200).json lots: []
     unless _.isEmpty lot_ids
       console.log 'not empty lot ids'
       console.log req.user.favourite_lots
