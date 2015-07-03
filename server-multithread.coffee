@@ -28,8 +28,8 @@ if cluster.isMaster
     cluster.fork process.env
 
 else
-  if process.env.NODE_ENV is 'development'
-    app.use logger
+  # if process.env.NODE_ENV is 'development'
+  app.use logger
 
   app.use compression()
   app.use cookieParser 'keyboard cat'
