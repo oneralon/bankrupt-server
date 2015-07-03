@@ -105,7 +105,7 @@ exports.list = (req, res, next) ->
       lot_ids = _.intersection lot_ids, req.user.favourite_lots.map (item) -> item.toString()
     else
       console.log 'empty lot ids'
-      lot_ids = [1].concat req.user.favourite_lots.map (item) -> item.toString()
+      lot_ids = req.user.favourite_lots.map (item) -> item.toString()
 
   Promise.all(promises).then ->
 
