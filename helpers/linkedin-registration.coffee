@@ -39,6 +39,12 @@ class Strategy extends passport.Strategy
       , (err, user) ->
         if err? or not user?
           return me.fail err
+
+        if user.third_party_ids.length > 0
+          error = errors.auth_fail_social_exists
+          return req.res.status(401).json
+            error_code: error?.code
+            error_message: error?.message
         User.findOne
           third_party_ids: linkedin: li_info.id
         , (err, li_user) ->

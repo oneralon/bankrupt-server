@@ -47,7 +47,7 @@ class Strategy extends passport.Strategy
           return me.fail err
         if not user?
           error = errors.auth_fail_social
-          req.res.status(401).json
+          return req.res.status(401).json
             error_code: error?.code
             error_message: error?.message
         return me.success user

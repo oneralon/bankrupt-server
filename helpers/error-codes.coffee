@@ -15,6 +15,10 @@ errors =
     code: 103
     message: 'Данный аккаунт социальной сети не зарегистрирован в программе'
 
+  auth_fail_social_exists:
+    code: 104
+    message: 'Это устройство уже зарегистрировано в системе'
+
   strange_error:
     code: 666
     message: 'Странная ошибка'

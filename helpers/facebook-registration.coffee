@@ -43,6 +43,13 @@ class Strategy extends passport.Strategy
           if err? or not user?
             console.log 'fail because err', err, user
             return me.fail err
+
+
+          if user.third_party_ids.length > 0
+            error = errors.auth_fail_social_exists
+            return req.res.status(401).json
+              error_code: error?.code
+              error_message: error?.message
           User.findOne
             third_party_ids: facebook: user_info.id
           , (err, fb_user) ->
