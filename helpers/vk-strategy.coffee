@@ -7,6 +7,7 @@ VK        = require 'vksdk'
 _         = require 'lodash'
 
 config    = require "../config/db"
+errors    = require '../helpers/error-codes'
 vk_config = require "../config/vk"
 
 require '../models/user'
@@ -42,8 +43,13 @@ class Strategy extends passport.Strategy
       User.findOne
         third_party_ids: vk: res.user_id
       , (err, user) ->
-        if err? or not user?
+        if err?
           return me.fail err
+        if not user?
+          error = errors.auth_fail_social
+          req.res.status(401).json
+            error_code: error?.code
+            error_message: error?.message
         return me.success user
 
   check_vk: (token, cb) ->

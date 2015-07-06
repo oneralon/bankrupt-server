@@ -11,6 +11,10 @@ errors =
     code: 102
     message: 'Достигнут предел количества "моих лотов"'
 
+  auth_fail_social:
+    code: 103
+    message: 'Данный аккаунт социальной сети не зарегистрирован в программе'
+
   strange_error:
     code: 666
     message: 'Странная ошибка'

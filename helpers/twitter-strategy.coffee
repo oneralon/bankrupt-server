@@ -7,6 +7,7 @@ Twitter   = require 'twitter'
 _         = require 'lodash'
 
 config    = require "../config/db"
+errors    = require '../helpers/error-codes'
 tw_config = require "../config/twitter"
 
 require '../models/user'
@@ -35,8 +36,14 @@ class Strategy extends passport.Strategy
       User.findOne
         third_party_ids: twitter: user_info.id
       , (err, user) ->
-        if err? or not user?
+        if err?
           return me.fail err
+
+        if not user?
+          error = errors.auth_fail_social
+          req.res.status(401).json
+            error_code: error?.code
+            error_message: error?.message
         return me.success user
 
   check_tw: (token, secret, cb) ->

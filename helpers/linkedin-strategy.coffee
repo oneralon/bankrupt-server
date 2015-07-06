@@ -7,6 +7,7 @@ Linkedin  = require 'node-linkedin'
 _         = require 'lodash'
 
 config    = require "../config/db"
+errors    = require '../helpers/error-codes'
 li_config = require "../config/linkedin"
 
 require '../models/user'
@@ -37,8 +38,14 @@ class Strategy extends passport.Strategy
       User.findOne
         third_party_ids: linkedin: user_info.id
       , (err, user) ->
-        if err? or not user?
+        if err?
           return me.fail err
+
+        if not user?
+          error = errors.auth_fail_social
+          req.res.status(401).json
+            error_code: error?.code
+            error_message: error?.message
         return me.success user
 
   check_li: (access_token, cb) ->
