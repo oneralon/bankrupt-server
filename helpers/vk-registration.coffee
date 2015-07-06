@@ -7,6 +7,7 @@ VK        = require 'vksdk'
 _         = require 'lodash'
 
 config    = require "../config/db"
+errors    = require '../helpers/error-codes'
 vk_config = require "../config/vk"
 
 require '../models/user'

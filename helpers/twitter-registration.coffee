@@ -7,6 +7,7 @@ Twitter   = require 'twitter'
 _         = require 'lodash'
 
 config    = require "../config/db"
+errors    = require '../helpers/error-codes'
 tw_config = require "../config/twitter"
 
 require '../models/user'

@@ -7,6 +7,7 @@ FB        = require 'fb'
 _         = require 'lodash'
 
 config    = require "../config/db"
+errors    = require '../helpers/error-codes'
 fb_config = require "../config/facebook"
 
 require '../models/user'

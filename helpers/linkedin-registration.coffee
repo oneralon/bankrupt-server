@@ -7,6 +7,7 @@ Linkedin  = require 'node-linkedin'
 _         = require 'lodash'
 
 config    = require "../config/db"
+errors    = require '../helpers/error-codes'
 li_config = require "../config/linkedin"
 
 require '../models/user'
