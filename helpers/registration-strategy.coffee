@@ -27,6 +27,7 @@ class Strategy extends passport.Strategy
     pass      = req.pass      or req.query.pass
     name      = req.name      or req.query.name
     surname   = req.surname   or req.query.surname
+    console.log 'plain auth'
     unless device_id? and email? and pass?
       return @fail()
     User.findOne email: email, (err, mail_user) =>

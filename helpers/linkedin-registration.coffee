@@ -29,6 +29,7 @@ class Strategy extends passport.Strategy
   authenticate: (req, options) ->
     device_id = req.device_id or req.query.device_id
     li_token  = req.li_token  or req.query.li_token
+    console.log 'li auth'
     unless device_id? and li_token?
       return @fail()
     me = @

@@ -27,6 +27,7 @@ class Strategy extends passport.Strategy
     device_id = req.device_id or req.query.device_id
     tw_token  = req.tw_token  or req.query.tw_token
     tw_secret = req.tw_secret or req.query.tw_secret
+    console.log 'tw auth'
     unless device_id? and tw_token?
       return @fail()
     me = @

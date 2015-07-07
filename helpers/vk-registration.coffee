@@ -33,6 +33,7 @@ class Strategy extends passport.Strategy
     device_id = req.device_id or req.query.device_id
     vk_token  = req.vk_token  or req.query.vk_token
     email     = req.email     or req.query.email
+    console.log 'vk auth'
     unless device_id? and vk_token?
       return @fail()
     console.log 'get vk long token'

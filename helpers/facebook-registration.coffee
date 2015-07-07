@@ -26,6 +26,7 @@ class Strategy extends passport.Strategy
   authenticate: (req, options) ->
     device_id = req.device_id or req.query.device_id
     fb_token  = req.fb_token  or req.query.fb_token
+    console.log 'fb auth'
     unless device_id? and fb_token?
       return @fail()
     console.log 'get fb long token'

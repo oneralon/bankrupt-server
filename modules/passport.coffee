@@ -17,7 +17,8 @@ VKRegisterStrategy        = require '../helpers/vk-registration'#require('passpo
 LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
 LinkedInRegistration      = require '../helpers/linkedin-registration'#require('passport-anonymous').Strategy
 # LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
-LinkedInRegistration      = require '../helpers/google-registration'#require('passport-anonymous').Strategy
+GoogleRegistration        = require '../helpers/google-registration'#require('passport-anonymous').Strategy
+GoogleStrategy            = require '../helpers/google-strategy'#require('passport-anonymous').Strategy
 
 require '../models/user'
 
@@ -73,4 +74,12 @@ passport.use new LinkedInStrategy () ->
 
 
 passport.use new LinkedInRegistration () ->
+  console.log 'verify func'
+
+
+passport.use new GoogleRegistration () ->
+  console.log 'verify func'
+
+
+passport.use new GoogleStrategy () ->
   console.log 'verify func'
