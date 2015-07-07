@@ -14,7 +14,8 @@ router.get '/login', (req, res) ->
     res.send()
 
 router.get '/register', (req, res) ->
-  passport.authenticate(['registration', 'vk-registration', 'facebook-registration', 'twitter-registration', 'linkedin-registration']) req, res, () ->
+  console.log req.query.gp_token
+  passport.authenticate(['registration', 'google-registration', 'vk-registration', 'facebook-registration', 'twitter-registration', 'linkedin-registration']) req, res, () ->
     res.send()
 
 router.get '/activate', (req, res) ->

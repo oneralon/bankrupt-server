@@ -16,6 +16,8 @@ VKStrategy                = require '../helpers/vk-strategy'#require('passport-a
 VKRegisterStrategy        = require '../helpers/vk-registration'#require('passport-anonymous').Strategy
 LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
 LinkedInRegistration      = require '../helpers/linkedin-registration'#require('passport-anonymous').Strategy
+# LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
+LinkedInRegistration      = require '../helpers/google-registration'#require('passport-anonymous').Strategy
 
 require '../models/user'
 
