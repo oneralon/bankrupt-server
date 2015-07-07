@@ -32,6 +32,7 @@ exports.list = (req, res, next) ->
 
   promises  = []
   lot_ids   = []
+  find_lot_ids = no
 
   query = Lot.find()
 
@@ -78,6 +79,7 @@ exports.list = (req, res, next) ->
 
           console.log 'Mongo has ', public_lots.length
 
+          find_lot_ids = yes
           unless _.isEmpty lot_ids
             lot_ids = _.intersection lot_ids, public_lots
           else
@@ -92,6 +94,7 @@ exports.list = (req, res, next) ->
 
         console.log 'Elastic has ', text_lots.length
 
+        find_lot_ids = yes
         unless _.isEmpty lot_ids
           lot_ids = _.intersection lot_ids, text_lots
         else
@@ -99,8 +102,7 @@ exports.list = (req, res, next) ->
         resolve text_lots # query.where _id: $in: ids
 
   if my_lots_only
-    if _.isEmpty req.user.favourite_lots
-      return res.status(200).json lots: []
+    find_lot_ids = yes
     unless _.isEmpty lot_ids
       console.log 'not empty lot ids'
       console.log req.user.favourite_lots
@@ -115,7 +117,7 @@ exports.list = (req, res, next) ->
 
     console.log lot_ids
 
-    unless _.isEmpty lot_ids
+    if find_lot_ids
       query.where('_id').in lot_ids
 
     query.sort("#{sort}": "#{sort_order}")
