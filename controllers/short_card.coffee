@@ -114,8 +114,9 @@ exports.list = (req, res, next) ->
     console.log 'All promises resolved'
 
     console.log lot_ids
+
     unless _.isEmpty lot_ids
-      query.where _id: $in: lot_ids
+      query.where('_id').in lot_ids
 
     query.sort("#{sort}": "#{sort_order}")
 
