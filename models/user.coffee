@@ -27,7 +27,7 @@ userSchema = new Schema
       end_date: Date
       license_type:
         type: Schema.Types.ObjectId
-        ref: 'Lot'
+        ref: 'License'
     ]
   third_party_ids: [Schema.Types.Mixed]
   favourite_lots: [

@@ -35,8 +35,8 @@ passport.deserializeUser (id, done) ->
   console.log 'deserializeUser'
   User.findById(id)
   .populate
-    path: 'license.license_type'
-    model: 'License'
+    path: 'licenses.license_type'
+    # model: 'License'
   .exec done
 
 passport.use new AnonymousStrategy () ->
