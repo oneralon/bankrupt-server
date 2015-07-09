@@ -6,7 +6,7 @@ cors        = require '../middlewares/cors'
 
 
 router.get '/login', (req, res) ->
-  passport.authenticate(['registered', 'vk', 'google', 'facebook', 'twitter', 'linkedin', 'anonymous']) req, res, () ->
+  passport.authenticate(['registered', 'vk', 'google', 'facebook', 'twitter', 'linkedin', 'odnoklassniki', 'anonymous']) req, res, () ->
     console.log 'there', req.user
     device_id = req.device_id or req.query.device_id
     if req.user?

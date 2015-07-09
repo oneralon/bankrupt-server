@@ -20,6 +20,7 @@ LinkedInRegistration      = require '../helpers/linkedin-registration'#require('
 GoogleRegistration        = require '../helpers/google-registration'#require('passport-anonymous').Strategy
 GoogleStrategy            = require '../helpers/google-strategy'#require('passport-anonymous').Strategy
 OdnoklassnikiRegistration = require '../helpers/odnoklassniki-registration'#require('passport-anonymous').Strategy
+OdnoklassnikiStrategy     = require '../helpers/odnoklassniki-strategy'#require('passport-anonymous').Strategy
 
 require '../models/user'
 
@@ -88,4 +89,8 @@ passport.use new GoogleStrategy () ->
 
 
 passport.use new OdnoklassnikiRegistration () ->
+  console.log 'verify func'
+
+
+passport.use new OdnoklassnikiStrategy () ->
   console.log 'verify func'
