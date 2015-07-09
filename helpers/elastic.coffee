@@ -33,10 +33,10 @@ exports.like = (fields, filter_fields, text, from, take, ids) ->
               fuzzy_like_this:
                 fields: filter_fields
                 like_text: text
-                ignore_tf: yes
-                max_query_terms: 12
+                # ignore_tf: yes
+                # max_query_terms: 12
                 fuzziness: 2
-                prefix_length: 2
+                # prefix_length: 2
             # boost_factor: 10
         ]
 

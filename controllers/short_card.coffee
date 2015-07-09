@@ -88,7 +88,7 @@ exports.list = (req, res, next) ->
 
   unless _.isEmpty text
     promises.push new Promise (resolve, reject) ->
-      elastic.like ['_id'], ['information', 'title^2'], text, 0, 1000000
+      elastic.like ['_id'], ['information', 'title'], text, 0, 1000000
       .then (ids) ->
         text_lots = ids
 
