@@ -53,5 +53,5 @@ exports.buy = (req, res) ->
             else
               res.status(500).json errors.license_not_found
         else
-          res.status(422).json errors.purchase_completed
+          res.status(200).json data.purchaseToken
 
