@@ -33,7 +33,11 @@ class Strategy extends passport.Strategy
     me = @
     @check_ok ok_config.app_public, ok_config.app_secret, ok_token, (err, user_info) ->
       if err?
-        return me.fail err
+        error = errors.auth_fail_social
+        return req.res.status(401).json
+          error_code: error?.code
+          error_message: error?.message
+          original_error: err
       User.findOne
         third_party_ids: odnoklassniki: user_info.uid
       , (err, user) ->

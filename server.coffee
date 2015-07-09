@@ -29,9 +29,7 @@ app.use session
   cookie: {maxAge: 36000000000}
   resave: true
   saveUninitialized: false
-app.use bodyParser.urlencoded
-  extended: true
-  type: '*/x-www-form-urlencoded'
+app.use bodyParser.json type: 'application/*+json'
 app.use passport.initialize()
 app.use passport.session()
 app.set 'views', base + '/views'

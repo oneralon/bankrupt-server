@@ -19,6 +19,14 @@ errors =
     code: 104
     message: 'Это устройство уже зарегистрировано в системе'
 
+  license_not_found:
+    code: 105
+    message: 'Лицензии с таким кодом не существует'
+
+  purchase_completed:
+    code: 106
+    message: 'Эта покупка уже совершена ранее'
+
   strange_error:
     code: 666
     message: 'Странная ошибка'

@@ -32,6 +32,7 @@ hidden_lots     = require '../controllers/hidden_lots'
 filter_presets  = require '../controllers/filters'
 upload_lots     = require '../controllers/upload_lots'
 profile         = require '../controllers/profile'
+license         = require '../controllers/license'
 
 facebook        = require '../controllers/facebook'
 vk              = require '../controllers/vk'
@@ -77,5 +78,7 @@ router.get '/filter_presets/set',       filter_presets.set
 router.get '/filter_presets/delete',    filter_presets.delete
 
 router.get '/upload_lots/',             upload_lots.get
+
+router.get '/license/buy',             license.buy
 
 module.exports = router
