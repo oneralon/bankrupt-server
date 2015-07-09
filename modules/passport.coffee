@@ -19,6 +19,7 @@ LinkedInRegistration      = require '../helpers/linkedin-registration'#require('
 # LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
 GoogleRegistration        = require '../helpers/google-registration'#require('passport-anonymous').Strategy
 GoogleStrategy            = require '../helpers/google-strategy'#require('passport-anonymous').Strategy
+OdnoklassnikiRegistration = require '../helpers/odnoklassniki-registration'#require('passport-anonymous').Strategy
 
 require '../models/user'
 
@@ -26,6 +27,7 @@ User              = mongoose.model 'User'
 
 passport.serializeUser (user, done) ->
   console.log 'serializeUser'
+  console.log user
   done null, user._id
 
 passport.deserializeUser (id, done) ->
@@ -82,4 +84,8 @@ passport.use new GoogleRegistration () ->
 
 
 passport.use new GoogleStrategy () ->
+  console.log 'verify func'
+
+
+passport.use new OdnoklassnikiRegistration () ->
   console.log 'verify func'
