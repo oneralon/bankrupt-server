@@ -39,10 +39,18 @@ exports.buy = (req, res) ->
             if err
               return res.status(500).json err
             if license?
-              req.user.license.license_type = license
-              req.user.license.start_date = new Date()
-              req.user.license.end_date = moment().add(days: license.duration).toDate()
-
+              if req.user.licenses.length and req.user.licenses[req.user.licenses.length - 1].end_date > new Date()
+                req.user.licenses.push
+                  start_date: req.user.licenses[req.user.licenses.length - 1].end_date
+                  end_date: moment(req.user.licenses[req.user.licenses.length - 1].end_date)
+                    .add(days: license.duration).toDate()
+                  license_type: license
+              else
+                req.user.licenses = [
+                  start_date: new Date()
+                  end_date: moment().add(days: license.duration).toDate()
+                  license_type: license
+                ]
               req.user.save()
 
               if purchase?

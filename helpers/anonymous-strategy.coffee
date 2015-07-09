@@ -32,9 +32,10 @@ class Strategy extends passport.Strategy
       else
         user = new User
           device: device_id
-          license:
+          licenses: [
             start_date: moment().format()
             end_date: moment().add(days: 14)
+          ]
         user.save (err, user) =>
           @success user
 
