@@ -34,8 +34,8 @@ exports.like = (fields, filter_fields, text, from, take, ids) ->
                 fields: filter_fields
                 like_text: text
                 ignore_tf: yes
-                max_query_terms: 12
-                fuzziness: 0.7
+                # max_query_terms: 12
+                fuzziness: 0.6
                 prefix_length: 2
             boost_factor: 10
         ]
