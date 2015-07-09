@@ -27,6 +27,10 @@ errors =
     code: 106
     message: 'Эта покупка уже совершена ранее'
 
+  invalid_signature:
+    code: 107
+    message: 'Неправильная сигнатура покупки'
+
   strange_error:
     code: 666
     message: 'Странная ошибка'

@@ -23,6 +23,8 @@ exports.buy = (req, res) ->
   console.log req.body.json
   console.log req.json
 
+  console.log "java -jar google_play_verify.jar #{sign} #{json}"
+
   child = exec "java -jar google_play_verify.jar #{sign} #{json}", (error, stdout, stderr) ->
     if error != null
       return res.status(500).json error
@@ -54,4 +56,6 @@ exports.buy = (req, res) ->
               res.status(500).json errors.license_not_found
         else
           res.status(200).json data.purchaseToken
+    else
+      res.status(422).json errors.invalid_signature
 
