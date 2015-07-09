@@ -14,10 +14,14 @@ Purchase  = mongoose.model 'Purchase'
 
 
 exports.buy = (req, res) ->
-  data = JSON.parse req.query.json
+  json = req.body.json or req.json or req.query.json
+  data = JSON.parse json
+  json = encodeURIComponent(json.replace /\s/ig, '+')
+  sign = req.body.sign or req.sign or req.query.sign
+  sign = encodeURIComponent(sign.replace /\s/ig, '+')
 
-  json = encodeURIComponent(req.query.json.replace /\s/ig, '+')
-  sign = encodeURIComponent(req.query.sign.replace /\s/ig, '+')
+  console.log req.body.json
+  console.log req.json
 
   child = exec "java -jar google_play_verify.jar #{sign} #{json}", (error, stdout, stderr) ->
     if error != null

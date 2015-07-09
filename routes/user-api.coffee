@@ -79,6 +79,6 @@ router.get '/filter_presets/delete',    filter_presets.delete
 
 router.get '/upload_lots/',             upload_lots.get
 
-router.get '/license/buy',             license.buy
+router.post '/license/buy',             license.buy
 
 module.exports = router
