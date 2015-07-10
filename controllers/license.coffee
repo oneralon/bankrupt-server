@@ -20,11 +20,6 @@ exports.buy = (req, res) ->
   sign = req.body.sign or req.sign or req.query.sign
   sign = encodeURIComponent(sign.replace /\s/ig, '+')
 
-  console.log req.body.json
-  console.log req.json
-
-  console.log "java -jar google_play_verify.jar #{sign} #{json}"
-
   child = exec "java -jar google_play_verify.jar #{sign} #{json}", (error, stdout, stderr) ->
     if error != null
       return res.status(500).json error

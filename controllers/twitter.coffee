@@ -33,7 +33,6 @@ exports.attach = (req, res) ->
       third_party_ids: twitter: tw_info.id
     , (err, tw_user) ->
       if err? or not _.isEmpty tw_user
-        console.log err, tw_user
         return res.status(500).send()
       req.user.third_party_ids.addToSet twitter: tw_info.id
       req.user.anonymous = no

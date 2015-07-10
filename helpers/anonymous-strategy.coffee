@@ -9,7 +9,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'anonymous'
     unless verify?
       verify = params

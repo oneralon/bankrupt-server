@@ -17,7 +17,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'google-registration'
     unless verify?
       verify = params
@@ -28,12 +27,10 @@ class Strategy extends passport.Strategy
     device_id = req.device_id or req.query.device_id
     gp_token  = req.gp_token  or req.query.gp_token
     email     = req.email  or req.query.email
-    console.log 'google auth'
     unless device_id? and gp_token?
       return @fail()
     me = @
     @check_gp gp_token, (err, gp_info) ->
-      console.log err
       if err?
         return me.fail err
       User.findOne

@@ -4,39 +4,42 @@ mongoose                  = require 'mongoose'
 
 
 LocalStrategy             = require('passport-local').Strategy
-AnonymousStrategy         = require '../helpers/anonymous-strategy'#require('passport-anonymous').Strategy
-ActivationStrategy        = require '../helpers/activation-strategy'#require('passport-anonymous').Strategy
-RegistrationStrategy      = require '../helpers/registration-strategy'#require('passport-anonymous').Strategy
-RegisteredStrategy        = require '../helpers/registered-strategy'#require('passport-anonymous').Strategy
-FacebookStrategy          = require '../helpers/facebook-strategy'#require('passport-anonymous').Strategy
-FacebookRegisterStrategy  = require '../helpers/facebook-registration'#require('passport-anonymous').Strategy
-TwitterStrategy           = require '../helpers/twitter-strategy'#require('passport-anonymous').Strategy
-TwitterRegisterStrategy   = require '../helpers/twitter-registration'#require('passport-anonymous').Strategy
-VKStrategy                = require '../helpers/vk-strategy'#require('passport-anonymous').Strategy
-VKRegisterStrategy        = require '../helpers/vk-registration'#require('passport-anonymous').Strategy
-LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
-LinkedInRegistration      = require '../helpers/linkedin-registration'#require('passport-anonymous').Strategy
-# LinkedInStrategy          = require '../helpers/linkedin-strategy'#require('passport-anonymous').Strategy
-GoogleRegistration        = require '../helpers/google-registration'#require('passport-anonymous').Strategy
-GoogleStrategy            = require '../helpers/google-strategy'#require('passport-anonymous').Strategy
-OdnoklassnikiRegistration = require '../helpers/odnoklassniki-registration'#require('passport-anonymous').Strategy
-OdnoklassnikiStrategy     = require '../helpers/odnoklassniki-strategy'#require('passport-anonymous').Strategy
+
+AnonymousStrategy         = require '../helpers/anonymous-strategy'
+
+RegistrationStrategy      = require '../helpers/registration-strategy'
+ActivationStrategy        = require '../helpers/activation-strategy'
+RegisteredStrategy        = require '../helpers/registered-strategy'
+
+FacebookRegisterStrategy  = require '../helpers/facebook-registration'
+FacebookStrategy          = require '../helpers/facebook-strategy'
+
+TwitterRegisterStrategy   = require '../helpers/twitter-registration'
+TwitterStrategy           = require '../helpers/twitter-strategy'
+
+VKRegisterStrategy        = require '../helpers/vk-registration'
+VKStrategy                = require '../helpers/vk-strategy'
+
+LinkedInRegistration      = require '../helpers/linkedin-registration'
+LinkedInStrategy          = require '../helpers/linkedin-strategy'
+
+GoogleRegistration        = require '../helpers/google-registration'
+GoogleStrategy            = require '../helpers/google-strategy'
+
+OdnoklassnikiRegistration = require '../helpers/odnoklassniki-registration'
+OdnoklassnikiStrategy     = require '../helpers/odnoklassniki-strategy'
 
 require '../models/user'
 
 User              = mongoose.model 'User'
 
 passport.serializeUser (user, done) ->
-  console.log 'serializeUser'
-  console.log user
   done null, user._id
 
 passport.deserializeUser (id, done) ->
-  console.log 'deserializeUser'
   User.findById(id)
   .populate
     path: 'licenses.license_type'
-    # model: 'License'
   .exec done
 
 passport.use new AnonymousStrategy () ->

@@ -24,7 +24,6 @@ exports.get = (req, res, next) ->
     model: 'LotAlias'
   .exec (err, lot) ->
     if err
-      console.log err
       next err
     unless lot?
       return res.status(404).send()

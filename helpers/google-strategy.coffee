@@ -17,7 +17,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'google'
     unless verify?
       verify = params
@@ -50,7 +49,6 @@ class Strategy extends passport.Strategy
   check_gp: (access_token, cb) ->
     request.get gp_config.url + access_token, (err, res, body) ->
       body = JSON.parse body
-      console.log body
       if body.error?.code
         return cb body.error
       cb null, body

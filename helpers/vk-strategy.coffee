@@ -20,7 +20,6 @@ vk        = new VK
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'vk'
     unless verify?
       verify = params
@@ -36,10 +35,6 @@ class Strategy extends passport.Strategy
     @check_vk vk_token, (err, res) ->
       if err?
         return me.fail err
-      # me.get_vk_info res.user_id, (err, user_info) ->
-      #   console.log user_info
-      #   if err?
-      #     return me.fail err
       User.findOne
         third_party_ids: vk: res.user_id
       , (err, user) ->
@@ -53,8 +48,6 @@ class Strategy extends passport.Strategy
         return me.success user
 
   check_vk: (token, cb) ->
-    # userToken = token
-    # vk.setToken token
     vk.setSecureRequests true
     vk.requestServerToken (res) ->
       vk.setToken res.access_token
@@ -62,7 +55,6 @@ class Strategy extends passport.Strategy
       , (res) ->
         if res.error?
           return cb res.error
-        # vk.setToken userToken
         vk.setToken undefined
         return cb null, res.response
 

@@ -13,7 +13,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'registered'
     unless verify?
       verify = params
@@ -27,14 +26,11 @@ class Strategy extends passport.Strategy
     unless device_id? and email? and pass?
       return @fail()
     User.findOne
-      # device: device_id
       email: email
     , (err, user) =>
       if err?
-        console.log 'fail because err'
         return @fail err
       if user? and not user.anonymous
-        console.log pass, user.password
         if bcrypt.compareSync pass, user.password
           @success user
         else

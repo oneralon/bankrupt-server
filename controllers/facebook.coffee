@@ -48,9 +48,7 @@ exports.attach = (req, res) ->
         third_party_ids: facebook: fb_info.id
       , (err, fb_user) ->
         if err? or not _.isEmpty fb_user
-          console.log err, fb_user
           return res.status(500).send()
-        console.log 'asdfasdf'
         req.user.third_party_ids.addToSet facebook: fb_info.id
         req.user.anonymous = no
         req.user.name = req.user.name or fb_info.first_name

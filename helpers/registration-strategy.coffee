@@ -14,7 +14,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'registration'
     unless verify?
       verify = params
@@ -27,7 +26,6 @@ class Strategy extends passport.Strategy
     pass      = req.pass      or req.query.pass
     name      = req.name      or req.query.name
     surname   = req.surname   or req.query.surname
-    console.log 'plain auth'
     unless device_id? and email? and pass?
       return @fail()
     User.findOne email: email, (err, mail_user) =>
@@ -40,7 +38,6 @@ class Strategy extends passport.Strategy
           error_message: error?.message
       User.findOne device: device_id, (err, user) =>
         if err?
-          console.log err
           return @fail err
         user = user or new User
           device: device_id

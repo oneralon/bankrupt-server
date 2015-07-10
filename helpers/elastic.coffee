@@ -26,18 +26,13 @@ exports.like = (fields, filter_fields, text, from, take, ids) ->
               multi_match:
                 query: text
                 fields: filter_fields
-            # boost_factor: 100
         ,
           function_score:
             query:
               fuzzy_like_this:
                 fields: filter_fields
                 like_text: text
-                # ignore_tf: yes
-                # max_query_terms: 12
                 fuzziness: 2
-                # prefix_length: 2
-            # boost_factor: 10
         ]
 
     query.fields = fields

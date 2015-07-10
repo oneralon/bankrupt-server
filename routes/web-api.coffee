@@ -29,12 +29,12 @@ router.get '/statuses',       statuses.get
 router.get '/regions',        regions.get
 
 router.get '/tags',           tags.get
-router.get '/tags/update',    tags.update
-router.get '/tags/add',       tags.add
-router.get '/tags/delete',    tags.delete
 
 router.use mustBeAuth
 
+router.get '/tags/update',    tags.update
+router.get '/tags/add',       tags.add
+router.get '/tags/delete',    tags.delete
 router.get '/short-cards',    short_cards.list
 router.get '/full-cards/:id', full_cards.get
 

@@ -17,7 +17,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'odnoklassniki'
     unless verify?
       verify = params
@@ -29,7 +28,6 @@ class Strategy extends passport.Strategy
     ok_token  = req.ok_token  or req.query.ok_token
     unless device_id? and ok_token?
       return @fail()
-    console.log 'ok strategy'
     me = @
     @check_ok ok_config.app_public, ok_config.app_secret, ok_token, (err, user_info) ->
       if err?

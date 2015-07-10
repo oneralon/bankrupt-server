@@ -16,7 +16,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'twitter'
     unless verify?
       verify = params

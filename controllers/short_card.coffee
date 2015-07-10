@@ -61,8 +61,6 @@ exports.list = (req, res, next) ->
       tradeQuery = {}
       unless _.isEmpty etps
         tradeQuery['etp.name'] = $in: etps
-      # unless _.isEmpty regions
-      #   tradeQuery.region = $in: regions
       unless _.isEmpty trade_types
         tradeQuery['trade_type'] = $in: trade_types
       unless _.isEmpty membership_types
@@ -77,8 +75,6 @@ exports.list = (req, res, next) ->
             lots = lots.concat trade.lots
           public_lots = lots.map (item) -> return item.toString()
 
-          console.log 'Mongo has ', public_lots.length
-
           find_lot_ids = yes
           unless _.isEmpty lot_ids
             lot_ids = _.intersection lot_ids, public_lots
@@ -92,30 +88,22 @@ exports.list = (req, res, next) ->
       .then (ids) ->
         text_lots = ids
 
-        console.log 'Elastic has ', text_lots.length
-
         find_lot_ids = yes
         unless _.isEmpty lot_ids
           lot_ids = _.intersection lot_ids, text_lots
         else
           lot_ids = text_lots
-        resolve text_lots # query.where _id: $in: ids
+        resolve text_lots
 
   if my_lots_only
     find_lot_ids = yes
     unless _.isEmpty lot_ids
-      console.log 'not empty lot ids'
-      console.log req.user.favourite_lots
       lot_ids = _.intersection lot_ids, req.user.favourite_lots.map (item) -> item.toString()
     else
-      console.log 'empty lot ids'
       lot_ids = req.user.favourite_lots.map (item) -> item.toString()
 
   Promise.all(promises).then ->
-
-    console.log 'All promises resolved'
-
-    console.log lot_ids
+    # All promises resolved
 
     if find_lot_ids
       query.where('_id').in lot_ids
@@ -137,10 +125,7 @@ exports.list = (req, res, next) ->
 
 
     query.exec (err, lots) ->
-      console.log 'query executed'
-
       if err
-        console.log err
         res.status(500)
         return next err
       if not lots? or lots.length is 0
@@ -173,17 +158,6 @@ exports.list = (req, res, next) ->
 
           if nextInterval?
             duration = moment(nextInterval.interval_start_date)
-
-        # unless _.isEmpty item.intervals
-        #   current_interval = item.intervals[0]
-        #   date = new Date()
-        #   for interval in item.intervals
-        #     if interval.interval_start_date < date < interval.interval_end_date
-        #       current_interval = interval
-        #       break
-        #   nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
-        #   if nextInterval?
-        #     duration = moment(nextInterval.interval_start_date)
 
         end_date = moment(item.trade.results_date or
           item.trade.holding_date or
@@ -221,4 +195,3 @@ exports.list = (req, res, next) ->
       else
         res.status(200).json lots: lots
   .catch (err) ->
-    console.log err

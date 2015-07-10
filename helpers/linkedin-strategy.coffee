@@ -19,7 +19,6 @@ Linkedin  = Linkedin li_config.cliend_id, li_config.client_secret
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'linkedin'
     unless verify?
       verify = params

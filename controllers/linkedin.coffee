@@ -29,7 +29,6 @@ exports.attach = (req, res) ->
       third_party_ids: linkedin: li_info.id
     , (err, li_user) ->
       if err? or not _.isEmpty li_user
-        console.log err, li_user
         return res.status(500).send()
       req.user.third_party_ids.addToSet linkedin: li_info.id
       req.user.anonymous = no

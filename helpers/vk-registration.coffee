@@ -22,7 +22,6 @@ vk        = new VK
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'vk-registration'
     unless verify?
       verify = params
@@ -33,26 +32,19 @@ class Strategy extends passport.Strategy
     device_id = req.device_id or req.query.device_id
     vk_token  = req.vk_token  or req.query.vk_token
     email     = req.email     or req.query.email
-    console.log 'vk auth'
     unless device_id? and vk_token?
       return @fail()
-    console.log 'get vk long token'
     me = @
     @check_vk vk_token, (err, res) ->
       if err?
-        console.log err
         return me.fail err
-      console.log 'get vk user info'
       me.get_vk_info res.user_id, (err, user_info) ->
-        console.log user_info
         if err?
-          console.log err
           return me.fail err
         User.findOne
           device: device_id
         , (err, user) ->
           if err? or not user?
-            console.log 'fail because err', err, user
             return me.fail err
 
           if user.third_party_ids.length > 0
@@ -64,7 +56,6 @@ class Strategy extends passport.Strategy
           User.findOne
             third_party_ids: vk: user_info.id
           , (err, vk_user) ->
-            console.log err, vk_user
             if err or vk_user?
               return me.fail err
             user.third_party_ids.addToSet vk: user_info.id
@@ -79,8 +70,6 @@ class Strategy extends passport.Strategy
               return me.success()
 
   check_vk: (token, cb) ->
-    # userToken = token
-    # vk.setToken token
     vk.setSecureRequests true
     vk.requestServerToken (res) ->
       vk.setToken res.access_token
@@ -88,7 +77,6 @@ class Strategy extends passport.Strategy
       , (res) ->
         if res.error?
           return cb res.error
-        # vk.setToken userToken
         vk.setToken undefined
         return cb null, res.response
 

@@ -16,7 +16,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'facebook'
     unless verify?
       verify = params
@@ -33,7 +32,6 @@ class Strategy extends passport.Strategy
       if err?
         return me.fail err
       me.get_fb_info (err, user_info) ->
-        console.log user_info
         if err?
           return me.fail err
         User.findOne

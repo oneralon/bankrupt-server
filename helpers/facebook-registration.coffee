@@ -16,7 +16,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'facebook-registration'
     unless verify?
       verify = params
@@ -26,26 +25,20 @@ class Strategy extends passport.Strategy
   authenticate: (req, options) ->
     device_id = req.device_id or req.query.device_id
     fb_token  = req.fb_token  or req.query.fb_token
-    console.log 'fb auth'
     unless device_id? and fb_token?
       return @fail()
-    console.log 'get fb long token'
     me = @
     @check_fb fb_token, (err, res) ->
       if err?
         return me.fail err
-      console.log 'get fb user info'
       me.get_fb_info (err, user_info) ->
-        console.log user_info
         if err?
           return me.fail err
         User.findOne
           device: device_id
         , (err, user) ->
           if err? or not user?
-            console.log 'fail because err', err, user
             return me.fail err
-
 
           if user.third_party_ids.length > 0
             error = errors.auth_fail_social_exists

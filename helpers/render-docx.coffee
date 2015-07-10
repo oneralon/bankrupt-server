@@ -30,7 +30,6 @@ countdown.setLabels(
 module.exports = (lot_ids, cb) ->
   Lot.find(_id: $in: lot_ids).populate('trade').populate('tags').exec (err, lots) ->
     if err?
-      console.error err
       return cb err
     renderer = ECT root : path.join __dirname, '../assets/docs'
 

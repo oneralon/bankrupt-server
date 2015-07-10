@@ -17,7 +17,6 @@ User      = mongoose.model 'User'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
-    # super arguments...
     @name = 'odnoklassniki-registration'
     unless verify?
       verify = params
@@ -27,7 +26,6 @@ class Strategy extends passport.Strategy
   authenticate: (req, options) ->
     device_id = req.device_id or req.query.device_id
     ok_token  = req.ok_token  or req.query.ok_token
-    console.log 'ok auth'
     unless device_id? and ok_token?
       return @fail()
     me = @
@@ -46,10 +44,12 @@ class Strategy extends passport.Strategy
             error_code: error?.code
             error_message: error?.message
         User.findOne
-          third_party_ids: odnoklassniki: ok_info.id
+          third_party_ids: odnoklassniki: ok_info.uid
         , (err, ok_user) ->
-          if err or ok_user?
-            return me.fail err
+          if err
+            return req.res.status(500).json err
+          if ok_user?
+            return req.res.status(401).json errors.auth_fail_social_exists
           req.user.third_party_ids.addToSet odnoklassniki: ok_info.uid
           req.user.anonymous = no
           req.user.name = req.user.name or ok_info.first_name

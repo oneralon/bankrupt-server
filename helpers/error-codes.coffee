@@ -31,6 +31,10 @@ errors =
     code: 107
     message: 'Неправильная сигнатура покупки'
 
+  refer_empty_email:
+    code: 108
+    message: 'Не указан email'
+
   strange_error:
     code: 666
     message: 'Странная ошибка'

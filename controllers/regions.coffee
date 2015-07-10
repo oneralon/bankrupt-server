@@ -4,7 +4,6 @@ _         = require 'lodash'
 moment    = require 'moment'
 
 exports.get = (req, res, next) ->
-  console.log req.query
   _v = req.query._v
   mongoose.connection.collection('regions').findOne { $query: {}, $orderby: { '_v' : -1 } , $limit: 1}, (err, regions) ->
     if _v < regions?._v or not _v?
