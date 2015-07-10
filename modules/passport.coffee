@@ -30,8 +30,10 @@ OdnoklassnikiRegistration = require '../helpers/odnoklassniki-registration'
 OdnoklassnikiStrategy     = require '../helpers/odnoklassniki-strategy'
 
 require '../models/user'
+require '../models/refer'
 
 User              = mongoose.model 'User'
+Refer             = mongoose.model 'Refer'
 
 passport.serializeUser (user, done) ->
   done null, user._id
@@ -40,7 +42,13 @@ passport.deserializeUser (id, done) ->
   User.findById(id)
   .populate
     path: 'licenses.license_type'
-  .exec done
+  .exec (err, user) ->
+    if user?
+      Refer.count sender: user, recipient: $ne: null
+      , (err, refers) ->
+        user.refers_count = refers
+        done err, user
+    else done null, null
 
 passport.use new AnonymousStrategy () ->
   console.log 'verify func'

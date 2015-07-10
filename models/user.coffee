@@ -13,6 +13,7 @@ userSchema = new Schema
     default: yes
   device: String
   activation_hash: String
+  refers_count: Number
   activated:
     type: Boolean
     default: no
