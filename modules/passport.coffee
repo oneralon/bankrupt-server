@@ -1,6 +1,7 @@
 passport                  = require 'passport'
 bcrypt                    = require 'bcrypt-nodejs'
 mongoose                  = require 'mongoose'
+Promise                   = require 'promise'
 
 
 LocalStrategy             = require('passport-local').Strategy
@@ -31,9 +32,19 @@ OdnoklassnikiStrategy     = require '../helpers/odnoklassniki-strategy'
 
 require '../models/user'
 require '../models/refer'
+require '../models/license'
 
 User              = mongoose.model 'User'
 Refer             = mongoose.model 'Refer'
+License           = mongoose.model 'License'
+
+default_license   = new Promise (resolve, reject) ->
+  License.findOne title: 'default', name: 'default', (err, license) ->
+    console.log err, license
+    if err?
+      reject license
+    else
+      resolve license
 
 passport.serializeUser (user, done) ->
   done null, user._id
@@ -44,10 +55,16 @@ passport.deserializeUser (id, done) ->
     path: 'licenses.license_type'
   .exec (err, user) ->
     if user?
+      console.log 'user'
       if user.licenses[0]?.end_date < new Date()
         user.licenses.shift()
         user.save()
-      user.license = user.licenses[0]
+      if user.licenses.length
+        user.license = user.licenses[0].license_type
+      else
+        console.log 'has not license'
+        default_license.then (license) ->
+          user.license = license
       Refer.count sender: user, recipient: $ne: null
       , (err, refers) ->
         user.refers_count = refers

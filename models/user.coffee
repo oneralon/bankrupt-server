@@ -18,11 +18,11 @@ userSchema = new Schema
     type: Boolean
     default: no
   license:
-    start_date: Date
-    end_date: Date
-    license_type:
-      type: Schema.Types.ObjectId
-      ref: 'Lot'
+    title: String
+    name: String
+    max_lots: Number
+    max_filters: Number
+    duration: Number # days
   licenses: [
       start_date: Date
       end_date: Date

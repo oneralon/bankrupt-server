@@ -17,6 +17,11 @@ mongoose.connect 'mongodb://127.0.0.1:27017/bankrot-parser', ->
       max_lots: 300
       max_filters: 999
   ,
+      title: 'default'
+      name: 'default'
+      max_lots: 3
+      max_filters: 3
+  ,
       title: 'demo'
       name: 'demo'
       duration: 7
