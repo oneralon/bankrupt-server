@@ -112,5 +112,7 @@ router.post '/license/buy',             license.buy
 
 router.post '/refer/mail',              referal.mail
 router.get  '/refer/mail',              referal.mail
+router.post '/refer/get',               referal.get
+router.get  '/refer/get',               referal.get
 
 module.exports = router

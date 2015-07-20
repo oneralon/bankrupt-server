@@ -38,3 +38,8 @@ exports.mail = (req, res) ->
 
       res.status(200).json result
 
+exports.get = (req, res) ->
+  Refer.generate req.user, (err, refer) ->
+    if err
+      return res.status(500).json err
+    return res.status(200).json refer
