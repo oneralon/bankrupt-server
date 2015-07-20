@@ -40,7 +40,8 @@ router.get '/register', (req, res) ->
               for i in [1..req.user.licenses.length - 1]
                 duration = req.user.licenses[i].end_date - Math.max(now, req.user.licenses[i].start_date)
                 req.user.licenses[i].start_date = req.user.licenses[i - 1].end_date
-                req.user.licenses[i].end_date = moment(req.user.licenses[i].start_date).add(ms: duration, days: 7).toDate()
+                req.user.licenses[i].end_date = moment(req.user.licenses[i].start_date).add(ms: duration).toDate()
+                req.user.licenses[1]?.end_date = moment(req.user.licenses[1]?.end_date).add({days: 7}).toDate()
               refer.recipient = req.user
               refer.save()
               req.user.save (err) ->
