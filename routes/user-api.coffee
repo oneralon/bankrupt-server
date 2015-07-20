@@ -7,7 +7,9 @@ mustBeAuth  = require '../middlewares/passport'
 cors        = require '../middlewares/cors'
 
 require '../models/refer'
+require '../models/license'
 Refer = mongoose.model 'Refer'
+License = mongoose.model 'License'
 
 
 router.get '/login', (req, res) ->
@@ -28,14 +30,23 @@ router.get '/register', (req, res) ->
         if err
           req.res.status(500).json err
         if refer
-          req.user.licenses[req.user.licenses.length - 1].end_date =
-            moment(req.user.licenses[req.user.licenses.length - 1].end_date).add(days: 14).toDate()
-          refer.recipient = req.user
-          refer.save()
-          req.user.save()
-
-    console.log
-    res.send()
+          License.findOne name: 'prof', title: 'prof', duration: 14, (err, license) ->
+            if license?
+              now = new Date()
+              req.user.licenses.unshift
+                start_date: now
+                end_date: moment().add({days: license.duration}).toDate()
+                license_type: license
+              for i in [1..req.user.licenses.length - 1]
+                duration = req.user.licenses[i].end_date - Math.max(now, req.user.licenses[i].start_date)
+                req.user.licenses[i].start_date = req.user.licenses[i - 1].end_date
+                req.user.licenses[i].end_date = moment(req.user.licenses[i].start_date).add(ms: duration, days: 7).toDate()
+              refer.recipient = req.user
+              refer.save()
+              req.user.save (err) ->
+                res.json req.user
+    else
+      res.send()
 
 router.get '/activate', (req, res) ->
   passport.authenticate('activation') req, res, () ->

@@ -4,8 +4,10 @@ mongoose  = require 'mongoose'
 moment    = require 'moment'
 
 require '../models/user'
+require '../models/license'
 
 User      = mongoose.model 'User'
+License   = mongoose.model 'License'
 
 class Strategy extends passport.Strategy
   constructor: (params, verify) ->
@@ -29,13 +31,15 @@ class Strategy extends passport.Strategy
         else
           @fail()
       else
-        user = new User
-          device: device_id
-          licenses: [
-            start_date: moment().format()
-            end_date: moment().add(days: 14)
-          ]
-        user.save (err, user) =>
-          @success user
+        License.findOne title: 'demo', name: 'demo', duration: 7, (err, license) =>
+          user = new User
+            device: device_id
+            licenses: [
+              start_date: moment().format()
+              end_date: moment().add(days: license.duration)
+              license_type: license
+            ]
+          user.save (err, user) =>
+            @success user
 
 module.exports = Strategy

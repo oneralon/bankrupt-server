@@ -44,6 +44,10 @@ passport.deserializeUser (id, done) ->
     path: 'licenses.license_type'
   .exec (err, user) ->
     if user?
+      if user.licenses[0]?.end_date < new Date()
+        user.licenses.shift()
+        user.save()
+      user.license = user.licenses[0]
       Refer.count sender: user, recipient: $ne: null
       , (err, refers) ->
         user.refers_count = refers
