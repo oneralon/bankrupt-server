@@ -7,7 +7,7 @@ require '../models/lot'
 Lot       = mongoose.model 'Lot'
 
 update_current_price = (done) ->
-    console.log 'Cron job update_current_price started'
+  console.log 'Cron job update_current_price started'
   stream = Lot.find().populate('trade').stream()
 
   stream.on 'data', (lot) ->

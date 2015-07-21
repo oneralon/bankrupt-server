@@ -24,13 +24,13 @@ mongoose.connect 'mongodb://127.0.0.1:27017/bankrot-parser', ->
       max_filters: 999
   ,
       title: 'prof_9'
-      name: 'prof_6'
+      name: 'prof_9'
       duration: 30 * 9
       max_lots: 300
       max_filters: 999
   ,
       title: 'prof_12'
-      name: 'prof_6'
+      name: 'prof_12'
       duration: 30 * 12
       max_lots: 300
       max_filters: 999
