@@ -15,6 +15,7 @@ base          = __dirname
 app           = express()
 
 require './modules/passport'
+require './cron'
 
 
 # if process.env.NODE_ENV is 'development'

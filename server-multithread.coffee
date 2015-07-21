@@ -22,6 +22,7 @@ app           = express()
 require './modules/passport'
 
 if cluster.isMaster
+  require './cron'
   cluster.on 'online', () ->
     console.log 'Worker started'
   for i in [1..cCPUs]
