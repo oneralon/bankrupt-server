@@ -1,0 +1,30 @@
+extends layout
+
+block content
+  table
+    tr
+      td
+        label Title
+      td
+        span= title
+    tr
+      td
+        label Percent of discount
+      td
+        span= percent + '%'
+    tr
+      td
+        label Count of activations
+      td
+        span= activations
+    tr
+      td
+        label Expiration
+      td
+        span= expiration
+    tr
+      td
+        label License
+      td
+        span= license
+  textarea(value="#{code}")

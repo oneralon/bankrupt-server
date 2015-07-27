@@ -1,0 +1,48 @@
+extends layout
+
+block header
+  link(rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css")
+  script(src="//code.jquery.com/jquery-1.10.2.js")
+  script(src="//code.jquery.com/ui/1.11.4/jquery-ui.js")
+  script.
+    $(function() {
+      $( "#datepicker" ).datepicker();
+      $( "#datepicker" ).datepicker("option", "dateFormat", "yy-mm-dd");
+    });
+
+block content
+  form(action='/api/promocode/generate', method='POST')
+    table
+      tr
+        td
+          label Title
+        td
+          input(type='edit', name='title', value='Promocode')
+      tr
+        td
+          label Percent of discount
+        td
+          input(type='edit', name='percent', value='20')
+      tr
+        td
+          label Count of activations
+        td
+          input(type='edit', name='activations', value='1')
+      tr
+        td
+          label Expiration
+        td
+          input(type='edit', name='expiration', id='datepicker')
+      tr
+        td
+          label Count of codes
+        td
+          input(type='edit', name='count', value='1')
+      tr
+        td
+          label License
+        td
+          select(name='license')
+            for license in licenses
+              option(value="#{license._id}")= license.title
+    button(type='submit') Generate

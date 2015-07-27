@@ -16,7 +16,7 @@ statuses      = require '../controllers/statuses'
 regions       = require '../controllers/regions'
 tags          = require '../controllers/tags'
 error_logs    = require '../controllers/error_logs'
-
+promocode     = require '../controllers/promocode'
 
 mongoose.set 'debug', yes
 
@@ -30,6 +30,9 @@ router.get '/regions',        regions.get
 
 router.get '/tags',           tags.get
 
+router.get '/promocode/create', promocode.create
+router.post '/promocode/generate', promocode.generate
+
 router.use mustBeAuth
 
 router.get '/tags/update',    tags.update
@@ -37,6 +40,9 @@ router.get '/tags/add',       tags.add
 router.get '/tags/delete',    tags.delete
 router.get '/short-cards',    short_cards.list
 router.get '/full-cards/:id', full_cards.get
+
+router.get '/promocode/create', promocode.create
+router.post '/promocode/generate', promocode.generate
 
 
 module.exports = router
