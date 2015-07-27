@@ -26,13 +26,25 @@ exports.generate = (req, res) ->
         res.render 'error',
           message: 'Error in fields'
           error: err
-      res.render 'generate_promocode',
+      Promocode.generate count,
+        code: null
         percent: percent
         title: title
-        count: count
         activations: activations
         expiration: expiration
-        license: license.title
+        license: license._id
+      , (err, codes) =>
+        str = ''
+        for code in codes
+          str += "\n#{code}"
+        res.render 'generate_promocode',
+          percent: percent
+          title: title
+          count: count
+          activations: activations
+          expiration: expiration
+          license: license.title
+          codes: str
   catch e
     res.render 'error',
       message: 'Error in fields'

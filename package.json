@@ -43,6 +43,7 @@
     "promise": "^7.0.1",
     "redis": "^0.12.1",
     "request": "^2.58.0",
+    "sync": "^0.2.5",
     "time-grunt": "~1.1.1",
     "twitter": "^1.2.5",
     "vksdk": "^5.1.0"
