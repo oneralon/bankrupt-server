@@ -1,9 +1,9 @@
-mongoose = require 'mongoose'
-
+mongoose  = require 'mongoose'
+config    = require '../config/db'
 require '../models/license'
 License   = mongoose.model 'License'
 
-mongoose.connect 'mongodb://127.0.0.1:27017/bankrot-parser', ->
+mongoose.connect "mongodb://127.0.0.1:27017/#{config.database}", ->
   mongoose.connection.collection('licenses').insert [
       title: 'тест 1'
       name: 'test1001'
