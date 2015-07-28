@@ -45,4 +45,9 @@ block content
           select(name='license')
             for license in licenses
               option(value="#{license._id}")= license.title
+      tr
+        td
+          label Description
+        td
+          textarea(maxlength='100', name='description')
     button(type='submit') Generate

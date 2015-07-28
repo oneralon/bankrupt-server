@@ -54,6 +54,7 @@ exports.generate = (req, res) ->
     title       = req.body.title.trim()
     count       = parseInt req.body.count
     activations = parseInt req.body.activations
+    description = req.body.description.trim()
     expiration  = if req.body.expiration isnt ''
       new Date req.body.expiration
     else null
@@ -69,6 +70,7 @@ exports.generate = (req, res) ->
         percent: percent
         title: title
         count: activations
+        description: description
         expiration: expiration
         license_name: license.name
         license: license._id

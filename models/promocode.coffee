@@ -4,6 +4,7 @@ Sync                = require 'sync'
 
 promocodeSchema = new Schema
   title: String
+  description: String
   code: { type: String, unique: true }
   percent: Number
   count: Number
