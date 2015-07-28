@@ -4,7 +4,7 @@ moment        = require 'moment'
 _             = require 'lodash'
 router        = require('express').Router()
 mustBeAuth    = require '../middlewares/passport'
-
+localOnly     = require '../middlewares/local'
 
 cors          = require '../middlewares/cors'
 
@@ -30,8 +30,8 @@ router.get '/regions',        regions.get
 
 router.get '/tags',           tags.get
 
-router.get '/promocode/create', promocode.create
-router.post '/promocode/generate', promocode.generate
+router.get '/promocode/create', localOnly, promocode.create
+router.post '/promocode/generate', localOnly, promocode.generate
 
 router.use mustBeAuth
 
@@ -41,8 +41,9 @@ router.get '/tags/delete',    tags.delete
 router.get '/short-cards',    short_cards.list
 router.get '/full-cards/:id', full_cards.get
 
-router.get '/promocode/create', promocode.create
-router.post '/promocode/generate', promocode.generate
+router.get  '/promocode/create',    promocode.create
+router.post '/promocode/generate',  promocode.generate
+router.post '/promocode/enter',     promocode.enter
 
 
 module.exports = router

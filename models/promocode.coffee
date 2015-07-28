@@ -10,6 +10,7 @@ promocodeSchema = new Schema
   license:
     type: Schema.Types.ObjectId
     ref: 'License'
+  license_name: String
 
 promocodeSchema.statics.generate = (count, options, cb) ->
   generate = ->
@@ -22,6 +23,7 @@ promocodeSchema.statics.generate = (count, options, cb) ->
       code += letter if letter
     code
   insert = (options, cb) =>
+    console.log options
     options._id = mongoose.Types.ObjectId()
     mongoose.connection.collection('promocodes').insert options, (err) =>
       if err? and err.code is 11000 then cb null, false

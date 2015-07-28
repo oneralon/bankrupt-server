@@ -39,6 +39,16 @@ userSchema = new Schema
     type: Schema.Types.ObjectId
     ref: 'Lot'
   ]
+  promocodes: [
+    title: String
+    code: String
+    count: Number
+    expiration: Date
+    license:
+      type: Schema.Types.ObjectId
+      ref: 'License'
+    license_name: String
+  ]
 
 
 

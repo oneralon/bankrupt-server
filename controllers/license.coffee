@@ -19,21 +19,22 @@ exports.buy = (req, res) ->
   json = encodeURIComponent(json.replace /\s/ig, '+')
   sign = req.body.sign or req.sign or req.query.sign
   sign = encodeURIComponent(sign.replace /\s/ig, '+')
-
-  child = exec "java -jar google_play_verify.jar #{sign} #{json}", (error, stdout, stderr) ->
+  child = exec "java -jar google_play_verify.jar #{sign} #{json}", (error, stdout, stderr) =>
     if error != null
       return res.status(500).json error
 
     verified = stdout.trim() is 'true'
     if verified
-      Purchase.findOne {purchaseToken: data.purchaseToken}, (err, purchase) ->
+      Purchase.findOne {purchaseToken: data.purchaseToken}, (err, purchase) =>
         if err
           return res.status(500).json err
         unless purchase? and purchase.completed
-          License.findOne {name: data.productId}, (err, license) ->
+          License.findOne {name: data.productId}, (err, license) =>
             if err
               return res.status(500).json err
             if license?
+              if data.developerPayload
+                req.user.promocodes = req.user.promocodes.filter (i) ->  i.code isnt data.developerPayload
               if req.user.licenses.length and req.user.licenses[req.user.licenses.length - 1].end_date > new Date()
                 req.user.licenses.push
                   start_date: req.user.licenses[req.user.licenses.length - 1].end_date
