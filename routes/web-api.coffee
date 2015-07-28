@@ -41,9 +41,8 @@ router.get '/tags/delete',    tags.delete
 router.get '/short-cards',    short_cards.list
 router.get '/full-cards/:id', full_cards.get
 
-router.get  '/promocode/create',    promocode.create
-router.post '/promocode/generate',  promocode.generate
-router.post '/promocode/enter',     promocode.enter
+router.post '/promocode/check', promocode.check
+router.post '/promocode/enter', promocode.enter
 
 
 module.exports = router

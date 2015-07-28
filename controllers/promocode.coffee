@@ -8,6 +8,16 @@ Promocode = mongoose.model 'Promocode'
 License   = mongoose.model 'License'
 User      = mongoose.model 'User'
 
+exports.check = (req, res) ->
+  code = req.body.code
+  Promocode.findOne {code: code}, (err, promocode) =>
+    res.status(500).send() if err?
+    if promocode?
+      if promocode.expiration and promocode.expiration - new Date() < 0
+        res.status(400).send()
+      res.status(200).send()
+    else res.status(404).send()
+
 exports.enter = (req, res) ->
   code = req.body.code
   Promocode.findOne {code: code}, (err, promocode) =>

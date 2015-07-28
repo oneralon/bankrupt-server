@@ -44,6 +44,7 @@ userSchema = new Schema
     code: String
     count: Number
     expiration: Date
+    percent: Number
     license:
       type: Schema.Types.ObjectId
       ref: 'License'
