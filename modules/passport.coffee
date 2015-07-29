@@ -55,11 +55,7 @@ passport.deserializeUser (id, done) ->
     path: 'licenses.license_type'
   .exec (err, user) =>
     if user?
-      # if user.licenses[0]?.end_date < new Date()
-      #   user.licenses.shift()
-      #   user.save()
       if user.licenses.length
-        user.license = user.licenses[0].license_type
         valid = user.licenses.filter (i) ->
           now = new Date()
           i.start_date <= now and i.end_date >= now
@@ -74,6 +70,7 @@ passport.deserializeUser (id, done) ->
         console.log 'has not license'
         default_license.then (license) ->
           user.license = license
+      user.save()
       Refer.count sender: user, recipient: $ne: null
       , (err, refers) ->
         user.refers_count = refers
