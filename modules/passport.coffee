@@ -70,11 +70,11 @@ passport.deserializeUser (id, done) ->
         console.log 'has not license'
         default_license.then (license) ->
           user.license = license
-      user.save()
-      Refer.count sender: user, recipient: $ne: null
-      , (err, refers) ->
-        user.refers_count = refers
-        done err, user
+      user.save ->
+        Refer.count sender: user, recipient: $ne: null
+        , (err, refers) ->
+          user.refers_count = refers
+          done err, user
     else done null, null
 
 passport.use new AnonymousStrategy () ->
