@@ -63,14 +63,17 @@ passport.deserializeUser (id, done) ->
         valid = user.licenses.filter (i) ->
           now = new Date()
           i.start_date <= now and i.end_date >= now
-        for license in valid 
-          if license.license_type and /prof.*/.test license.license_type.name
+        for license in valid
+          if user.license
+            if license.license_type and /prof.*/.test license.license_type.name
+              user.license = license.license_type
+              break
+          else
             user.license = license.license_type
-            break
-      # else
-      #   console.log 'has not license'
-      #   default_license.then (license) ->
-      #     user.license = license
+      else
+        console.log 'has not license'
+        default_license.then (license) ->
+          user.license = license
       Refer.count sender: user, recipient: $ne: null
       , (err, refers) ->
         user.refers_count = refers
