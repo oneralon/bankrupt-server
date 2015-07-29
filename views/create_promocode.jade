@@ -11,43 +11,47 @@ block header
     });
 
 block content
+  p Поле #[b процент] скидки должно совпадать со скидкой лицензии
+  p #[b Количество активаций] -- сколько раз можно использовать (оставить пустым если бесконечно)
+  p #[b Дата истечения] -- когда перестанет действовать (оставить пустым, если бессрочно)
+  p #[b Описание] ограничено сотней символов
   form(action='/api/promocode/generate', method='POST')
     table
       tr
         td
-          label Title
+          label Заголовок
         td
-          input(type='edit', name='title', value='Promocode')
+          input(type='edit', name='title', placeholder='Название промокода')
       tr
         td
-          label Percent of discount
+          label Процент скидки
         td
           input(type='edit', name='percent', value='20')
       tr
         td
-          label Count of activations
+          label Количество активаций
         td
           input(type='edit', name='activations', value='1')
       tr
         td
-          label Expiration
+          label Дата истечения
         td
           input(type='edit', name='expiration', id='datepicker')
       tr
         td
-          label Count of codes
+          label Кол-во генерируемых кодов
         td
           input(type='edit', name='count', value='1')
       tr
         td
-          label License
+          label Лицензия
         td
           select(name='license')
             for license in licenses
               option(value="#{license._id}")= license.title
       tr
         td
-          label Description
+          label Описание
         td
           textarea(maxlength='100', name='description')
-    button(type='submit') Generate
+    button(type='submit') Сгенерировать
