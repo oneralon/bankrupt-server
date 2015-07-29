@@ -5,54 +5,43 @@ License   = mongoose.model 'License'
 
 mongoose.connect "mongodb://127.0.0.1:27017/#{config.database}", ->
   mongoose.connection.collection('licenses').insert [
-      title: 'тест 1'
-      name: 'test1001'
-      duration: 30
-      max_lots: 300
-      max_filters: 999
-  ,
-      title: 'тест 2'
-      name: 'test_billing'
-      duration: 60
-      max_lots: 300
-      max_filters: 999
-  ,
-      title: 'prof_6'
+      title: 'PRO 6 месяцев'
       name: 'prof_6'
       duration: 30 * 6
       max_lots: 300
       max_filters: 999
   ,
-      title: 'prof_9'
+      title: 'PRO 9 месяцев'
       name: 'prof_9'
       duration: 30 * 9
       max_lots: 300
       max_filters: 999
   ,
-      title: 'prof_12'
+      title: 'PRO 12 месяцев'
       name: 'prof_12'
       duration: 30 * 12
       max_lots: 300
       max_filters: 999
   ,
-      title: 'default'
-      name: 'default'
-      max_lots: 3
-      max_filters: 3
+      title: 'PRO 6 месяцев -50%'
+      name: 'prof_6m_50p'
+      duration: 30 * 6
+      max_lots: 300
+      max_filters: 999
   ,
-      title: 'demo'
-      name: 'demo'
-      duration: 7
-      max_lots: 25
-      max_filters: 3
+      title: 'PRO 12 месяцев -40%'
+      name: 'prof_12m_40p'
+      duration: 30 * 12
+      max_lots: 300
+      max_filters: 999
   ,
-      title: 'demo'
+      title: 'Демо'
       name: 'demo'
       duration: 14
       max_lots: 25
       max_filters: 3
   ,
-      title: 'prof'
+      title: 'PRO 2 недели'
       name: 'prof'
       duration: 14
       max_lots: 300
