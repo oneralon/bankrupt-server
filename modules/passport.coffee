@@ -64,7 +64,7 @@ passport.deserializeUser (id, done) ->
           now = new Date()
           i.start_date <= now and i.end_date >= now
         for license in valid
-          if /prof.*/.test license.license_type.name
+          if license.license_type and /prof.*/.test license.license_type.name
             user.license = license.license_type
             break
       else
