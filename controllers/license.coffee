@@ -17,7 +17,7 @@ exports.buy = (req, res) ->
   User.findById(req.user.id)
   .populate
     path: 'licenses.license_type'
-  .exec (err, user) ->
+  .exec (err, user) =>
     req.user = user
     json = req.body.json or req.json or req.query.json
     data = JSON.parse json
