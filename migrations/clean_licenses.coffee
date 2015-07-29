@@ -25,7 +25,7 @@ User.find().populate('licenses.license_type').exec (err, users) =>
         license_type: demo
       ]
       for license in user.licenses
-        if license.license_type then licenses.push license
+        if license and license.license_type then licenses.push license
       user.licenses = licenses
       console.log user._id
       user.save()
