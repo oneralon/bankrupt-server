@@ -6,19 +6,19 @@ License   = mongoose.model 'License'
 mongoose.connect "mongodb://127.0.0.1:27017/#{config.database}", ->
   mongoose.connection.collection('licenses').insert [
       title: 'PRO 6 месяцев'
-      name: 'prof_6'
+      name: 'prof_6m'
       duration: 30 * 6
       max_lots: 300
       max_filters: 999
   ,
       title: 'PRO 9 месяцев'
-      name: 'prof_9'
+      name: 'prof_9m'
       duration: 30 * 9
       max_lots: 300
       max_filters: 999
   ,
       title: 'PRO 12 месяцев'
-      name: 'prof_12'
+      name: 'prof_12m'
       duration: 30 * 12
       max_lots: 300
       max_filters: 999
