@@ -20,7 +20,6 @@ User.find().populate('licenses.license_type').exec (err, users) =>
       licenses = [
         start_date: now
         end_date: now.setDate(now.getDate() + 14)
-        license_type: license
         license_type: demo
       ]
       for license in user.licenses
