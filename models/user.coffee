@@ -27,11 +27,8 @@ userSchema = new Schema
       start_date: Date
       end_date: Date
       license_type:
-        title: String
-        name: String
-        max_lots: Number
-        max_filters: Number
-        duration: Number
+        type: Schema.Types.ObjectId
+        ref: 'License'
     ]
   third_party_ids: [Schema.Types.Mixed]
   favourite_lots: [

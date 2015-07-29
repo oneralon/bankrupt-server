@@ -50,7 +50,10 @@ passport.serializeUser (user, done) ->
   done null, user._id
 
 passport.deserializeUser (id, done) ->
-  User.findById(id).exec (err, user) ->
+  User.findById(id)
+  .populate
+    path: 'licenses.license_type'
+  .exec (err, user) ->
     if user?
       if user.licenses[0]?.end_date < new Date()
         user.licenses.shift()

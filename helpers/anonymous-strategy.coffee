@@ -38,12 +38,7 @@ class Strategy extends passport.Strategy
               licenses: [
                 start_date: moment().format()
                 end_date: moment().add(days: license.duration)
-                license_type:
-                  title: license.title
-                  name: license.name
-                  max_lots: license.max_lots
-                  max_filters: license.max_filters
-                  duration: license.duration
+                license_type: license
               ]
             user.save (err, user) =>
               @success user
