@@ -60,14 +60,14 @@ passport.deserializeUser (id, done) ->
         user.save()
       if user.licenses.length
         user.license = user.licenses[0].license_type
-        valid = user.licenses.filter (i) ->
-          now = new Date()
-          i.start_date <= now and i.end_date >= now
-        for license in valid
-          console.log license.license_type.name
-          if /prof.*/.test license.license_type.name
-            user.license = license.license_type
-            break
+        # valid = user.licenses.filter (i) ->
+        #   now = new Date()
+        #   i.start_date <= now and i.end_date >= now
+        # for license in valid
+        #   console.log license.license_type.name
+        #   if /prof.*/.test license.license_type.name
+        #     user.license = license.license_type
+        #     break
       else
         console.log 'has not license'
         default_license.then (license) ->
