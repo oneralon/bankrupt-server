@@ -13,7 +13,7 @@ User              = mongoose.model 'User'
 Refer             = mongoose.model 'Refer'
 License           = mongoose.model 'License'
 
-User.find().populate('licenses.license_type').exec (err, users) =>
+User.find (err, users) =>
   License.find {name: 'demo'}, (err, demo) =>
     for user in users
       now = new Date()
@@ -24,8 +24,8 @@ User.find().populate('licenses.license_type').exec (err, users) =>
         end_date: far
         license_type: demo
       ]
-      for license in user.licenses
-        if license and license.license_type then licenses.push license
+      # for license in user.licenses
+      #   if license and license.license_type then licenses.push license
       user.licenses = licenses
       console.log user._id
       user.save()
