@@ -15,9 +15,16 @@ License           = mongoose.model 'License'
 
 User.find().populate('licenses.license_type').exec (err, users) =>
   License.find {name: 'demo'}, (err, demo) =>
-  for user in users
-    licenses = [demo]
-    for license in user.licenses
-      unless license.license_type is null then licenses.push license
-    user.licenses = licenses
-    user.save()
+    for user in users
+      now = new Date()
+      licenses = [
+        start_date: now
+        end_date: now.setDate(now.getDate() + 14)
+        license_type: license
+        license_type: demo
+      ]
+      for license in user.licenses
+        if license.license_type then licenses.push license
+      user.licenses = licenses
+      console.log user._id
+      user.save()
