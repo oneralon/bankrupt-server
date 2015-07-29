@@ -36,7 +36,12 @@ router.get '/register', (req, res) ->
               req.user.licenses.unshift
                 start_date: now
                 end_date: moment().add({days: license.duration}).toDate()
-                license_type: license
+                license_type:
+                  title: license.title
+                  name: license.name
+                  max_lots: license.max_lots
+                  max_filters: license.max_filters
+                  duration: license.duration
               for i in [1..req.user.licenses.length - 1]
                 duration = req.user.licenses[i].end_date - Math.max(now, req.user.licenses[i].start_date)
                 req.user.licenses[i].start_date = req.user.licenses[i - 1].end_date

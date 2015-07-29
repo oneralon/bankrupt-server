@@ -50,17 +50,21 @@ passport.serializeUser (user, done) ->
   done null, user._id
 
 passport.deserializeUser (id, done) ->
-  User.findById(id)
-  .populate
-    path: 'licenses.license_type'
-  .exec (err, user) ->
+  User.findById(id).exec (err, user) ->
     if user?
-      console.log 'user'
       if user.licenses[0]?.end_date < new Date()
         user.licenses.shift()
         user.save()
       if user.licenses.length
         user.license = user.licenses[0].license_type
+        valid = user.licenses.filter (i) ->
+          now = new Date()
+          i.start_date <= now and i.end_date >= now
+        for license in valid
+          console.log license.license_type.name
+          if /prof.*/.test license.license_type.name
+            user.license = license.license_type
+            break
       else
         console.log 'has not license'
         default_license.then (license) ->

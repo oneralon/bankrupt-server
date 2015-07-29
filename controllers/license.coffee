@@ -35,18 +35,30 @@ exports.buy = (req, res) ->
             if license?
               if data.developerPayload
                 req.user.promocodes = req.user.promocodes.filter (i) ->  i.code isnt data.developerPayload
-              if req.user.licenses.length and req.user.licenses[req.user.licenses.length - 1].end_date > new Date()
+              if req.user.licenses.length and req.user.licenses[req.user.licenses.length - 1].end_date > new Date() and req.user.licenses[req.user.licenses.length - 1].license_type.name isnt 'demo'
                 req.user.licenses.push
                   start_date: req.user.licenses[req.user.licenses.length - 1].end_date
                   end_date: moment(req.user.licenses[req.user.licenses.length - 1].end_date)
                     .add(days: license.duration).toDate()
-                  license_type: license
+                  license_type:
+                    title: license.title
+                    name: license.name
+                    max_lots: license.max_lots
+                    max_filters: license.max_filters
+                    duration: license.duration
               else
                 req.user.licenses = [
                   start_date: new Date()
                   end_date: moment().add(days: license.duration).toDate()
-                  license_type: license
+                  license_type:
+                    title: license.title
+                    name: license.name
+                    max_lots: license.max_lots
+                    max_filters: license.max_filters
+                    duration: license.duration
                 ]
+              if req.user.license.name is 'demo' then req.user.license = license
+
               req.user.save()
 
               if purchase?

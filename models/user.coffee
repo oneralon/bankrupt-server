@@ -22,13 +22,16 @@ userSchema = new Schema
     name: String
     max_lots: Number
     max_filters: Number
-    duration: Number # days
+    duration: Number
   licenses: [
       start_date: Date
       end_date: Date
       license_type:
-        type: Schema.Types.ObjectId
-        ref: 'License'
+        title: String
+        name: String
+        max_lots: Number
+        max_filters: Number
+        duration: Number
     ]
   third_party_ids: [Schema.Types.Mixed]
   favourite_lots: [
