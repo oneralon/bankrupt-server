@@ -53,7 +53,7 @@ passport.deserializeUser (id, done) ->
   User.findById(id)
   .populate
     path: 'licenses.license_type'
-  .exec (err, user) ->
+  .exec (err, user) =>
     req.user = user
     if user?
       if user.licenses[0]?.end_date < new Date()
