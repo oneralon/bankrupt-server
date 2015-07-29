@@ -68,11 +68,11 @@ passport.deserializeUser (id, done) ->
             user.license = license.license_type
       else
         console.log 'has not license'
-        default_license.then (license) ->
+        default_license.then (license) =>
           user.license = license
-      user.save ->
+      user.save =>
         Refer.count sender: user, recipient: $ne: null
-        , (err, refers) ->
+        , (err, refers) =>
           user.refers_count = refers
           done err, user
     else done null, null
