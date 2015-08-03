@@ -512,5 +512,5 @@ module.exports = (auc) ->
       'iso': 'RU-SEV'
     '99':
       'name': 'Не определен'
-  code = auc.debtor.inn.toString().slice(0,2) or auc.owner.inn.toString().slice(0,2) or '99'
-  return regions[code].name
+  inn = auc.debtor.inn or auc.owner.inn or '99'
+  return regions[inn.slice(0,2)].name
