@@ -510,4 +510,7 @@ module.exports = (auc) ->
       'gai': '92'
       'okato': '67'
       'iso': 'RU-SEV'
-  return regions[auc.debtor.inn.toString().slice(0,2)].name
+    '99':
+      'name': 'Не определен'
+  code = auc.debtor.inn.toString().slice(0,2) or auc.owner.inn.toString().slice(0,2) or '99'
+  return regions[code].name
