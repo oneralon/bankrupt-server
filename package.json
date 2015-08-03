@@ -31,6 +31,7 @@
     "load-grunt-config": "~0.17.1",
     "lodash": "^3.8.0",
     "lodash.unescape": "^3.0.0",
+    "mailchecker": "^1.0.0",
     "moment": "^2.10.2",
     "moment-countdown": "0.0.1",
     "mongoose": "^4.0.2",

@@ -1,9 +1,10 @@
-passport  = require 'passport-strategy'
-util      = require 'util'
-mongoose  = require 'mongoose'
-moment    = require 'moment'
-bcrypt    = require 'bcrypt'
-_         = require 'lodash'
+passport    = require 'passport-strategy'
+util        = require 'util'
+mongoose    = require 'mongoose'
+moment      = require 'moment'
+mailchecker = require 'mailchecker'
+bcrypt      = require 'bcrypt'
+_           = require 'lodash'
 
 config    = require '../config/db'
 errors    = require './error-codes'
@@ -28,6 +29,7 @@ class Strategy extends passport.Strategy
     surname   = req.surname   or req.query.surname
     unless device_id? and email? and pass?
       return @fail()
+    unless mailchecker(email) then return @fail()
     User.findOne email: email, (err, mail_user) =>
       if err?
         return @fail err
