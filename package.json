@@ -42,6 +42,7 @@
     "passport-anonymous": "^1.0.1",
     "passport-local": "^1.0.0",
     "passport-strategy": "^1.0.0",
+    "password-generator": "^1.0.0",
     "promise": "^7.0.1",
     "redis": "^0.12.1",
     "request": "^2.58.0",
