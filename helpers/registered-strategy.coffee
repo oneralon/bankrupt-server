@@ -25,8 +25,9 @@ class Strategy extends passport.Strategy
     pass      = req.pass      or req.query.pass
     unless device_id? and email? and pass?
       return @fail()
+    email = new RegExp(email, 'i')
     User.findOne
-      email: email
+      email: {$regex: email}
     , (err, user) =>
       if err?
         return @fail err
