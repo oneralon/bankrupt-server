@@ -510,7 +510,14 @@ module.exports = (auc) ->
       'gai': '92'
       'okato': '67'
       'iso': 'RU-SEV'
-    '99':
-      'name': 'Не определен'
-  region = regions[auc.debtor.inn.slice(0,2)] or regions[auc.owner.inn.slice(0,2)]
-  return region.name or 'Не определен'
+
+  region = null
+  if auc.debtor.ogrn
+    region = regions[auc.debtor.ogrn.slice(3,5)]
+  if not region and auc.debtor.inn
+    region = regions[auc.debtor.inn.slice(0,2)]
+  if auc.owner.ogrn
+    region = regions[auc.owner.ogrn.slice(3,5)]
+  if not region and auc.owner.inn
+    region = regions[auc.owner.inn.slice(0,2)]
+  return if region then region.name else 'Не определен'
