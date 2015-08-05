@@ -3,6 +3,7 @@ require '../models/lot'
 
 regionize = require '../helpers/regionize'
 mongoose  = require 'mongoose'
+ObjectID  = mongoose.Types.ObjectId
 Sync = require 'sync'
 config =
   host: 'localhost'
@@ -18,9 +19,12 @@ Lot = mongoose.model 'Lot'
 save = (trade, cb) ->
   trade.save (err, info) =>
     cb err if err?
-    Lot.update {trade: trade}, {$set: {region: trade.region}}, (err, res) =>
-      cb err if err?
-      cb null, res
+    cb null, info
+
+update = (trade, cb) ->
+  mongoose.connection.collection('lots').update {trade: trade}, {$set: {region: trade.region}}, (err) =>
+    cb err if err?  
+    cb()
 
 Trade.find {}, (err, trades) =>
   console.log trades.length
@@ -28,8 +32,9 @@ Trade.find {}, (err, trades) =>
     try
       for trade in trades
         trade.region = regionize(trade)
-        res = save.sync null, trade
-        console.log res
+        save.sync null, trade
+        update.sync null, trade
+        console.log trade.region
       console.log 'Trades OK'
       process.exit 0
     catch e
