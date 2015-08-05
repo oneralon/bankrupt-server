@@ -51,7 +51,6 @@ userSchema = new Schema
       ref: 'License'
     license_name: String
   ]
-
-
+  spent: [String]
 
 mongoose.model 'User', userSchema

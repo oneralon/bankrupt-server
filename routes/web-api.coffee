@@ -18,6 +18,7 @@ tags          = require '../controllers/tags'
 error_logs    = require '../controllers/error_logs'
 promocode     = require '../controllers/promocode'
 users         = require '../controllers/users'
+referal       = require '../controllers/referal'
 
 mongoose.set 'debug', yes
 
@@ -45,6 +46,8 @@ router.get '/full-cards/:id', full_cards.get
 
 router.post '/promocode/check', promocode.check
 router.post '/promocode/enter', promocode.enter
+
+router.post '/bonus/activate', referal.activate
 
 router.post '/user/changepass', users.changepass
 
