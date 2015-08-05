@@ -24,7 +24,7 @@ Trade.find {}, (err, trades) =>
       for trade in trades
         trade.region = regionize(trade)
         trade.save.sync trade
-        res = Lot.update.sync Lot, {trade: trade}, {$set: {region: trade.region}}
+        res = Lot.update.sync Lot, {trade: trade}, {region: trade.region}
         console.log "OK #{trade.region}"
         console.log res
         i++
