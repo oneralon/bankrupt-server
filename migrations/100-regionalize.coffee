@@ -16,25 +16,17 @@ unless mongoose.connection.readyState
 Trade = mongoose.model 'Trade'
 Lot = mongoose.model 'Lot'
 
-save = (trade, cb) ->
-  trade.save (err, info) =>
-    cb err if err?
-    cb null, info
-
-update = (trade, cb) ->
-  mongoose.connection.collection('lots').update {trade: trade}, {$set: {region: trade.region}}, (err) =>
-    cb err if err?  
-    cb()
-
-Trade.find {}, '_id region', (err, trades) =>
+Trade.find {}, (err, trades) =>
   console.log trades.length
   Sync =>
     try
+      i = 0
       for trade in trades
         trade.region = regionize(trade)
-        save.sync null, trade
-        update.sync null, trade
-        console.log trade.region
+        trade.save.sync trade
+        Lot.update.sync Lot, {trade: trade}, {$set: {region: trade.region}}
+        console.log "OK #{trade.region}"
+        i++
       console.log 'Trades OK'
       process.exit 0
     catch e
