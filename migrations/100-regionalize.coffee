@@ -26,7 +26,7 @@ update = (trade, cb) ->
     cb err if err?  
     cb()
 
-Trade.find {}, (err, trades) =>
+Trade.find {}, '_id region', (err, trades) =>
   console.log trades.length
   Sync =>
     try
