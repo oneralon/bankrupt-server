@@ -22,6 +22,7 @@ exports.mail = (req, res) ->
   Refer.generate req.user, (err, refer) ->
     if err
       return res.status(500).json err
+    refer.name = "#{req.user.name} #{req.user.surname}"
     html = renderer.render 'refer.ect', refer: refer
 
     transporter = nodemailer.createTransport(
@@ -32,7 +33,7 @@ exports.mail = (req, res) ->
     transporter.sendMail
       from: "#{mail_config.name} <#{mail_config.user}>"
       to: email
-      subject: 'Вас пригласили воспользоваться приложением'
+      subject: "#{refer.name} приглашает вас начать зарабатывать с помощью приложения «Охота на Банкрота»"
       html: html
     , (err, result) ->
       if err
