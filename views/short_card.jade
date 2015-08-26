@@ -1,6 +1,32 @@
 extends layout
 
 block content
+    .form
+        form(method='GET' enctype='application/x-www-form-urlencoded' action='')
+            input.inline(name='text' placeholder='text')
+            input.inline(name='startPrice' placeholder='start price')
+            input.inline(name='endPrice' placeholder='end price')
+            label
+                input(type='checkbox' name='my_lots')
+                | My lots
+            input.inline(type='hidden' name='render' value='true')
+            div.container
+                for etp in etps
+                    label
+                        input(type='checkbox' name='etps[]' value="#{etp}")
+                        = etp
+            div.container
+                for region in regions
+                    label
+                        input(type='checkbox' name='regions[]' value="#{region}")
+                        = region
+            div.container
+                for status in statuses
+                    label
+                        input(type='checkbox' name='statuses[]' value="#{status}")
+                        = status
+            input.inline(name='perPage' placeholder='Per page')
+            button(type='submit') Search
     .pager
         .title Страница
         il.pager__container

@@ -38,7 +38,7 @@ else
     secret: 'keyboard cat'
     name: 'bankrupt.sid'
     store: redis.store
-    cookie: {maxAge: 36000000000}
+    cookie: {maxAge: 36000000000, path: '/'}
     resave: true
     saveUninitialized: false
   app.use bodyParser.urlencoded

@@ -6,19 +6,9 @@ client = new elasticsearch.Client
   host: 'localhost:9200'
   log: 'error'
 
-exports.like = (fields, filter_fields, text, from, take, ids) ->
+exports.like = (fields, filter_fields, text, from, take, ids, trade_ids) ->
   new Promise (resolve, reject) ->
-    query = {}
-    if ids?
-      query.filter =
-        query:
-          ids:
-            values: ids
-
-    query.from = from
-    query.size = take
-
-    query.query =
+    query = 
       bool:
         should: [
           function_score:
@@ -34,6 +24,23 @@ exports.like = (fields, filter_fields, text, from, take, ids) ->
                 like_text: text
                 fuzziness: 2
         ]
+    if ids? or trade_ids?
+      query.bool.must = []
+      if ids?
+        should = []
+        for id in ids
+          should.push { "match": { "_id": id } }
+        query.bool.must.push bool: { should: should }
+      if trade_ids?
+        should = []
+        for id in trade_ids
+          should.push { "match": { "trade": id } }
+        query.bool.must.push bool: { should: should }
+
+    query = query: query
+
+    query.from = from
+    query.size = take
 
     query.fields = fields
 
