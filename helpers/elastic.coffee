@@ -11,7 +11,10 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
 
     if text.length < 4
       query_fields = ['title']
-    else query_fields = ['title^10', 'information^5']
+      fuzziness = 0.1
+    else
+      query_fields = ['title^10', 'information^5']
+      fuzziness = 2
 
     query = 
       bool:
@@ -22,7 +25,7 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
               query: text
               fields: query_fields
               operator: 'and'
-              fuzziness: 2
+              fuzziness: fuzziness
         ]
     if ids? or trade_ids?
       query.bool.must = []
