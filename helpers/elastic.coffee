@@ -18,7 +18,7 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
       fuzziness = 2
       type = 'best_fields'
 
-    query = 
+    query =
       bool:
         should: [
           function_score:
@@ -47,7 +47,7 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
 
     query.from = from
     query.size = take
-    query.min_score = 0.9
+    query.min_score = 0.99
     query.fields = fields
 
     client.search
