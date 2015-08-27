@@ -9,6 +9,10 @@ client = new elasticsearch.Client
 exports.like = (fields, text, from, take, ids, trade_ids) ->
   new Promise (resolve, reject) ->
 
+    if text.length < 4
+      query_fields = ['title']
+    else query_fields = ['title^10', 'information^5']
+
     query = 
       bool:
         should: [
@@ -16,7 +20,7 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
             weight: 100
             query: multi_match:
               query: text
-              fields: ['title^10', 'information^5']
+              fields: query_fields
               operator: 'and'
               fuzziness: 2
         ]

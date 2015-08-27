@@ -45,7 +45,6 @@ exports.list = (req, res, next) ->
   if my_lots_only
     if _.isEmpty req.user.favourite_lots then return res.status(200).json lots: []
     else lot_ids = req.user.favourite_lots.map (item) -> item.toString()
-
   tradesFound = new Promise (resolve, reject) ->
     unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
       query = {}
@@ -66,16 +65,16 @@ exports.list = (req, res, next) ->
 
   elasticFound = new Promise (resolve, reject) ->
     tradesFound.catch(error).then (trades) ->
-      unless text
+      unless text?
         resolve({trades: trades, lot_ids: lot_ids})
       else
-        elastic.like ['_id'], text, 0, 10000, lot_ids, trades.map (i) -> i._id.toString()
+        trade_ids = unless trades? then null else trades.map (i) -> i._id.toString()
+        elastic.like ['_id'], text, 0, 10000, lot_ids, trade_ids
         .then (ids) ->
           resolve({trades: trades, lot_ids: ids})
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
-      console.log '>>>>>>>', params.lot_ids.length
       query = Lot.find()
       query.where title: {$exists: true}
       query.where _id: $nin: req.user.hidden_lots
