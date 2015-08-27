@@ -6,23 +6,19 @@ client = new elasticsearch.Client
   host: 'localhost:9200'
   log: 'error'
 
-exports.like = (fields, filter_fields, text, from, take, ids, trade_ids) ->
+exports.like = (fields, text, from, take, ids, trade_ids) ->
   new Promise (resolve, reject) ->
+
     query = 
       bool:
         should: [
           function_score:
-            query:
-              multi_match:
-                query: text
-                fields: filter_fields
-        ,
-          function_score:
-            query:
-              fuzzy_like_this:
-                fields: filter_fields
-                like_text: text
-                fuzziness: 2
+            weight: 100
+            query: multi_match:
+              query: text
+              fields: ['title^10', 'information^5']
+              operator: 'and'
+              fuzziness: 2
         ]
     if ids? or trade_ids?
       query.bool.must = []
@@ -41,7 +37,7 @@ exports.like = (fields, filter_fields, text, from, take, ids, trade_ids) ->
 
     query.from = from
     query.size = take
-
+    query.min_score = 0.9
     query.fields = fields
 
     client.search

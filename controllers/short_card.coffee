@@ -69,12 +69,13 @@ exports.list = (req, res, next) ->
       unless text
         resolve({trades: trades, lot_ids: lot_ids})
       else
-        elastic.like ['_id'], ['information', 'title'], text, 0, 1000000, lot_ids, trades.map (i) -> i._id.toString()
+        elastic.like ['_id'], text, 0, 10000, lot_ids, trades.map (i) -> i._id.toString()
         .then (ids) ->
           resolve({trades: trades, lot_ids: ids})
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
+      console.log '>>>>>>>', params.lot_ids.length
       query = Lot.find()
       query.where title: {$exists: true}
       query.where _id: $nin: req.user.hidden_lots
