@@ -17,11 +17,11 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
       min_score = 0.99
     else
       query_fields = ['title^10', 'information^5']
-      fuzziness = 2
+      fuzziness = 1
       type = 'best_fields'
-      min_score = 0.9
+      min_score = 0.99
 
-    query = 
+    query =
       bool:
         should: [
           function_score:
@@ -46,11 +46,6 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
           should.push { "match": { "trade": id } }
         query.bool.must.push bool: { should: should }
 
-    if /дом/i.test text
-      query.bool.must_not = regexp: title:
-        value: '.*дом.{0,5}(№|0|1|2|3|4|5|6|7|8|9).*'
-        flags: 'ALL'
-    
     query = query: query
 
     query.from = from
