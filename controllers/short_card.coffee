@@ -119,6 +119,13 @@ exports.list = (req, res, next) ->
       res.repeated = yes
       res.lots = lots
       return exports.list req, res, next
+    distinct_lots = []
+    lots = lots.filter (item) ->
+      url = item.url.replace '://www.', '://'
+      if distinct_lots.indexOf(url) isnt -1 then return false
+      else
+        distinct_lots.push url
+        return true
     lots = lots.map (item) ->
       current_interval = null
       unless _.isEmpty item.intervals
