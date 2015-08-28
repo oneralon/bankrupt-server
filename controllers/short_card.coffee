@@ -75,11 +75,11 @@ exports.list = (req, res, next) ->
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
-      res.status(200).json lots: [] if _.isEqual params.lot_ids, []
-      unless params.lot_ids is null
-        query.where('_id').in params.lot_ids
+      return res.status(200).json lots: [] if _.isEqual params.lot_ids, []
       query = Lot.find()
       query.where title: {$exists: true}
+      unless params.lot_ids is null
+        query.where('_id').in params.lot_ids
       query.where _id: $nin: req.user.hidden_lots
       unless _.isEmpty tags
         query.where tags: $in: tags
