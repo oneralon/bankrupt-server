@@ -75,8 +75,11 @@ exports.list = (req, res, next) ->
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
+      return res.status(200).json lots: [] if _.isEqual params.lot_ids, []
       query = Lot.find()
       query.where title: {$exists: true}
+      unless params.lot_ids is null
+        query.where('_id').in params.lot_ids
       query.where _id: $nin: req.user.hidden_lots
       unless _.isEmpty tags
         query.where tags: $in: tags
@@ -93,8 +96,6 @@ exports.list = (req, res, next) ->
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
-      unless _.isEmpty params.lot_ids
-        query.where('_id').in params.lot_ids
       query.sort("#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'

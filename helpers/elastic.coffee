@@ -5,20 +5,23 @@ console.log 'created elastic client'
 client = new elasticsearch.Client
   host: 'localhost:9200'
   log: 'error'
+  requestTimeout: 60000
 
 exports.like = (fields, text, from, take, ids, trade_ids) ->
   new Promise (resolve, reject) ->
 
     if text.length < 4
       query_fields = ['title']
-      fuzziness = 0.001
-      type = 'phrase'
+      fuzziness = 0
+      type = 'phrase_prefix'
+      min_score = 0.9999
     else
-      query_fields = ['title^10', 'information^5']
-      fuzziness = 2
+      query_fields = ['title^1000', 'information^5']
+      fuzziness = 1
       type = 'best_fields'
+      min_score = 0.99
 
-    query = 
+    query =
       bool:
         should: [
           function_score:
@@ -47,13 +50,14 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
 
     query.from = from
     query.size = take
-    query.min_score = 0.9
+    query.min_score = min_score
     query.fields = fields
 
     client.search
       index: 'lots'
       body: query
     .then (resp) ->
+      console.log "===> ElasticSearch: #{resp.hits.hits.length}"
       resolve resp.hits.hits.map (hit) -> hit.fields._id
     .catch (err) ->
       console.log err
