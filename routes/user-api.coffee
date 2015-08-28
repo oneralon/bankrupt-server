@@ -80,8 +80,21 @@ router.use mustBeAuth
 router.use '/*', cors
 
 router.get '/me', (req, res) ->
-  res.status(200).json req.user
-
+  res.status(200).json
+    refers_count: req.user.refers_count
+    _id: req.user._id
+    email: req.user.email
+    device: req.user.device
+    __v: req.user.__v
+    spent: req.user.spent
+    promocodes: req.user.promocodes
+    hidden_lots: req.user.hidden_lots
+    favourite_lots: req.user.favourite_lots
+    third_party_ids: req.user.third_party_ids
+    licenses: req.user.licenses
+    license: req.user.license
+    activated: req.user.activated
+    anonymous: req.user.anonymous
 
 router.get '/logout', (req, res) ->
   req.logOut()
