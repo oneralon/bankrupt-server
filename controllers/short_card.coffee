@@ -26,6 +26,7 @@ normalize = (field, def) ->
 exports.list = (req, res, next) ->
   page = Number(req.query.page) or 1
   perPage = Number(req.query.perPage) or 30
+  if perPage > 100 then perPage = 30
   tags = normalize req.query.tags
   statuses = normalize req.query.statuses
   etps = normalize req.query.etps
