@@ -77,6 +77,8 @@ exports.list = (req, res, next) ->
     elasticFound.catch(error).then (params) ->
       return res.status(200).json lots: [] if _.isEqual params.lot_ids, []
       query = Lot.find()
+      if /дом/i.test text
+        query.where title: /дом(?!(\s*(№|\d)))/i
       query.where title: {$exists: true}
       unless params.lot_ids is null
         query.where('_id').in params.lot_ids
