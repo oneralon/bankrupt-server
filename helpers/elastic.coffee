@@ -13,15 +13,15 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
     if text.length < 4
       query_fields = ['title']
       fuzziness = 0
-      type = 'phrase_prefix'
-      min_score = 0.9999
-    else
-      query_fields = ['title^1000', 'information^5']
-      fuzziness = 1
-      type = 'best_fields'
+      type = 'phrase'
       min_score = 0.99
+    else
+      query_fields = ['title^10', 'information^5']
+      fuzziness = 2
+      type = 'best_fields'
+      min_score = 0.9
 
-    query =
+    query = 
       bool:
         should: [
           function_score:
@@ -46,6 +46,11 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
           should.push { "match": { "trade": id } }
         query.bool.must.push bool: { should: should }
 
+    if /дом/i.test text
+      query.bool.must_not = regexp: title:
+        value: '.*дом.{0,5}(№|0|1|2|3|4|5|6|7|8|9).*'
+        flags: 'ALL'
+    
     query = query: query
 
     query.from = from
@@ -53,11 +58,12 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
     query.min_score = min_score
     query.fields = fields
 
+    console.log query
+
     client.search
       index: 'lots'
       body: query
     .then (resp) ->
-      console.log "===> ElasticSearch: #{resp.hits.hits.length}"
       resolve resp.hits.hits.map (hit) -> hit.fields._id
     .catch (err) ->
       console.log err
