@@ -1,6 +1,6 @@
 module.exports = (req, res, next) ->
-  if req.query.render is 'true' and /\:\:1/.test req.connection.remoteAddress
+  if req.query.render is 'true' and req.connection.remoteAddress is '::1'
     return next()
-  if /android\-bankrupt/.test req.headers['user-agent']
+  if req.headers['user-agent'] is 'android-bankrupt'
     return next()
   return res.status(403).send()
