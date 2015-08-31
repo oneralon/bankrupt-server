@@ -6,6 +6,7 @@ passport      = require 'passport'
 redis         = require './modules/redis-session'
 logger        = require './middlewares/logger'
 mustBeAuth    = require './middlewares/passport'
+useragent     = require './middlewares/useragent'
 dbConfig      = require './config/db'
 
 webAPI        = require './routes/web-api'
@@ -20,7 +21,7 @@ require './cron'
 
 # if process.env.NODE_ENV is 'development'
 app.use logger
-
+app.use useragent
 
 app.use cookieParser 'keyboard cat'
 app.use session
