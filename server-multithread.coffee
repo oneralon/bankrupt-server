@@ -10,7 +10,6 @@ cCPUs         = require('os').cpus().length
 
 redis         = require './modules/redis-session'
 logger        = require './middlewares/logger'
-useragent     = require './middlewares/useragent'
 mustBeAuth    = require './middlewares/passport'
 dbConfig      = require './config/db'
 
@@ -32,7 +31,6 @@ if cluster.isMaster
 else
   # if process.env.NODE_ENV is 'development'
   app.use logger
-  app.use useragent
   app.use compression()
   app.use cookieParser 'keyboard cat'
   app.use session
