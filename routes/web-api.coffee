@@ -7,7 +7,7 @@ mustBeAuth    = require '../middlewares/passport'
 localOnly     = require '../middlewares/local'
 
 cors          = require '../middlewares/cors'
-
+params        = require '../middlewares/params'
 
 short_cards   = require '../controllers/short_card'
 full_cards    = require '../controllers/full_card'

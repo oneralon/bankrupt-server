@@ -1,10 +1,12 @@
 passport    = require 'passport'
 moment      = require 'moment'
 mongoose    = require 'mongoose'
+validator   = require 'validator'
 pass        = require '../modules/passport'
 router      = require('express').Router()
 mustBeAuth  = require '../middlewares/passport'
 cors        = require '../middlewares/cors'
+params      = require '../middlewares/params'
 
 require '../models/refer'
 require '../models/license'
@@ -12,7 +14,7 @@ Refer = mongoose.model 'Refer'
 License = mongoose.model 'License'
 
 
-router.get '/login', (req, res) ->
+login_func = (req, res) ->
   passport.authenticate(['registered', 'vk', 'google', 'facebook', 'twitter', 'linkedin', 'odnoklassniki', 'anonymous']) req, res, () ->
     console.log 'there', req.user
     if req.user?
@@ -21,7 +23,12 @@ router.get '/login', (req, res) ->
       req.user.save()
     res.send()
 
-router.get '/register', (req, res) ->
+router.post '/login', params, login_func
+router.get '/login', login_func
+
+register_func = (req, res) ->
+  email = req.body.email or req.query.email or req.email
+  unless validator.isEmail email then return res.status(400).json {error: "Wrong email!"}
   passport.authenticate(['registration', 'google-registration', 'vk-registration', 'facebook-registration', 'twitter-registration', 'linkedin-registration', 'odnoklassniki-registration']) req, res, () ->
     console.log 'registered', arguments
     refer_code = req.refer_code or req.query.refer_code
@@ -54,12 +61,12 @@ router.get '/register', (req, res) ->
     else
       res.send()
 
-router.get '/activate', (req, res) ->
+router.post '/register', params, register_func
+router.get  '/register', register_func
+
+router.post '/activate', (req, res) ->
   passport.authenticate('activation') req, res, () ->
     res.send()
-
-
-
 
 favourite_lots  = require '../controllers/favourite_lots'
 hidden_lots     = require '../controllers/hidden_lots'
