@@ -42,6 +42,8 @@ router.get '/tags/update',    tags.update
 router.get '/tags/add',       tags.add
 router.get '/tags/delete',    tags.delete
 router.get '/short-cards',    short_cards.list
+router.post '/short-cards',   params, short_cards.list
+
 router.get '/full-cards/:id', full_cards.get
 
 router.post '/promocode/check', promocode.check
