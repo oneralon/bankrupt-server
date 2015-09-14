@@ -28,6 +28,7 @@ lotSchema = new Schema
   url: String
   last_message: Date
   region: String
+  updated: Date
   documents: [
     name: String
     url: String

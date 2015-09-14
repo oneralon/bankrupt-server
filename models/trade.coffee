@@ -2,6 +2,7 @@ mongoose            = require "mongoose"
 Schema              = mongoose.Schema
 
 tradeSchema = new Schema
+  updated: Date
   holding_date: Date
   title: String
   type: String
