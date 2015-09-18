@@ -10,29 +10,31 @@ client = new elasticsearch.Client
 exports.like = (fields, text, from, take, ids, trade_ids) ->
   new Promise (resolve, reject) ->
 
-    if text.length < 4
-      query_fields = ['title']
-      fuzziness = 0
-      type = 'phrase'
-      min_score = 0.99
-    else
-      query_fields = ['title^10', 'information^5']
-      fuzziness = 1
-      type = 'best_fields'
-      min_score = 0.99
+    terms = text.split(',').map((i)->i.trim())
 
-    query =
-      bool:
-        should: [
-          function_score:
-            weight: 100
-            query: multi_match:
-              query: text
-              fields: query_fields
-              operator: 'and'
-              type: type
-              fuzziness: fuzziness
-        ]
+    query = bool: should: []
+
+    for text in terms
+      if text.length < 4
+        query_fields = ['title']
+        fuzziness = 0
+        type = 'phrase'
+        min_score = 0.99
+      else
+        query_fields = ['title^10', 'information^5']
+        fuzziness = 1
+        type = 'best_fields'
+        min_score = 0.99
+    
+      query.bool.should.push function_score:
+        weight: 100
+        query: multi_match:
+          query: text
+          fields: query_fields
+          operator: 'and'
+          type: type
+          fuzziness: fuzziness
+
     if ids? or trade_ids?
       query.bool.must = []
       if ids?
