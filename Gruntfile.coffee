@@ -63,7 +63,7 @@ module.exports = (grunt) ->
               require('fs').writeFileSync('.rebooted', 'rebooted')
             , 100
           opts: ['/usr/local/bin/coffee']
-          evv: PORT: 4000
+          env: PORT: 4000
           ignore: [
             'node_modules/**'
             'public/**'
