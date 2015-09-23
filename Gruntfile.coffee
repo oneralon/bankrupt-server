@@ -60,6 +60,7 @@ module.exports = (grunt) ->
           callback: (nodemon) ->
             nodemon.on 'crash', -> setTimeout ->
               exec 'pkill -9 -f \'node /usr/local/bin/coffee server-multithread.coffee\''
+              exec 'pkill -9 -f \'sh -c coffee ./server-multithread.coffee\''
               require('fs').writeFileSync('.rebooted', 'rebooted')
             , 100
           opts: ['/usr/local/bin/coffee']
