@@ -53,12 +53,14 @@ module.exports = (grunt) ->
       prod:
         script: './server-multithread.coffee'
         timeout: 100
-        callback: (nodemon) ->
-          nodemon.on 'restart', -> setTimeout -> 
-            require('fs').writeFileSync('.rebooted', 'rebooted')
-          , 100
         options:
+          nodeArgs: ['--debug-brk']
+          callback: (nodemon) ->
+            nodemon.on 'crash', -> setTimeout ->
+              require('fs').writeFileSync('.rebooted', 'rebooted')
+            , 100
           opts: ['/usr/local/bin/coffee']
+          evv: PORT: 4000
           ignore: [
             'node_modules/**'
             'public/**'
