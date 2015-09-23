@@ -50,6 +50,21 @@ module.exports = (grunt) ->
           ]
           ext: 'js,coffee'
           watch: ['**/*.coffee', 'server.coffee']
+      prod:
+        script: './server-multithread.coffee'
+        timeout: 100
+        callback: (nodemon) ->
+          nodemon.on 'restart', -> setTimeout -> 
+            require('fs').writeFileSync('.rebooted', 'rebooted')
+          , 100
+        options:
+          opts: ['/usr/local/bin/coffee']
+          ignore: [
+            'node_modules/**'
+            'public/**'
+          ]
+          ext: 'js,coffee'
+          watch: ['**/*.coffee', 'server.coffee', '.rebooted']
 
 
 
@@ -60,4 +75,4 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-nodemon'
   grunt.loadNpmTasks 'grunt-keepalive'
   grunt.registerTask 'default', ['stylus', 'nodemon:dev', 'watch']
-  grunt.registerTask 'production', ['stylus', 'express:prod', 'keepalive']
+  grunt.registerTask 'production', ['stylus', 'nodemon:prod', 'keepalive']
