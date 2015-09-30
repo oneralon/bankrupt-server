@@ -25,7 +25,7 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
         fuzziness = 1
         type = 'best_fields'
         min_score = 0.99
-    
+
       query.bool.should.push function_score:
         weight: 100
         query: multi_match:
@@ -45,7 +45,7 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
       if trade_ids?
         should = []
         for id in trade_ids
-          should.push { "match": { "trade": id } }
+          should.push { "term": { "trade": id } }
         query.bool.must.push bool: { should: should }
 
     query = query: query
