@@ -99,7 +99,7 @@ exports.list = (req, res, next) ->
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
-      query.sort("#{sort}": "#{sort_order}")
+      query.sort({present: -1, "#{sort}": "#{sort_order}"})
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
       query.populate
