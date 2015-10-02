@@ -38,8 +38,8 @@ exports.list = (req, res, next) ->
   trade_types = req.query.tradeTypes?.map (item) -> item.toLowerCase()
   membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
   price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
-  sort = req.query.sort or 'last_event'
-  sort_order = req.query.sortOrder or 'asc'
+  sort = req.query.sort or 'last_message'
+  sort_order = req.query.sortOrder or 'desc'
 
   lot_ids = null
 
@@ -50,13 +50,13 @@ exports.list = (req, res, next) ->
     unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
       query = {}
       unless _.isEmpty etps
-        query['etp.name'] = $in: etps.map (i) -> new RegExp '^' + i + '$', 'i'
+        query['etp.name'] = $in: etps.map (i) -> new RegExp i, 'i'
       unless _.isEmpty trade_types
-        query['trade_type'] = $in: trade_types.map (i) -> new RegExp '^' + i + '$', 'i'
+        query['trade_type'] = $in: trade_types.map (i) -> new RegExp i, 'i'
       unless _.isEmpty membership_types
-        query['membership_type'] = $in: membership_types.map (i) -> new RegExp '^' + i + '$', 'i'
+        query['membership_type'] = $in: membership_types.map (i) -> new RegExp i, 'i'
       unless _.isEmpty price_submission_types
-        query['price_submission_type'] = $in: price_submission_types.map (i) -> new RegExp '^' + i + '$', 'i'
+        query['price_submission_type'] = $in: price_submission_types.map (i) -> new RegExp i, 'i'
       if _.isEmpty query then resolve(null)
       else
         Trade.find(query).select('_id').exec (err, trades) ->
@@ -99,7 +99,7 @@ exports.list = (req, res, next) ->
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
-      query.sort({present: 1, "#{sort}": "#{sort_order}"})
+      query.sort("#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
       query.populate
@@ -146,11 +146,11 @@ exports.list = (req, res, next) ->
           current_interval = item.intervals[item.intervals.length - 1]
         if nextInterval?
           duration = moment(nextInterval.interval_start_date)
-      end_date = item.trade.results_date or
-        item.trade.holding_date or
-        item.trade.requests_end_date or
-        item.last_event or
-        item.intervals[item.intervals.length - 1]?.request_end_date
+        end_date = item.last_event
+      # end_date = moment(item.trade.results_date or
+      #   item.trade.holding_date or
+      #   item.trade.requests_end_date or
+      #   item.intervals[item.intervals.length - 1]?.request_end_date)
       if req.query.render is 'true'
         duration = moment.duration(duration.diff new Date()).humanize() if duration?
         end_date = moment.duration(end_date.diff new Date()).humanize() if end_date?
