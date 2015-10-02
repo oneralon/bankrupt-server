@@ -1,3 +1,5 @@
+exec = require('child_process').execSync
+
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
@@ -53,12 +55,16 @@ module.exports = (grunt) ->
       prod:
         script: './server-multithread.coffee'
         timeout: 100
-        callback: (nodemon) ->
-          nodemon.on 'restart', -> setTimeout -> 
-            require('fs').writeFileSync('.rebooted', 'rebooted')
-          , 100
         options:
+          nodeArgs: []
+          callback: (nodemon) ->
+            nodemon.on 'crash', -> setTimeout ->
+              exec 'pkill -9 -f \'node /usr/local/bin/coffee server-multithread.coffee\''
+              exec 'pkill -9 -f \'sh -c coffee ./server-multithread.coffee\''
+              require('fs').writeFileSync('.rebooted', 'rebooted')
+            , 100
           opts: ['/usr/local/bin/coffee']
+          env: PORT: 4000
           ignore: [
             'node_modules/**'
             'public/**'
