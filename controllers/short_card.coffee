@@ -146,7 +146,7 @@ exports.list = (req, res, next) ->
           current_interval = item.intervals[item.intervals.length - 1]
         if nextInterval?
           duration = moment(nextInterval.interval_start_date)
-        end_date = item.last_event
+        end_date = moment(item.last_event)
       # end_date = moment(item.trade.results_date or
       #   item.trade.holding_date or
       #   item.trade.requests_end_date or
