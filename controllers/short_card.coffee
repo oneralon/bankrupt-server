@@ -149,6 +149,7 @@ exports.list = (req, res, next) ->
       end_date = moment(item.trade.results_date or
         item.trade.holding_date or
         item.trade.requests_end_date or
+        item.last_event or
         item.intervals[item.intervals.length - 1]?.request_end_date)
       if req.query.render is 'true'
         duration = moment.duration(duration.diff new Date()).humanize() if duration?
