@@ -81,6 +81,7 @@ exports.list = (req, res, next) ->
       if /дом/i.test text
         query.where title: /дом(?!(\s*(№|\d)))/i
       query.where title: {$exists: true}
+      query.where last_event: $ne: null
       unless params.lot_ids is null
         query.where('_id').in params.lot_ids
       query.where _id: $nin: req.user.hidden_lots
