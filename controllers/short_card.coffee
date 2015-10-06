@@ -128,6 +128,7 @@ exports.list = (req, res, next) ->
       return exports.list req, res, next
     distinct_lots = []
     lots = lots.filter (item) ->
+      if moment(item.last_event) < new Date() then return false
       url = item.url.replace '://www.', '://'
       if distinct_lots.indexOf(url) isnt -1 then return false
       else
