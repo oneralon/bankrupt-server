@@ -72,7 +72,7 @@ exports.list = (req, res, next) ->
         trade_ids = unless trades? then null else trades.map (i) -> i._id.toString()
         elastic.like ['_id'], text, 0, 3000, lot_ids, trade_ids
         .then (ids) ->
-          resolve({trades: trades, lot_ids: ids, trade_ids: trade_ids})
+          resolve({trades: trades, lot_ids: ids})
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
@@ -93,8 +93,6 @@ exports.list = (req, res, next) ->
         query.where current_sum: $gte: start_price
       unless _.isEmpty end_price
         query.where current_sum: $lte: end_price
-      unless _.isEmpty params.trade_ids
-        query.where trade: $in: params.trade_ids
       unless _.isEmpty regions
         if res.repeated
           perPage = perPage - res.lots.length
@@ -102,6 +100,7 @@ exports.list = (req, res, next) ->
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
+      else if params.trades is [] then resolve([])
       query.sort(present: -1, "#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
