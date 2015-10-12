@@ -76,7 +76,7 @@ exports.list = (req, res, next) ->
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
-      if _.isEqual params.lot_ids, [] or _.isEqual params.trades, []
+      if _.isEqual(params.lot_ids, []) or _.isEqual(params.trades, [])
         return res.status(200).json lots: [] 
       query = Lot.find()
       if /дом/i.test text
