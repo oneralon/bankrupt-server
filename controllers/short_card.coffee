@@ -76,7 +76,8 @@ exports.list = (req, res, next) ->
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
-      return res.status(200).json lots: [] if _.isEqual params.lot_ids, []
+      if _.isEqual params.lot_ids, [] or _.isEqual params.trades, []
+        return res.status(200).json lots: [] 
       query = Lot.find()
       if /дом/i.test text
         query.where title: /дом(?!(\s*(№|\d)))/i
@@ -100,8 +101,6 @@ exports.list = (req, res, next) ->
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
-      else
-        if params.trades is [] then resolve([])
       query.sort(present: -1, "#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
