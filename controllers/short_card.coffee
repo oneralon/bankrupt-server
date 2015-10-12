@@ -50,7 +50,7 @@ exports.list = (req, res, next) ->
     unless _.isEmpty(etps) and _.isEmpty(regions) and _.isEmpty(trade_types) and _.isEmpty(membership_types) and _.isEmpty(price_submission_types)
       query = {}
       unless _.isEmpty etps
-        query['etp.name'] = $in: etps.map (i) -> new RegExp i, 'i'
+        query['etp.name'] = $in: etps.map (i) -> new RegExp '^' + i + '$', 'i'
       unless _.isEmpty trade_types
         query['trade_type'] = $in: trade_types.map (i) -> new RegExp i, 'i'
       unless _.isEmpty membership_types
