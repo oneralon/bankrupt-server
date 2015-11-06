@@ -52,5 +52,6 @@ userSchema = new Schema
     license_name: String
   ]
   spent: [String]
+  restorehash: String
 
 mongoose.model 'User', userSchema

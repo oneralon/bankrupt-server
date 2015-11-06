@@ -33,20 +33,43 @@ exports.restore = (req, res) ->
   User.findOne { email: { $regex: remail } }, (err, user) =>
     return res.status(500).json {err: err} if err?
     if user?
-      transporter = nodemailer.createTransport
-        service: config.service
-        auth: { user: config.user, pass: config.pass }
-      password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
-      user.password = bcrypt.hashSync password, 10
+      hash1 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+      hash2 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+      url   = "http://mass-shtab.com:3000/user/restore/#{hash1}/#{hash2}"
+      user.restorehash = "#{hash1}:#{hash2}"
       user.save (err, user) =>
         res.status(500).json {err: err} if err?
+        transporter = nodemailer.createTransport
+          service: config.service
+          auth: { user: config.user, pass: config.pass }
         email =
           from: "#{config.name} <#{config.user}>"
           to: email
-          subject: "Восстановление доступа"
-          text: "Новый пароль: #{password}"
-          html: "Новый пароль: #{password}"
+          subject: "Восстановление доступа (Подтверждение)"
+          text: "Для восстановления пароля перейдите по ссылке: #{url}"
+          html: "Для восстановления пароля перейдите по ссылке: </br><a href='#{url}'>#{url}</a>"
         transporter.sendMail email, (err, info) =>
           res.status(500).json {err: err} if err?
           res.status(200).send()
     else res.status(400).json {err: 'Wrong email!'}
+
+exports.confirm = (req, res) ->
+  hash1 = req.body.hash1 or req.query.hash1
+  hash2 = req.body.hash2 or req.query.hash2
+  User.findOne { restorehash: "#{hash1}:#{hash2}" }, (err, user) =>
+    return res.status(500).json {err: err} if err?
+    if user?
+        password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+        user.password = bcrypt.hashSync password, 10
+        user.save (err, user) =>
+          res.status(500).json {err: err} if err?
+          email =
+            from: "#{config.name} <#{config.user}>"
+            to: email
+            subject: "Восстановление доступа"
+            text: "Новый пароль: #{password}"
+            html: "Новый пароль: #{password}"
+          transporter.sendMail email, (err, info) =>
+            res.status(500).json {err: err} if err?
+            res.status(200).send()
+    else res.status(400).json {err: 'Hash expired!'}
