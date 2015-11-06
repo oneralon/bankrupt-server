@@ -138,6 +138,7 @@ router.delete '/filter_presets/delete',   params, filter_presets.delete
 router.get '/upload_lots/',             upload_lots.get
 
 router.post '/license/buy',             license.buy
+router.post '/license/check',           license.check
 
 router.post '/refer/mail',              referal.mail
 router.get  '/refer/mail',              referal.mail
