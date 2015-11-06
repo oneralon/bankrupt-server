@@ -70,6 +70,7 @@ exports.confirm = (req, res) ->
             subject: "Восстановление доступа"
             text: "Новый пароль: #{password}"
             html: "Новый пароль: #{password}"
+          transporter = nodemailer.createTransport
           transporter.sendMail email, (err, info) =>
             res.status(500).json {err: err} if err?
             res.status(200).json {success: true}
