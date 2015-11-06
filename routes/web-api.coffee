@@ -34,8 +34,8 @@ router.get '/tags',           tags.get
 
 router.get '/promocode/create', localOnly, promocode.create
 router.post '/promocode/generate', localOnly, promocode.generate
-router.post '/user/restore',    users.restore
-router.get  '/user/confirm/:hash1/:hash2',    users.confirm
+router.post '/user/restore', users.restore
+router.get  '/user/confirm/:hash1/:hash2', users.confirm
 
 router.use mustBeAuth
 

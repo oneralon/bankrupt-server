@@ -35,7 +35,7 @@ exports.restore = (req, res) ->
     if user?
       hash1 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
       hash2 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
-      url   = "http://mass-shtab.com:3000/user/restore/#{hash1}/#{hash2}"
+      url   = "http://mass-shtab.com:3000/user/confirm/#{hash1}/#{hash2}"
       user.restorehash = "#{hash1}:#{hash2}"
       user.save (err, user) =>
         res.status(500).json {err: err} if err?
@@ -60,6 +60,7 @@ exports.confirm = (req, res) ->
     return res.status(500).json {err: err} if err?
     if user?
         password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+        user.restorehash = ''
         user.password = bcrypt.hashSync password, 10
         user.save (err, user) =>
           res.status(500).json {err: err} if err?
@@ -71,5 +72,5 @@ exports.confirm = (req, res) ->
             html: "Новый пароль: #{password}"
           transporter.sendMail email, (err, info) =>
             res.status(500).json {err: err} if err?
-            res.status(200).send()
+            res.status(200).json {success: true}
     else res.status(400).json {err: 'Hash expired!'}
