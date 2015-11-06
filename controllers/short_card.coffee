@@ -52,11 +52,11 @@ exports.list = (req, res, next) ->
       unless _.isEmpty etps
         query['etp.name'] = $in: etps.map (i) -> new RegExp '^' + i + '$', 'i'
       unless _.isEmpty trade_types
-        query['trade_type'] = $in: trade_types.map (i) -> new RegExp i, 'i'
+        query['trade_type'] = $in: trade_types.map (i) -> new RegExp '^' + i + '$', 'i'
       unless _.isEmpty membership_types
-        query['membership_type'] = $in: membership_types.map (i) -> new RegExp i, 'i'
+        query['membership_type'] = $in: membership_types.map (i) -> new RegExp '^' + i + '$', 'i'
       unless _.isEmpty price_submission_types
-        query['price_submission_type'] = $in: price_submission_types.map (i) -> new RegExp i, 'i'
+        query['price_submission_type'] = $in: price_submission_types.map (i) -> new RegExp '^' + i + '$', 'i'
       if _.isEmpty query then resolve(null)
       else
         Trade.find(query).select('_id').exec (err, trades) ->
@@ -76,6 +76,7 @@ exports.list = (req, res, next) ->
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
+      perPage = 100
       if _.isEqual(params.lot_ids, []) or _.isEqual(params.trades, [])
         return res.status(200).json lots: [] 
       query = Lot.find()
