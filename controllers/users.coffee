@@ -71,6 +71,8 @@ exports.confirm = (req, res) ->
             text: "Новый пароль: #{password}"
             html: "Новый пароль: #{password}"
           transporter = nodemailer.createTransport
+            service: config.service
+            auth: { user: config.user, pass: config.pass }
           transporter.sendMail email, (err, info) =>
             return res.status(500).json {err: err} if err?
             return res.status(200).json {success: true}
