@@ -35,7 +35,7 @@ exports.restore = (req, res) ->
     if user?
       hash1 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
       hash2 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
-      url   = "http://mass-shtab.com:3000/user/confirm/#{hash1}/#{hash2}"
+      url   = "http://mass-shtab.com:3000/api/user/confirm/#{hash1}/#{hash2}"
       user.restorehash = "#{hash1}:#{hash2}"
       user.save (err, user) =>
         res.status(500).json {err: err} if err?
