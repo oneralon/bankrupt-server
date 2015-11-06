@@ -67,7 +67,7 @@ exports.confirm = (req, res) ->
         return res.status(500).json {err: err} if err?
         email =
           from: "#{config.name} <#{config.user}>"
-          to: email
+          to: user.email
           subject: "Восстановление доступа"
           text: "Новый пароль: #{password}"
           html: "Новый пароль: #{password}"
