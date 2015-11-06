@@ -59,6 +59,9 @@ exports.confirm = (req, res) ->
   User.findOne { restorehash: "#{hash1}#{hash2}" }, (err, user) =>
     return res.status(500).json {err: err} if err?
     if user?
+        transporter = nodemailer.createTransport
+          service: config.service
+          auth: { user: config.user, pass: config.pass }
         password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
         user.restorehash = ''
         user.password = bcrypt.hashSync password, 10
@@ -70,10 +73,7 @@ exports.confirm = (req, res) ->
             subject: "Восстановление доступа"
             text: "Новый пароль: #{password}"
             html: "Новый пароль: #{password}"
-          transporter = nodemailer.createTransport
-            service: config.service
-            auth: { user: config.user, pass: config.pass }
           transporter.sendMail email, (err, info) =>
-            return res.status(500).json {err: err} if err?
-            return res.status(200).json {success: true}
+            res.status(500).json {err: err} if err?
+            res.status(200).json {success: true}
     else return res.status(400).json {err: 'Hash expired!'}
