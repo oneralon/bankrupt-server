@@ -66,7 +66,7 @@ exports.confirm = (req, res) ->
         user.restorehash = ''
         user.password = bcrypt.hashSync password, 10
         user.save (err, user) =>
-          return res.status(500).json {err: err} if err?
+          res.status(500).json {err: err} if err?
           email =
             from: "#{config.name} <#{config.user}>"
             to: email
@@ -76,4 +76,4 @@ exports.confirm = (req, res) ->
           transporter.sendMail email, (err, info) =>
             res.status(500).json {err: err} if err?
             res.status(200).json {success: true}
-    else return res.status(400).json {err: 'Hash expired!'}
+    else res.status(400).json {err: 'Hash expired!'}
