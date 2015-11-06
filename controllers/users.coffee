@@ -7,6 +7,10 @@ require '../models/user'
 User      = mongoose.model 'User'
 config    = require '../config/email'
 
+transporter = nodemailer.createTransport
+  service: config.service
+  auth: { user: config.user, pass: config.pass }
+
 exports.changepass = (req, res) ->
   old_pass  = req.body.old_pass  or req.query.old_pass
   new_pass1 = req.body.new_pass1 or req.query.new_pass1
@@ -39,9 +43,6 @@ exports.restore = (req, res) ->
       user.restorehash = "#{hash1}#{hash2}"
       user.save (err, user) =>
         return res.status(500).json {err: err} if err?
-        transporter = nodemailer.createTransport
-          service: config.service
-          auth: { user: config.user, pass: config.pass }
         email =
           from: "#{config.name} <#{config.user}>"
           to: email
@@ -59,21 +60,18 @@ exports.confirm = (req, res) ->
   User.findOne { restorehash: "#{hash1}#{hash2}" }, (err, user) =>
     return res.status(500).json {err: err} if err?
     if user?
-        transporter = nodemailer.createTransport
-          service: config.service
-          auth: { user: config.user, pass: config.pass }
-        password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
-        user.restorehash = ''
-        user.password = bcrypt.hashSync password, 10
-        user.save (err, user) =>
+      password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+      user.restorehash = ''
+      user.password = bcrypt.hashSync password, 10
+      user.save (err, user) =>
+        res.status(500).json {err: err} if err?
+        email =
+          from: "#{config.name} <#{config.user}>"
+          to: email
+          subject: "Восстановление доступа"
+          text: "Новый пароль: #{password}"
+          html: "Новый пароль: #{password}"
+        transporter.sendMail email, (err, info) =>
           res.status(500).json {err: err} if err?
-          email =
-            from: "#{config.name} <#{config.user}>"
-            to: email
-            subject: "Восстановление доступа"
-            text: "Новый пароль: #{password}"
-            html: "Новый пароль: #{password}"
-          transporter.sendMail email, (err, info) =>
-            res.status(500).json {err: err} if err?
-            res.status(200).json {success: true}
+          res.status(200).json {success: true}
     else res.status(400).json {err: 'Hash expired!'}
