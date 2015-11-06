@@ -36,7 +36,7 @@ exports.restore = (req, res) ->
       hash1 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
       hash2 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
       url   = "http://mass-shtab.com:3000/api/user/confirm/#{hash1}/#{hash2}"
-      user.restorehash = "#{hash1}:#{hash2}"
+      user.restorehash = "#{hash1}#{hash2}"
       user.save (err, user) =>
         res.status(500).json {err: err} if err?
         transporter = nodemailer.createTransport
@@ -56,7 +56,7 @@ exports.restore = (req, res) ->
 exports.confirm = (req, res) ->
   hash1 = req.body.hash1 or req.params.hash1
   hash2 = req.body.hash2 or req.params.hash2
-  User.findOne { restorehash: "#{hash1}:#{hash2}" }, (err, user) =>
+  User.findOne { restorehash: new RegExp "#{hash1}#{hash2}" }, (err, user) =>
     return res.status(500).json {err: err} if err?
     if user?
         password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
