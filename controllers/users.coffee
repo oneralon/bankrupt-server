@@ -54,8 +54,8 @@ exports.restore = (req, res) ->
     else res.status(400).json {err: 'Wrong email!'}
 
 exports.confirm = (req, res) ->
-  hash1 = req.body.hash1 or req.query.hash1
-  hash2 = req.body.hash2 or req.query.hash2
+  hash1 = req.body.hash1 or req.params.hash1
+  hash2 = req.body.hash2 or req.params.hash2
   User.findOne { restorehash: "#{hash1}:#{hash2}" }, (err, user) =>
     return res.status(500).json {err: err} if err?
     if user?
