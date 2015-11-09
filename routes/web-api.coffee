@@ -24,7 +24,8 @@ mongoose.set 'debug', yes
 
 router.use '/*', cors
 
-router.get '/log',            error_logs.add
+router.get  '/log',            error_logs.add
+router.post '/report',         error_logs.report
 
 router.get '/etps',           etps.get
 router.get '/statuses',       statuses.get
