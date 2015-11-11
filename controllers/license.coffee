@@ -15,12 +15,9 @@ License       = mongoose.model 'License'
 Purchase      = mongoose.model 'Purchase'
 
 exports.options = (req, res) ->
-  LicenseType.find title: $ne: 'individual', (err, types) ->
+  LicenseType.find name: $ne: 'individual', {name:1,options:1}, (err, types) ->
     if err? then return res.status(500).json error: err
-    result = {}
-    for type in types
-      result[type.title] = type.options
-    res.status(200).json result
+    res.status(200).json types
 
 exports.check = (req, res) ->
   json = req.body.json or req.json or req.query.json
