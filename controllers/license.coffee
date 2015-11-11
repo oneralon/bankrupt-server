@@ -22,6 +22,22 @@ exports.options = (req, res) ->
       result[type.title] = type.options
     res.status(200).json result
 
+exports.check = (req, res) ->
+  json = req.body.json or req.json or req.query.json
+  data = JSON.parse json
+  json = encodeURIComponent(json.replace /\s/ig, '+')
+  sign = req.body.sign or req.sign or req.query.sign
+  sign = encodeURIComponent(sign.replace /\s/ig, '+')
+  child = exec "java -jar google_play_verify.jar #{sign} #{json}", (error, stdout, stderr) =>
+    if error != null then return res.status(500).json error
+    verified = stdout.trim() is 'true'
+    if verified
+      License.findOne {name: /prof/}, (err, license) =>
+        res.status(200).json
+          valid: true
+          license: license
+    else res.status(200).json valid: false
+
 exports.buy = (req, res) ->
   User.findById(req.user.id)
   .populate

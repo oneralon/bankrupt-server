@@ -38,8 +38,8 @@ exports.list = (req, res, next) ->
   trade_types = req.query.tradeTypes?.map (item) -> item.toLowerCase()
   membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
   price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
-  sort = req.query.sort or 'last_event'
-  sort_order = req.query.sortOrder or 'asc'
+  sort = req.query.sort or 'last_message'
+  sort_order = req.query.sortOrder or 'desc'
 
   lot_ids = null
 
@@ -76,11 +76,14 @@ exports.list = (req, res, next) ->
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
-      return res.status(200).json lots: [] if _.isEqual params.lot_ids, []
+      perPage = 100
+      if _.isEqual(params.lot_ids, []) or _.isEqual(params.trades, [])
+        return res.status(200).json lots: [] 
       query = Lot.find()
       if /дом/i.test text
         query.where title: /дом(?!(\s*(№|\d)))/i
       query.where title: {$exists: true}
+      query.where last_event: $ne: null
       unless params.lot_ids is null
         query.where('_id').in params.lot_ids
       query.where _id: $nin: req.user.hidden_lots
@@ -99,7 +102,7 @@ exports.list = (req, res, next) ->
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
-      query.sort({present: 1, "#{sort}": "#{sort_order}"})
+      query.sort(present: -1, "#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
       query.populate
@@ -125,6 +128,7 @@ exports.list = (req, res, next) ->
       return exports.list req, res, next
     distinct_lots = []
     lots = lots.filter (item) ->
+      if item.present and moment(item.last_event) < new Date() then return false
       url = item.url.replace '://www.', '://'
       if distinct_lots.indexOf(url) isnt -1 then return false
       else
@@ -146,10 +150,7 @@ exports.list = (req, res, next) ->
           current_interval = item.intervals[item.intervals.length - 1]
         if nextInterval?
           duration = moment(nextInterval.interval_start_date)
-      end_date = moment(item.trade.results_date or
-        item.trade.holding_date or
-        item.trade.requests_end_date or
-        item.intervals[item.intervals.length - 1]?.request_end_date)
+      end_date = moment(item.last_event)
       if req.query.render is 'true'
         duration = moment.duration(duration.diff new Date()).humanize() if duration?
         end_date = moment.duration(end_date.diff new Date()).humanize() if end_date?

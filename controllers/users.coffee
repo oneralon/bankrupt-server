@@ -7,6 +7,10 @@ require '../models/user'
 User      = mongoose.model 'User'
 config    = require '../config/email'
 
+transporter = nodemailer.createTransport
+  service: config.service
+  auth: { user: config.user, pass: config.pass }
+
 exports.changepass = (req, res) ->
   old_pass  = req.body.old_pass  or req.query.old_pass
   new_pass1 = req.body.new_pass1 or req.query.new_pass1
@@ -33,20 +37,41 @@ exports.restore = (req, res) ->
   User.findOne { email: { $regex: remail } }, (err, user) =>
     return res.status(500).json {err: err} if err?
     if user?
-      transporter = nodemailer.createTransport
-        service: config.service
-        auth: { user: config.user, pass: config.pass }
-      password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
-      user.password = bcrypt.hashSync password, 10
+      hash1 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+      hash2 = generate(16, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+      url   = "http://mass-shtab.com:3000/api/user/confirm/#{hash1}/#{hash2}"
+      user.restorehash = "#{hash1}#{hash2}"
       user.save (err, user) =>
-        res.status(500).json {err: err} if err?
+        return res.status(500).json {err: err} if err?
         email =
           from: "#{config.name} <#{config.user}>"
           to: email
+          subject: "Восстановление доступа (Подтверждение)"
+          text: "Для восстановления пароля перейдите по ссылке: #{url}"
+          html: "Для восстановления пароля перейдите по ссылке: </br><a href='#{url}'>#{url}</a>"
+        transporter.sendMail email, (err, info) =>
+          return res.status(500).json {err: err} if err?
+          return res.status(200).send()
+    else return res.status(400).json {err: 'Wrong email!'}
+
+exports.confirm = (req, res) ->
+  hash1 = req.body.hash1 or req.params.hash1
+  hash2 = req.body.hash2 or req.params.hash2
+  User.findOne { restorehash: "#{hash1}#{hash2}" }, (err, user) =>
+    return res.status(500).json {err: err} if err?
+    if user?
+      password = generate(8, false, /[ABCDEFGHJKLMNPQRSTUVWXYZ1-9]/)
+      user.restorehash = ''
+      user.password = bcrypt.hashSync password, 10
+      user.save (err, user) =>
+        return res.status(500).json {err: err} if err?
+        email =
+          from: "#{config.name} <#{config.user}>"
+          to: user.email
           subject: "Восстановление доступа"
           text: "Новый пароль: #{password}"
           html: "Новый пароль: #{password}"
         transporter.sendMail email, (err, info) =>
-          res.status(500).json {err: err} if err?
-          res.status(200).send()
-    else res.status(400).json {err: 'Wrong email!'}
+          return res.status(500).json {err: err} if err?
+          return res.status(200).json {success: true}
+    else return res.status(400).json {err: 'Hash expired!'}

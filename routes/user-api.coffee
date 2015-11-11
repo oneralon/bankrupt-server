@@ -139,6 +139,8 @@ router.get '/upload_lots/',             upload_lots.get
 
 router.post '/license/buy',             license.buy
 router.get  '/license/options',         license.options
+router.post '/license/check',           license.check
+
 
 router.post '/refer/mail',              referal.mail
 router.get  '/refer/mail',              referal.mail
