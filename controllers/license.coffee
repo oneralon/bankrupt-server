@@ -5,13 +5,22 @@ moment    = require 'moment'
 errors    = require '../helpers/error-codes'
 
 require "../models/license"
+require "../models/license_type"
 require "../models/user"
 require "../models/purchase"
 
-User      = mongoose.model 'User'
-License   = mongoose.model 'License'
-Purchase  = mongoose.model 'Purchase'
+User          = mongoose.model 'User'
+LicenseType   = mongoose.model 'LicenseType'
+License       = mongoose.model 'License'
+Purchase      = mongoose.model 'Purchase'
 
+exports.options = (req, res) ->
+  LicenseType.find title: $ne: 'individual', (err, types) ->
+    if err? then return res.status(500).json error: err
+    result = {}
+    for type in types
+      result[type.title] = type.options
+    res.status(200).json result
 
 exports.buy = (req, res) ->
   User.findById(req.user.id)
