@@ -76,32 +76,43 @@ exports.list = (req, res, next) ->
 
   lotsFound = new Promise (resolve, reject) ->
     elasticFound.catch(error).then (params) ->
-      perPage = 100
       if _.isEqual(params.lot_ids, []) or _.isEqual(params.trades, [])
         return res.status(200).json lots: [] 
       query = Lot.find()
+      count = Lot.count()
       if /дом/i.test text
         query.where title: /дом(?!(\s*(№|\d)))/i
+        count.where title: /дом(?!(\s*(№|\d)))/i
       query.where title: {$exists: true}
+      count.where title: {$exists: true}
       query.where last_event: $ne: null
+      count.where last_event: $ne: null
       unless params.lot_ids is null
         query.where('_id').in params.lot_ids
+        count.where('_id').in params.lot_ids
       query.where _id: $nin: req.user.hidden_lots
+      count.where _id: $nin: req.user.hidden_lots
       unless _.isEmpty tags
         query.where tags: $in: tags
+        count.where tags: $in: tags
       unless _.isEmpty statuses
         query.where status: $in: statuses.map (i) -> new RegExp i, 'i'
+        count.where status: $in: statuses.map (i) -> new RegExp i, 'i'
       unless _.isEmpty start_price
         query.where current_sum: $gte: start_price
+        count.where current_sum: $gte: start_price
       unless _.isEmpty end_price
         query.where current_sum: $lte: end_price
+        count.where current_sum: $lte: end_price
       unless _.isEmpty regions
         if res.repeated
           perPage = perPage - res.lots.length
           regions = ['Не определен']
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
+        count.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
+        count.where('trade').in params.trades
       query.sort(present: -1, "#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
@@ -116,10 +127,13 @@ exports.list = (req, res, next) ->
         model: 'LotAlias'
       query.exec (err, lots) ->
         reject(err) if err?
-        if not lots? or lots.length is 0 then resolve([])
-        resolve(lots)
+        count.exec (err, count) ->
+          reject(err) if err?
+          if not lots? or lots.length is 0 then resolve([])
+          resolve({lots: lots, count: count})
 
-  lotsFound.catch(error).then (lots) ->
+  lotsFound.catch(error).then (result) ->
+    lots = result.lots
     if res.repeated
       lots = res.lots.concat lots
     if lots.length < perPage and not res.repeated and not _.isEmpty regions
@@ -182,4 +196,4 @@ exports.list = (req, res, next) ->
                     pages: [(parseInt(page/10)*10 + if page < 10 then 1 else 0)..parseInt(page/10)*10+9]
                     currentPage: page
     else
-      res.status(200).json lots: lots
+      res.status(200).json {lots: lots, count: result.count}
