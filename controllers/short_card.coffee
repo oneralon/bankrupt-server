@@ -150,20 +150,12 @@ exports.list = (req, res, next) ->
         return true
     lots = lots.map (item) ->
       current_interval = null
-      unless _.isEmpty item.intervals
-        current_interval = item.intervals[0]
-        unless new Date() > item.intervals[item.intervals.length - 1].interval_end_date
-          date = new Date()
-          for interval in item.intervals
-            if interval.interval_start_date < date < interval.interval_end_date
-              current_interval = interval
-              break
-          nextInterval = item.intervals[item.intervals.indexOf(current_interval) + 1] or undefined
-        else
-          nextInterval = item.intervals[item.intervals.length - 1]
-          current_interval = item.intervals[item.intervals.length - 1]
-        if nextInterval?
-          duration = moment(nextInterval.interval_start_date)
+      intervals = item.intervals.filter (i) -> i.interval_end_date > new Date()
+      unless _.isEmpty intervals
+        current_interval = intervals[0]
+        nextInterval = intervals[intervals.indexOf(current_interval) + 1] or intervals[intervals.length - 1]
+      if nextInterval?
+        duration = moment(nextInterval.interval_start_date)
       end_date = moment(item.last_event)
       if req.query.render is 'true'
         duration = moment.duration(duration.diff new Date()).humanize() if duration?
@@ -180,8 +172,8 @@ exports.list = (req, res, next) ->
         start_price: item.start_price
         current_price: current_interval?.interval_price or item.current_sum or item.start_price
         discount: item.discount
-        next_interval_start_date: duration
-        end_date: end_date
+        #next_interval_start_date: duration
+        end_date: duration or end_date
         tags: item.tags
         aliases: item.aliases or undefined
       }
