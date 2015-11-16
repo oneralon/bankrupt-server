@@ -26,7 +26,7 @@ module.exports = (params, cb) ->
     transporter.sendMail
       from: "#{mail_config.name} <#{mail_config.user}>"
       to: params.mail_to
-      subject: 'Выгрузка данных от ' + moment().format 'DD.MM.YYYY hh:mm'
+      subject: 'Выгрузка данных от ' + moment().format 'DD.MM.YYYY HH:mm'
       html: html
       attachments: params.attachments if params.attachments?
     , cb
