@@ -113,6 +113,7 @@ exports.list = (req, res, next) ->
       unless _.isEmpty params.trades
         query.where('trade').in params.trades
         count.where('trade').in params.trades
+      query.where present: $exists: true
       query.sort(present: -1, "#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
@@ -140,14 +141,6 @@ exports.list = (req, res, next) ->
       res.repeated = yes
       res.lots = lots
       return exports.list req, res, next
-    distinct_lots = []
-    lots = lots.filter (item) ->
-      if item.present and moment(item.last_event) < new Date() then return false
-      url = item.url.replace '://www.', '://'
-      if distinct_lots.indexOf(url) isnt -1 then return false
-      else
-        distinct_lots.push url
-        return true
     lots = lots.map (item) ->
       current_interval = null
       intervals = item.intervals.filter (i) -> i.interval_end_date > new Date()

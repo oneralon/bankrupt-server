@@ -29,7 +29,8 @@ exports.get = (req, res, next) ->
       return res.status(404).send()
 
     lot = lot.toObject()
-
+    for interval in lot.intervals
+      interval.price_reduction_percent = (1 - interval.interval_price / lot.start_price) * 100
     current_interval = null
     unless _.isEmpty lot.intervals
       current_interval = lot.intervals[0]

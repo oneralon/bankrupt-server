@@ -81,8 +81,6 @@ vk              = require '../controllers/vk'
 twitter         = require '../controllers/twitter'
 linkedin        = require '../controllers/linkedin'
 
-
-
 router.use mustBeAuth
 router.use '/*', cors
 
