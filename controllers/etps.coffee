@@ -130,10 +130,10 @@ exports.get = (req, res, next) ->
         name: 'ЭТП "ТЕНДЕР ГАРАНТ"'
         url: 'tendergarant.com'
       ]
-    if _v < etps?._v or not _v?
-      res.status(200).json etps
-    else
-      res.status(304).send()
+#    if _v < etps?._v or not _v?
+    res.status(200).json etps
+#    else
+#      res.status(304).send()
   else
     mongoose.connection.collection('etps').findOne { $query: {}, $orderby: { '_v' : -1 } , $limit: 1}, (err, etps) ->
       if _v < etps?._v or not _v?
