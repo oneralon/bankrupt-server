@@ -70,7 +70,7 @@ exports.list = (req, res, next) ->
         resolve({trades: trades, lot_ids: lot_ids})
       else
         trade_ids = unless trades? then null else trades.map (i) -> i._id.toString()
-        elastic.like ['_id'], text, 0, 3000, lot_ids, trade_ids
+        elastic.like ['_id'], text, 0, 10000, lot_ids, trade_ids
         .then (ids) ->
           resolve({trades: trades, lot_ids: ids})
 
@@ -105,14 +105,8 @@ exports.list = (req, res, next) ->
         query.where current_sum: $lte: end_price
         count.where current_sum: $lte: end_price
       unless _.isEmpty regions
-        # if res.repeated
-        #   perPage = perPage - res.lots.length
-        #   regions = ['Не определен']
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
         count.where('region').in regions.map (i) -> new RegExp i, 'i'
-      unless _.isEmpty params.trades
-        query.where('trade').in params.trades
-        count.where('trade').in params.trades
       query.where present: $exists: true
       query.sort(present: -1, "#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
@@ -135,12 +129,6 @@ exports.list = (req, res, next) ->
 
   lotsFound.catch(error).then (result) ->
     lots = result.lots
-    if res.repeated
-      lots = res.lots.concat lots
-    if lots.length < perPage and not res.repeated and not _.isEmpty regions
-      res.repeated = yes
-      res.lots = lots
-      return exports.list req, res, next
     lots = lots.map (item) ->
       current_interval = null
       intervals = item.intervals.filter (i) -> i.interval_end_date > new Date()
@@ -165,7 +153,6 @@ exports.list = (req, res, next) ->
         start_price: item.start_price
         current_price: current_interval?.interval_price or item.current_sum or item.start_price
         discount: item.discount
-        #next_interval_start_date: duration
         end_date: duration or end_date
         tags: item.tags
         aliases: item.aliases or undefined

@@ -54,9 +54,6 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
     query.size = take
     query.min_score = min_score
     query.fields = fields
-
-    console.log query
-
     client.search
       index: 'lots'
       body: query
