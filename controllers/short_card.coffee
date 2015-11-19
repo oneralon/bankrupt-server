@@ -70,7 +70,7 @@ exports.list = (req, res, next) ->
         resolve({trades: trades, lot_ids: lot_ids})
       else
         trade_ids = unless trades? then null else trades.map (i) -> i._id.toString()
-        elastic.like ['_id'], text, 0, 10000, lot_ids, trade_ids
+        elastic.like ['_id'], text, 0, 10000, lot_ids, trade_ids, regions, statuses, etps
         .then (ids) ->
           resolve({trades: trades, lot_ids: ids})
 

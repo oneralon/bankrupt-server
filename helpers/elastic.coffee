@@ -7,7 +7,7 @@ client = new elasticsearch.Client
   log: 'error'
   requestTimeout: 60000
 
-exports.like = (fields, text, from, take, ids, trade_ids) ->
+exports.like = (fields, text, from, take, ids, trade_ids, regions, statuses, etps) ->
   new Promise (resolve, reject) ->
 
     terms = text.split(',').map((i)->i.trim())
@@ -47,6 +47,24 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
         for id in trade_ids
           should.push { "term": { "trade": id } }
         query.bool.must.push bool: { should: should }
+
+    if regions? end regions.length > 0
+      should = []
+      for region in regions
+        should.push { "term": { "region": region } }
+      query.bool.must.push bool: { should: should }
+
+    if etps? end etps.length > 0
+      should = []
+      for etp in etps
+        should.push { "term": { "etp.name": etp } }
+      query.bool.must.push bool: { should: should }
+
+    if statuses? end statuses.length > 0
+      should = []
+      for status in statuses
+        should.push { "term": { "status": status } }
+      query.bool.must.push bool: { should: should }
 
     query = query: query
 
