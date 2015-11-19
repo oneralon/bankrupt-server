@@ -80,7 +80,7 @@ exports.list = (req, res, next) ->
         return res.status(200).json lots: [] 
       query = Lot.find()
       count = Lot.count()
-      if /дом/i.test text
+      if /^дом$/i.test text
         query.where title: /дом(?!(\s*(№|\d)))/i
         count.where title: /дом(?!(\s*(№|\d)))/i
       query.where title: {$exists: true}
@@ -105,9 +105,9 @@ exports.list = (req, res, next) ->
         query.where current_sum: $lte: end_price
         count.where current_sum: $lte: end_price
       unless _.isEmpty regions
-        if res.repeated
-          perPage = perPage - res.lots.length
-          regions = ['Не определен']
+        # if res.repeated
+        #   perPage = perPage - res.lots.length
+        #   regions = ['Не определен']
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
         count.where('region').in regions.map (i) -> new RegExp i, 'i'
       unless _.isEmpty params.trades

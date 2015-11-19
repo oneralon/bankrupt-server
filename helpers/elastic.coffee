@@ -40,7 +40,7 @@ exports.like = (fields, text, from, take, ids, trade_ids) ->
       if ids?
         should = []
         for id in ids
-          should.push { "match": { "_id": id } }
+          should.push { "term": { "_id": id } }
         query.bool.must.push bool: { should: should }
       if trade_ids?
         should = []
