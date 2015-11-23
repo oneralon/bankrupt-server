@@ -92,6 +92,9 @@ exports.list = (req, res, next) ->
         count.where('_id').in params.lot_ids
       query.where _id: $nin: req.user.hidden_lots
       count.where _id: $nin: req.user.hidden_lots
+      if params.trades?
+        query.where trade: $in: params.trades
+        count.where trade: $in: params.trades
       unless _.isEmpty tags
         query.where tags: $in: tags
         count.where tags: $in: tags
@@ -124,7 +127,8 @@ exports.list = (req, res, next) ->
         reject(err) if err?
         count.exec (err, count) ->
           reject(err) if err?
-          if not lots? or lots.length is 0 then resolve([])
+          console.log '======================================', count
+          if not lots? or lots.length is 0 then resolve(lots: [], count: count)
           resolve({lots: lots, count: count})
 
   lotsFound.catch(error).then (result) ->

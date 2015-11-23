@@ -24,7 +24,7 @@ exports.like = (fields, text, from, take, ids, trade_ids, regions, statuses, etp
         query_fields = ['title^10', 'information^5']
         fuzziness = 1
         type = 'best_fields'
-        min_score = 0.99
+        min_score = 0.6
 
       query.bool.should.push function_score:
         weight: 100
@@ -35,29 +35,24 @@ exports.like = (fields, text, from, take, ids, trade_ids, regions, statuses, etp
           type: type
           fuzziness: fuzziness
 
-    if ids? or trade_ids?
-      query.bool.must = []
-      if ids?
-        should = []
-        for id in ids
-          should.push { "term": { "_id": id } }
-        query.bool.must.push bool: { should: should }
-      if trade_ids?
-        should = []
-        for id in trade_ids
-          should.push { "term": { "trade": id } }
-        query.bool.must.push bool: { should: should }
+    query.bool.must = []
+
+    if ids?
+      should = []
+      for id in ids
+        should.push { "term": { "_id": id } }
+      query.bool.must.push bool: { should: should }
+
+    if trade_ids?
+      should = []
+      for id in trade_ids
+        should.push { "term": { "trade": id } }
+      query.bool.must.push bool: { should: should }
 
     if regions? end regions.length > 0
       should = []
       for region in regions
         should.push { "term": { "region": region } }
-      query.bool.must.push bool: { should: should }
-
-    if etps? end etps.length > 0
-      should = []
-      for etp in etps
-        should.push { "term": { "etp.name": etp } }
       query.bool.must.push bool: { should: should }
 
     if statuses? end statuses.length > 0
