@@ -15,16 +15,18 @@ exports.like = (fields, text, from, take, ids, trade_ids, regions, statuses, etp
     query = bool: should: []
 
     for text in terms
-      if text.length < 4
+      if text.length <= 4
         query_fields = ['title']
         fuzziness = 0
         type = 'phrase'
         min_score = 0.99
+        minimum_should_match = '100%'
       else
-        query_fields = ['title^10', 'information^5']
-        fuzziness = 1
+        query_fields = ['title', 'information', 'category']
+        fuzziness = 1.5
         type = 'best_fields'
-        min_score = 0.6
+        min_score = 0.001
+        minimum_should_match = '80%'
 
       query.bool.should.push function_score:
         weight: 100
@@ -34,6 +36,19 @@ exports.like = (fields, text, from, take, ids, trade_ids, regions, statuses, etp
           operator: 'and'
           type: type
           fuzziness: fuzziness
+          minimum_should_match: minimum_should_match
+
+      query.bool.should.push function_score:
+        weight: 100
+        query: prefix: title: text
+
+      query.bool.should.push function_score:
+        weight: 100
+        query: prefix: information: text
+
+      query.bool.should.push function_score:
+        weight: 100
+        query: prefix: category: text
 
     query.bool.must = []
 

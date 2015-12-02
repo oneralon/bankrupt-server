@@ -39,7 +39,7 @@ exports.list = (req, res, next) ->
   membership_types = req.query.membershipTypes?.map (item) -> item.toLowerCase()
   price_submission_types = req.query.priceSubmissionTypes?.map (item) -> item.toLowerCase()
   sort = req.query.sort or 'last_message'
-  sort_order = req.query.sortOrder or 'desc'
+  sort_order = req.query.sortOrder or 'asc'
 
   lot_ids = null
 
@@ -85,6 +85,8 @@ exports.list = (req, res, next) ->
         count.where title: /дом(?!(\s*(№|\d)))/i
       query.where title: {$exists: true}
       count.where title: {$exists: true}
+      count.where start_price: {$gte:0}
+      query.where start_price: {$gte:0} 
       query.where last_event: $ne: null
       count.where last_event: $ne: null
       unless params.lot_ids is null
@@ -111,7 +113,9 @@ exports.list = (req, res, next) ->
         query.where('region').in regions.map (i) -> new RegExp i, 'i'
         count.where('region').in regions.map (i) -> new RegExp i, 'i'
       query.where present: $exists: true
-      query.sort(present: -1, "#{sort}": "#{sort_order}")
+      if sort is 'last_message'
+        query.sort(present: -1, "#{sort}": "#{sort_order}")
+      else query.sort("#{sort}": "#{sort_order}")
       query.skip((page - 1) * perPage).limit(perPage)
       query.populate 'trade'
       query.populate
@@ -127,9 +131,8 @@ exports.list = (req, res, next) ->
         reject(err) if err?
         count.exec (err, count) ->
           reject(err) if err?
-          console.log '======================================', count
           if not lots? or lots.length is 0 then resolve(lots: [], count: count)
-          resolve({lots: lots, count: count})
+          resolve({lots: lots, count: count, query: query})
 
   lotsFound.catch(error).then (result) ->
     lots = result.lots
@@ -145,12 +148,13 @@ exports.list = (req, res, next) ->
       if req.query.render is 'true'
         duration = moment.duration(duration.diff new Date()).humanize() if duration?
         end_date = moment.duration(end_date.diff new Date()).humanize() if end_date?
+      suffix = if item.title.length > 100 then ' ...' else ''
       return {
         id: item.id
         url: item.url
         trade: item.trade.title?.substr 0, 100
         trade_url: item.trade.url
-        title: item.title.substr 0, 100
+        title: item.title.substr(0, 100) + suffix
         type: item.trade.type
         status: item.status
         region: item.region
@@ -180,4 +184,6 @@ exports.list = (req, res, next) ->
                     pages: [(parseInt(page/10)*10 + if page < 10 then 1 else 0)..parseInt(page/10)*10+9]
                     currentPage: page
     else
+      console.error '=====================================', result.count
+      console.error result.query.options
       res.status(200).json {lots: lots, count: result.count}
